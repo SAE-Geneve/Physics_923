@@ -1,0 +1,9 @@
+{
+    "name": "physics923",
+    "version-string": "1.0",
+    "dependencies": [
+        "gtest", "tracy", "sdl2", {
+            "name": "imgui", "features": ["sdl2-binding", "sdl2-renderer-binding"]
+        }
+    ]
+}
