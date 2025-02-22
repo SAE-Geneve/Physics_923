@@ -1,4 +1,8 @@
-﻿#include "collision_system.h"
+﻿
+// Version History :
+// 22.02.25 - Modified by Maxence - updated objects of body
+
+#include "collision_system.h"
 
 #include <ranges>
 
@@ -58,7 +62,12 @@ namespace physics923
     void CollisionSystem::CreateObject(size_t index, math::Circle& circle)
     {
         math::Vec2f velocity(random::Range(-50.0f, 50.0f), random::Range(-50.0f, 50.0f));
-        physics::Body body(physics::BodyType::Dynamic,circle.centre(), velocity, random::Range(1.0f, 50.0f));
+      physics::Body body(physics::BodyType::Dynamic,
+                         circle.centre(),
+                         velocity,
+                         gravity,
+                         random::Range(1.0f, 50.0f),
+                         false);
         physics::Collider collider(circle, random::Range(1.0f, 1.0f), 0, false);
         GameObject object(body, collider, circle.radius());
 
@@ -69,7 +78,14 @@ namespace physics923
     void CollisionSystem::CreateObject(size_t index, math::AABB& aabb)
     {
         math::Vec2f velocity(random::Range(-50.0f, 50.0f), random::Range(-50.0f, 50.0f));
-        physics::Body body(physics::BodyType::Dynamic, aabb.GetCentre(), velocity, random::Range(1.0f, 50.0f));
+
+      physics::Body body(physics::BodyType::Dynamic,
+                         aabb.GetCentre(),
+                         velocity,
+                         gravity,
+                         random::Range(1.0f, 50.0f),
+                         false);
+
         physics::Collider collider(aabb, random::Range(1.0f, 1.0f), 0, false);
         GameObject object(body, collider, aabb.half_size_length());
 
