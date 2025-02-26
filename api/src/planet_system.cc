@@ -1,4 +1,8 @@
-﻿#include "planet_system.h"
+﻿
+// Version History :
+// 22.02.25 - Modified by Maxence - updated objects of body
+
+#include "planet_system.h"
 
 #include <SDL_mouse.h>
 
@@ -12,7 +16,12 @@ namespace physics923
     void PlanetSystem::Initialize()
     {
         Clear();
-        star_ = physics::Body(physics::BodyType::Static, math::Vec2f(kWindowWidth/2.f, kWindowHeight/2.f), math::Vec2f::Zero(), star_mass_);
+        star_ = physics::Body(physics::BodyType::Static,
+                              math::Vec2f(kWindowWidth/2.f, kWindowHeight/2.f),
+                              math::Vec2f::Zero(),
+                              math::Vec2f::Zero(),
+                              star_mass_,
+                              false);
 
         for (std::size_t i = 0; i < kStartingPlanetsCount_; i++)
         {
@@ -61,7 +70,11 @@ namespace physics923
 
             // Calculate angular velocity
             math::Vec2f angular_velocity = tangential_direction * orbital_velocity;
-            physics::Body body(physics::BodyType::Dynamic,position, angular_velocity, planet_mass_);
+            physics::Body body(physics::BodyType::Dynamic,position,
+                               angular_velocity,
+                               math::Vec2f::Zero(),
+                               planet_mass_,
+                               false);
             //Random mass: random::Range(1.0f, 50.0f)
 
             auto planet = GameObject(body, radius, color);

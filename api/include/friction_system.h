@@ -1,11 +1,15 @@
 ﻿#ifndef PHYSICS_923_API_FRICTION_SYSTEM_H_
 #define PHYSICS_923_API_FRICTION_SYSTEM_H_
 
+// Version History :
+// 22.02.25 - Modified by Maxence - placed gravity here
+
 #include <unordered_map>
 #include <unordered_set>
 
 #include "display.h"
 #include "game_object.h"
+#include "conversions.h"
 #include "quadtree.h"
 #include "shape.h"
 #include "timer.h"
@@ -24,6 +28,9 @@ namespace physics923
 
         std::unordered_map<physics::Collider*, GameObject*> collider_to_object_map_;
         //Mapping from Collider to GameObject
+
+        //Create the gravity for the scene
+        static constexpr math::Vec2f gravity = conversions::ConvertToPixels(math::Vec2f(0.f, 9.8f));
 
         timer::Timer* timer_ = nullptr;
         math::AABB frame_bounds_ = math::AABB(math::Vec2f(0, 0), math::Vec2f(kWindowWidth, kWindowHeight));
