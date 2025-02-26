@@ -1,8 +1,4 @@
-﻿
-// Version History :
-// 22.02.25 - Modified by Maxence - updated objects of body
-
-#include "planet_system.h"
+﻿#include "planet_system.h"
 
 #include <SDL_mouse.h>
 

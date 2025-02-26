@@ -1,8 +1,4 @@
-﻿
-// Version History :
-// 22.02.25 - Modified by Maxence - updated objects of body
-
-#include "trigger_system.h"
+﻿#include "trigger_system.h"
 
 #include <ranges>
 
