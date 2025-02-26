@@ -1,6 +1,7 @@
 ﻿#include <gtest/gtest.h>
 
 #include "vec2.h"
+#include "commons.h"
 /**
  * \brief Tests for Vec2 with ints
  */
@@ -117,10 +118,10 @@ namespace physics923::math
     );
 
     /**
-     * \brief Tests for Vec2 with floats
+     * \brief Tests for Vec2 with physics923::commons::fps
      */
     struct Vec2fOperatorFixture :
-        public testing::TestWithParam<std::pair<Vec2<float>, Vec2<float>>>
+        public testing::TestWithParam<std::pair<Vec2<physics923::commons::fp>, Vec2<physics923::commons::fp>>>
     {
     };
 
@@ -150,7 +151,7 @@ namespace physics923::math
     TEST_P(Vec2fOperatorFixture, Dot)
     {
         auto [v1, v2] = GetParam();
-        const auto result = Vec2<float>::Dot(v1, v2);
+        const auto result = Vec2<physics923::commons::fp>::Dot(v1, v2);
         EXPECT_FLOAT_EQ(result, v1.x * v2.x + v1.y * v2.y);
     }
 
@@ -160,13 +161,13 @@ namespace physics923::math
         auto [v1, v2] = GetParam();
         const auto p1 = v1.Perpendicular();
         const auto p2 = v2.Perpendicular();
-        EXPECT_FLOAT_EQ(math::Vec2<float>::Dot(v1, p1), 0);
-        EXPECT_FLOAT_EQ(math::Vec2<float>::Dot(v2, p2), 0);
+        EXPECT_FLOAT_EQ(math::Vec2<physics923::commons::fp>::Dot(v1, p1), 0);
+        EXPECT_FLOAT_EQ(math::Vec2<physics923::commons::fp>::Dot(v2, p2), 0);
 
         const auto r1 = v1.Perpendicular2();
         const auto r2 = v2.Perpendicular2();
-        EXPECT_FLOAT_EQ(math::Vec2<float>::Dot(v1, r1), 0);
-        EXPECT_FLOAT_EQ(math::Vec2<float>::Dot(v2, r2), 0);
+        EXPECT_FLOAT_EQ(math::Vec2<physics923::commons::fp>::Dot(v1, r1), 0);
+        EXPECT_FLOAT_EQ(math::Vec2<physics923::commons::fp>::Dot(v2, r2), 0);
     }
 
     TEST_P(Vec2fOperatorFixture, MultiplyByScalar)
@@ -269,9 +270,9 @@ namespace physics923::math
                                  std::pair{ math::Vec2{-10.4f,-15.112f}, math::Vec2{-25.23f,35.7f} },
                                  std::pair{ math::Vec2{1.33f,3.99f}, math::Vec2{2.005f,4.2f} },
                                  std::pair{ math::Vec2{10.1f,15.6f}, math::Vec2{25.662f,35.22134f} },
-                                 std::pair{ math::Vec2<float>{}, math::Vec2<float>{} },
-                                 std::pair{ math::Vec2{1.1f,5.0007f}, math::Vec2<float>{} },
-                                 std::pair{ math::Vec2<float>{}, math::Vec2{1.93f,7.4f} }
+                                 std::pair{ math::Vec2<physics923::commons::fp>{}, math::Vec2<physics923::commons::fp>{} },
+                                 std::pair{ math::Vec2{1.1f,5.0007f}, math::Vec2<physics923::commons::fp>{} },
+                                 std::pair{ math::Vec2<physics923::commons::fp>{}, math::Vec2{1.93f,7.4f} }
                              )
     );
 }

@@ -49,7 +49,7 @@ namespace physics923
     {
         const size_t i = objects_.size();
         math::Vec2f new_position = pos;
-        const float radius = random::Range(5.f, 20.f);
+        const physics923::commons::fp radius = random::Range(5.f, 20.f);
 
         constexpr int max_retries = 10; // Limit retries to avoid infinite loops.
         for (int retry = 0; retry < max_retries; ++retry)
@@ -75,8 +75,8 @@ namespace physics923
         {
         case math::ShapeType::kAABB:
             {
-                const float half_size_x = random::Range(5.f, 20.f);
-                const float half_size_y = radius;
+                const physics923::commons::fp half_size_x = random::Range(5.f, 20.f);
+                const physics923::commons::fp half_size_y = radius;
                 const auto half_size_vec = math::Vec2f(half_size_x, half_size_y);
                 const auto half_size_length = half_size_vec.Magnitude();
                 math::AABB aabb(new_position, half_size_vec, half_size_length);
@@ -209,7 +209,7 @@ namespace physics923
     }
 
 
-    void FrictionSystem::Update(const float delta_time)
+    void FrictionSystem::Update(const physics923::commons::fp delta_time)
     {
         UpdateShapes(delta_time);
         //RemoveOutOfBoundsObjects();
@@ -217,7 +217,7 @@ namespace physics923
         NarrowPhase();
     }
 
-    void FrictionSystem::UpdateShapes(const float delta_time)
+    void FrictionSystem::UpdateShapes(const physics923::commons::fp delta_time)
     {
         for (auto& object : objects_)
         {

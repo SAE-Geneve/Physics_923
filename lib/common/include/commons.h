@@ -3,10 +3,9 @@
 
 namespace physics923::commons
 {
-    constexpr static float Pi = 3.14159265358979323846f;
-    constexpr static float Epsilon = 0.000001f;
-
-    //TODO using
+    using fp = float;
+    constexpr static fp Pi = 3.14159265358979323846f;
+    constexpr static fp Epsilon = 0.000001f;
 
 
     template <typename T>

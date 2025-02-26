@@ -5,6 +5,7 @@
 #include <emmintrin.h>
 #include <cassert>
 #include "vec3.h"
+#include "commons.h"
 
 namespace physics923::math
 {
@@ -30,36 +31,36 @@ namespace physics923::math
         FourVec3<T> operator+(const FourVec3<T>& other) const;
         FourVec3<T> operator-(const FourVec3<T>& other) const;
         FourVec3<T> operator-() const; //Opposite
-        FourVec3<T> operator*(const float scalar) const; //Multiply by scalar
-        FourVec3<T> operator/(const float scalar) const; //Divide by scalar
-        std::array<float, 4> Dot(const FourVec3<T>& other) const; //Dot
-        std::array<float, 4> SquareMagnitude() const; //SquareMagnitude
-        std::array<float, 4> Magnitude() const; //Magnitude/Sqrroot
+        FourVec3<T> operator*(const physics923::commons::fp scalar) const; //Multiply by scalar
+        FourVec3<T> operator/(const physics923::commons::fp scalar) const; //Divide by scalar
+        std::array<physics923::commons::fp, 4> Dot(const FourVec3<T>& other) const; //Dot
+        std::array<physics923::commons::fp, 4> SquareMagnitude() const; //SquareMagnitude
+        std::array<physics923::commons::fp, 4> Magnitude() const; //Magnitude/Sqrroot
         FourVec3<T> Normalize() const; //Normalize
     };
 
     using FourVec3i = FourVec3<int32_t>;
-    using FourVec3f = FourVec3<float>;
+    using FourVec3f = FourVec3<physics923::commons::fp>;
 
-    //Specialization for float
+    //Specialization for physics923::commons::fp
     template <>
-    FourVec3f FourVec3<float>::operator+(const FourVec3f& other) const;
+    FourVec3f FourVec3<physics923::commons::fp>::operator+(const FourVec3f& other) const;
     template <>
-    FourVec3f FourVec3<float>::operator-(const FourVec3f& other) const;
+    FourVec3f FourVec3<physics923::commons::fp>::operator-(const FourVec3f& other) const;
     template <>
-    FourVec3f FourVec3<float>::operator-() const;
+    FourVec3f FourVec3<physics923::commons::fp>::operator-() const;
     template <>
-    FourVec3f FourVec3<float>::operator*(const float scalar) const;
+    FourVec3f FourVec3<physics923::commons::fp>::operator*(const physics923::commons::fp scalar) const;
     template <>
-    FourVec3f FourVec3<float>::operator/(const float scalar) const;
+    FourVec3f FourVec3<physics923::commons::fp>::operator/(const physics923::commons::fp scalar) const;
     template <>
-    std::array<float, 4> FourVec3<float>::Dot(const FourVec3f& other) const;
+    std::array<physics923::commons::fp, 4> FourVec3<physics923::commons::fp>::Dot(const FourVec3f& other) const;
     template <>
-    std::array<float, 4> FourVec3<float>::SquareMagnitude() const;
+    std::array<physics923::commons::fp, 4> FourVec3<physics923::commons::fp>::SquareMagnitude() const;
     template <>
-    std::array<float, 4> FourVec3<float>::Magnitude() const;
+    std::array<physics923::commons::fp, 4> FourVec3<physics923::commons::fp>::Magnitude() const;
     template <>
-    FourVec3f FourVec3<float>::Normalize() const;
+    FourVec3f FourVec3<physics923::commons::fp>::Normalize() const;
 }
 
 #endif //PHYSICS_923_LIB_MATH_FOUR_VEC3_H_

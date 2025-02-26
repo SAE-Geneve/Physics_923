@@ -14,7 +14,7 @@ namespace physics923
     private:
         GameEngine* game_engine_ = nullptr;
         bool show_quadtree_ = true;
-        float speed_multiplier_ = 1.0f;
+        physics923::commons::fp speed_multiplier_ = 1.0f;
         int current_scene_ = 0;
 
         SDL_Color planets_colour_ = {255, 13, 132};
@@ -29,7 +29,7 @@ namespace physics923
         void PassEvents(SDL_Event& event);
 
         [[nodiscard]] bool show_quadtree() const { return show_quadtree_; }
-        [[nodiscard]] float speed_multiplier() const { return speed_multiplier_; }
+        [[nodiscard]] physics923::commons::fp speed_multiplier() const { return speed_multiplier_; }
         [[nodiscard]] SDL_Color planets_colour() const { return planets_colour_; }
     };
 }

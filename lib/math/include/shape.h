@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "vec2.h"
+#include "commons.h"
 
 namespace physics923::math
 {
@@ -23,7 +24,7 @@ namespace physics923::math
         Vec2f max_bound_ = Vec2f::Zero();
         Vec2f centre_ = Vec2f::Zero();
         Vec2f half_size_vec_ = Vec2f::Zero();
-        float half_size_length_ = 0.0f;
+        physics923::commons::fp half_size_length_ = 0.0f;
 
     public:
         constexpr AABB(const Vec2f min_bound, const Vec2f max_bound) : min_bound_(min_bound), max_bound_(max_bound)
@@ -37,7 +38,7 @@ namespace physics923::math
                        const Vec2f max_bound,
                        const Vec2f centre,
                        const Vec2f half_size_vec,
-                       const float half_size_length) :
+                       const physics923::commons::fp half_size_length) :
             min_bound_(min_bound),
             max_bound_(max_bound),
             centre_(centre),
@@ -46,7 +47,7 @@ namespace physics923::math
         {
         }
 
-        constexpr AABB(const Vec2f centre, const Vec2f half_size_vec, const float half_size_length)
+        constexpr AABB(const Vec2f centre, const Vec2f half_size_vec, const physics923::commons::fp half_size_length)
         {
             half_size_vec_ = half_size_vec;
             min_bound_ = Vec2f(centre - half_size_vec_);
@@ -59,7 +60,7 @@ namespace physics923::math
 
         [[nodiscard]] constexpr Vec2f min_bound() const { return min_bound_; }
         [[nodiscard]] constexpr Vec2f max_bound() const { return max_bound_; }
-        [[nodiscard]] constexpr float half_size_length() const { return half_size_length_; }
+        [[nodiscard]] constexpr physics923::commons::fp half_size_length() const { return half_size_length_; }
         [[nodiscard]] constexpr Vec2f half_size_vec() const { return half_size_vec_; }
 
         void set_min_bound(const Vec2f bound)
@@ -112,22 +113,22 @@ namespace physics923::math
     {
     private:
         Vec2f centre_ = Vec2f::Zero();
-        float radius_ = 0.0f;
+        physics923::commons::fp radius_ = 0.0f;
 
     public:
-        constexpr Circle(const Vec2f center, const float radius) : centre_(center), radius_(radius)
+        constexpr Circle(const Vec2f center, const physics923::commons::fp radius) : centre_(center), radius_(radius)
         {
         }
 
-        explicit constexpr Circle(const float radius) : centre_(Vec2f::Zero()), radius_(radius)
+        explicit constexpr Circle(const physics923::commons::fp radius) : centre_(Vec2f::Zero()), radius_(radius)
         {
         }
 
         [[nodiscard]] constexpr Vec2f centre() const { return centre_; }
-        [[nodiscard]] constexpr float radius() const { return radius_; }
+        [[nodiscard]] constexpr physics923::commons::fp radius() const { return radius_; }
 
         void set_centre(const Vec2f center) { centre_ = center; }
-        void set_radius(const float radius) { radius_ = radius; }
+        void set_radius(const physics923::commons::fp radius) { radius_ = radius; }
 
         [[nodiscard]] bool Contains(const Vec2f point) const
         {
@@ -205,7 +206,7 @@ namespace physics923::math
     {
         const Vec2f segment = segment_end - segment_start;
         const Vec2f point_to_start = compare_point - segment_start;
-        const float t = std::clamp(point_to_start.Dot(segment) / segment.SquareMagnitude(), 0.0f, 1.0f);
+        const physics923::commons::fp t = std::clamp(point_to_start.Dot(segment) / segment.SquareMagnitude(), 0.0f, 1.0f);
         const Vec2f closest_point = segment_start + segment * t;
 
         return closest_point;
@@ -222,8 +223,8 @@ namespace physics923::math
     [[nodiscard]] constexpr bool Intersect(const Circle& circle_a, const Circle& circle_b)
     {
         const Vec2f delta = circle_a.centre() - circle_b.centre();
-        const float distanceSquared = delta.SquareMagnitude();
-        const float radiusSum = circle_a.radius() + circle_b.radius();
+        const physics923::commons::fp distanceSquared = delta.SquareMagnitude();
+        const physics923::commons::fp radiusSum = circle_a.radius() + circle_b.radius();
         return distanceSquared < radiusSum * radiusSum;
     }
 
@@ -241,21 +242,21 @@ namespace physics923::math
                 const Vec2f axis = edge.Perpendicular();
 
                 //Project all vertices of polygon_a onto the axis
-                float min_a = vertices[0].Dot(axis);
-                float max_a = min_a;
+                physics923::commons::fp min_a = vertices[0].Dot(axis);
+                physics923::commons::fp max_a = min_a;
                 for (const auto& vertex : polygon_a.vertices())
                 {
-                    float projection = vertex.Dot(axis);
+                    physics923::commons::fp projection = vertex.Dot(axis);
                     min_a = std::min(min_a, projection);
                     max_a = std::max(max_a, projection);
                 }
 
                 //Project all vertices of polygon_b onto the axis
-                float min_b = polygon_b.vertices()[0].Dot(axis);
-                float max_b = min_b;
+                physics923::commons::fp min_b = polygon_b.vertices()[0].Dot(axis);
+                physics923::commons::fp max_b = min_b;
                 for (const auto& vertex : polygon_b.vertices())
                 {
-                    float projection = vertex.Dot(axis);
+                    physics923::commons::fp projection = vertex.Dot(axis);
                     min_b = std::min(min_b, projection);
                     max_b = std::max(max_b, projection);
                 }
@@ -276,15 +277,15 @@ namespace physics923::math
     [[nodiscard]] constexpr bool Intersect(const AABB& aabb, const Circle& circle)
     {
         const Vec2f& centre = circle.centre();
-        const float radius = circle.radius();
+        const physics923::commons::fp radius = circle.radius();
 
         // Clamp the circle center to the nearest point in the AABB
-        float closest_x = std::clamp(centre.x, aabb.min_bound().x, aabb.max_bound().x);
-        float closest_y = std::clamp(centre.y, aabb.min_bound().y, aabb.max_bound().y);
+        physics923::commons::fp closest_x = std::clamp(centre.x, aabb.min_bound().x, aabb.max_bound().x);
+        physics923::commons::fp closest_y = std::clamp(centre.y, aabb.min_bound().y, aabb.max_bound().y);
 
         // Compute the distance from the circle's center to this point
         Vec2f closest_point(closest_x, closest_y);
-        return (closest_point - centre).SquareMagnitude() <= (radius * radius) + std::numeric_limits<float>::epsilon();
+        return (closest_point - centre).SquareMagnitude() <= (radius * radius) + std::numeric_limits<physics923::commons::fp>::epsilon();
     }
 
     [[nodiscard]] constexpr bool Intersect(const AABB& aabb, const Polygon& polygon)

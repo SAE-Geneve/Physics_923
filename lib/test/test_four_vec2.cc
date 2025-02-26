@@ -1,21 +1,22 @@
 ﻿#include <gtest/gtest.h>
 
 #include "four_vec2.h"
+#include "commons.h"
 
 namespace physics923::math
 {
     TEST(FourVec2Test, Addition)
     {
-        std::array<Vec2<float>, 4> a_arr = {
-            Vec2<float>{1.0f, 2.0f}, Vec2<float>{3.0f, 4.0f}, Vec2<float>{5.0f, 6.0f}, Vec2<float>{7.0f, 8.0f}
+        std::array<Vec2<physics923::commons::fp>, 4> a_arr = {
+            Vec2<physics923::commons::fp>{1.0f, 2.0f}, Vec2<physics923::commons::fp>{3.0f, 4.0f}, Vec2<physics923::commons::fp>{5.0f, 6.0f}, Vec2<physics923::commons::fp>{7.0f, 8.0f}
         };
-        std::array<Vec2<float>, 4> b_arr = {
-            Vec2<float>{9.0f, 10.0f}, Vec2<float>{11.0f, 12.0f}, Vec2<float>{13.0f, 14.0f}, Vec2<float>{15.0f, 16.0f}
+        std::array<Vec2<physics923::commons::fp>, 4> b_arr = {
+            Vec2<physics923::commons::fp>{9.0f, 10.0f}, Vec2<physics923::commons::fp>{11.0f, 12.0f}, Vec2<physics923::commons::fp>{13.0f, 14.0f}, Vec2<physics923::commons::fp>{15.0f, 16.0f}
         };
 
-        FourVec2<float> a(a_arr);
-        FourVec2<float> b(b_arr);
-        FourVec2<float> result = a + b;
+        FourVec2<physics923::commons::fp> a(a_arr);
+        FourVec2<physics923::commons::fp> b(b_arr);
+        FourVec2<physics923::commons::fp> result = a + b;
 
         EXPECT_EQ(result.x[0], 10.0f);
         EXPECT_EQ(result.x[1], 14.0f);
@@ -30,16 +31,16 @@ namespace physics923::math
 
     TEST(FourVec2Test, Subtraction)
     {
-        std::array<Vec2<float>, 4> a_arr = {
-            Vec2<float>{10.0f, 20.0f}, Vec2<float>{30.0f, 40.0f}, Vec2<float>{50.0f, 60.0f}, Vec2<float>{70.0f, 80.0f}
+        std::array<Vec2<physics923::commons::fp>, 4> a_arr = {
+            Vec2<physics923::commons::fp>{10.0f, 20.0f}, Vec2<physics923::commons::fp>{30.0f, 40.0f}, Vec2<physics923::commons::fp>{50.0f, 60.0f}, Vec2<physics923::commons::fp>{70.0f, 80.0f}
         };
-        std::array<Vec2<float>, 4> b_arr = {
-            Vec2<float>{1.0f, 2.0f}, Vec2<float>{3.0f, 4.0f}, Vec2<float>{5.0f, 6.0f}, Vec2<float>{7.0f, 8.0f}
+        std::array<Vec2<physics923::commons::fp>, 4> b_arr = {
+            Vec2<physics923::commons::fp>{1.0f, 2.0f}, Vec2<physics923::commons::fp>{3.0f, 4.0f}, Vec2<physics923::commons::fp>{5.0f, 6.0f}, Vec2<physics923::commons::fp>{7.0f, 8.0f}
         };
 
-        FourVec2<float> a(a_arr);
-        FourVec2<float> b(b_arr);
-        FourVec2<float> result = a - b;
+        FourVec2<physics923::commons::fp> a(a_arr);
+        FourVec2<physics923::commons::fp> b(b_arr);
+        FourVec2<physics923::commons::fp> result = a - b;
 
         EXPECT_EQ(result.x[0], 9.0f);
         EXPECT_EQ(result.x[1], 27.0f);
@@ -55,12 +56,12 @@ namespace physics923::math
     // Test for negation operator (-)
     TEST(FourVec2Test, Negation)
     {
-        std::array<Vec2<float>, 4> a_arr = {
-            Vec2<float>{1.0f, -2.0f}, Vec2<float>{3.0f, -4.0f}, Vec2<float>{5.0f, -6.0f}, Vec2<float>{7.0f, -8.0f}
+        std::array<Vec2<physics923::commons::fp>, 4> a_arr = {
+            Vec2<physics923::commons::fp>{1.0f, -2.0f}, Vec2<physics923::commons::fp>{3.0f, -4.0f}, Vec2<physics923::commons::fp>{5.0f, -6.0f}, Vec2<physics923::commons::fp>{7.0f, -8.0f}
         };
 
-        FourVec2<float> a(a_arr);
-        FourVec2<float> result = -a;
+        FourVec2<physics923::commons::fp> a(a_arr);
+        FourVec2<physics923::commons::fp> result = -a;
 
         EXPECT_EQ(result.x[0], -1.0f);
         EXPECT_EQ(result.x[1], -3.0f);
@@ -76,12 +77,12 @@ namespace physics923::math
     // Test for scalar multiplication operator (*)
     TEST(FourVec2Test, ScalarMultiplication)
     {
-        std::array<Vec2<float>, 4> a_arr = {
-            Vec2<float>{1.0f, 2.0f}, Vec2<float>{3.0f, 4.0f}, Vec2<float>{5.0f, 6.0f}, Vec2<float>{7.0f, 8.0f}
+        std::array<Vec2<physics923::commons::fp>, 4> a_arr = {
+            Vec2<physics923::commons::fp>{1.0f, 2.0f}, Vec2<physics923::commons::fp>{3.0f, 4.0f}, Vec2<physics923::commons::fp>{5.0f, 6.0f}, Vec2<physics923::commons::fp>{7.0f, 8.0f}
         };
 
-        FourVec2<float> a(a_arr);
-        FourVec2<float> result = a * 2.0f;
+        FourVec2<physics923::commons::fp> a(a_arr);
+        FourVec2<physics923::commons::fp> result = a * 2.0f;
 
         EXPECT_EQ(result.x[0], 2.0f);
         EXPECT_EQ(result.x[1], 6.0f);
@@ -97,13 +98,13 @@ namespace physics923::math
     // Test for multiplication by an array of scalars
     TEST(FourVec2Test, ElementWiseMultiplication)
     {
-        std::array<Vec2<float>, 4> a_arr = {
-            Vec2<float>{1.0f, 2.0f}, Vec2<float>{3.0f, 4.0f}, Vec2<float>{5.0f, 6.0f}, Vec2<float>{7.0f, 8.0f}
+        std::array<Vec2<physics923::commons::fp>, 4> a_arr = {
+            Vec2<physics923::commons::fp>{1.0f, 2.0f}, Vec2<physics923::commons::fp>{3.0f, 4.0f}, Vec2<physics923::commons::fp>{5.0f, 6.0f}, Vec2<physics923::commons::fp>{7.0f, 8.0f}
         };
-        std::array<float, 4> scalars = {2.0f, 3.0f, 4.0f, 5.0f};
+        std::array<physics923::commons::fp, 4> scalars = {2.0f, 3.0f, 4.0f, 5.0f};
 
-        FourVec2<float> a(a_arr);
-        FourVec2<float> result = a * scalars;
+        FourVec2<physics923::commons::fp> a(a_arr);
+        FourVec2<physics923::commons::fp> result = a * scalars;
 
         // Check x components after element-wise multiplication
         EXPECT_EQ(result.x[0], 1.0f * 2.0f);
@@ -121,12 +122,12 @@ namespace physics923::math
     // Test for scalar division operator (/)
     TEST(FourVec2Test, ScalarDivision)
     {
-        std::array<Vec2<float>, 4> a_arr = {
-            Vec2<float>{10.0f, 20.0f}, Vec2<float>{30.0f, 40.0f}, Vec2<float>{50.0f, 60.0f}, Vec2<float>{70.0f, 80.0f}
+        std::array<Vec2<physics923::commons::fp>, 4> a_arr = {
+            Vec2<physics923::commons::fp>{10.0f, 20.0f}, Vec2<physics923::commons::fp>{30.0f, 40.0f}, Vec2<physics923::commons::fp>{50.0f, 60.0f}, Vec2<physics923::commons::fp>{70.0f, 80.0f}
         };
 
-        FourVec2<float> a(a_arr);
-        FourVec2<float> result = a / 10.0f;
+        FourVec2<physics923::commons::fp> a(a_arr);
+        FourVec2<physics923::commons::fp> result = a / 10.0f;
 
         EXPECT_EQ(result.x[0], 1.0f);
         EXPECT_EQ(result.x[1], 3.0f);
@@ -142,16 +143,16 @@ namespace physics923::math
     // Test for Dot product
     TEST(FourVec2Test, DotProduct)
     {
-        std::array<Vec2<float>, 4> a_arr = {
-            Vec2<float>{1.0f, 2.0f}, Vec2<float>{3.0f, 4.0f}, Vec2<float>{5.0f, 6.0f}, Vec2<float>{7.0f, 8.0f}
+        std::array<Vec2<physics923::commons::fp>, 4> a_arr = {
+            Vec2<physics923::commons::fp>{1.0f, 2.0f}, Vec2<physics923::commons::fp>{3.0f, 4.0f}, Vec2<physics923::commons::fp>{5.0f, 6.0f}, Vec2<physics923::commons::fp>{7.0f, 8.0f}
         };
-        std::array<Vec2<float>, 4> b_arr = {
-            Vec2<float>{9.0f, 10.0f}, Vec2<float>{11.0f, 12.0f}, Vec2<float>{13.0f, 14.0f}, Vec2<float>{15.0f, 16.0f}
+        std::array<Vec2<physics923::commons::fp>, 4> b_arr = {
+            Vec2<physics923::commons::fp>{9.0f, 10.0f}, Vec2<physics923::commons::fp>{11.0f, 12.0f}, Vec2<physics923::commons::fp>{13.0f, 14.0f}, Vec2<physics923::commons::fp>{15.0f, 16.0f}
         };
 
-        FourVec2<float> a(a_arr);
-        FourVec2<float> b(b_arr);
-        std::array<float, 4> result = a.Dot(b);
+        FourVec2<physics923::commons::fp> a(a_arr);
+        FourVec2<physics923::commons::fp> b(b_arr);
+        std::array<physics923::commons::fp, 4> result = a.Dot(b);
 
         EXPECT_EQ(result[0], 29.0f); // (1*9 + 2*10)
         EXPECT_EQ(result[1], 81.0f); // (3*11 + 4*12)
@@ -162,12 +163,12 @@ namespace physics923::math
     // Test for Square Magnitude
     TEST(FourVec2Test, SquareMagnitude)
     {
-        std::array<Vec2<float>, 4> a_arr = {
-            Vec2<float>{1.0f, 2.0f}, Vec2<float>{3.0f, 4.0f}, Vec2<float>{5.0f, 6.0f}, Vec2<float>{7.0f, 8.0f}
+        std::array<Vec2<physics923::commons::fp>, 4> a_arr = {
+            Vec2<physics923::commons::fp>{1.0f, 2.0f}, Vec2<physics923::commons::fp>{3.0f, 4.0f}, Vec2<physics923::commons::fp>{5.0f, 6.0f}, Vec2<physics923::commons::fp>{7.0f, 8.0f}
         };
 
-        FourVec2<float> a(a_arr);
-        std::array<float, 4> result = a.SquareMagnitude();
+        FourVec2<physics923::commons::fp> a(a_arr);
+        std::array<physics923::commons::fp, 4> result = a.SquareMagnitude();
 
         EXPECT_EQ(result[0], 5.0f); // 1^2 + 2^2
         EXPECT_EQ(result[1], 25.0f); // 3^2 + 4^2
@@ -178,12 +179,12 @@ namespace physics923::math
     // Test for Magnitude
     TEST(FourVec2Test, Magnitude)
     {
-        std::array<Vec2<float>, 4> a_arr = {
-            Vec2<float>{3.0f, 4.0f}, Vec2<float>{5.0f, 12.0f}, Vec2<float>{8.0f, 15.0f}, Vec2<float>{7.0f, 24.0f}
+        std::array<Vec2<physics923::commons::fp>, 4> a_arr = {
+            Vec2<physics923::commons::fp>{3.0f, 4.0f}, Vec2<physics923::commons::fp>{5.0f, 12.0f}, Vec2<physics923::commons::fp>{8.0f, 15.0f}, Vec2<physics923::commons::fp>{7.0f, 24.0f}
         };
 
-        FourVec2<float> a(a_arr);
-        std::array<float, 4> result = a.Magnitude();
+        FourVec2<physics923::commons::fp> a(a_arr);
+        std::array<physics923::commons::fp, 4> result = a.Magnitude();
 
         EXPECT_FLOAT_EQ(result[0], 5.0f); // sqrt(3^2 + 4^2)
         EXPECT_FLOAT_EQ(result[1], 13.0f); // sqrt(5^2 + 12^2)
@@ -194,12 +195,12 @@ namespace physics923::math
     // Test for Normalize
     TEST(FourVec2Test, Normalize)
     {
-        std::array<Vec2<float>, 4> a_arr = {
-            Vec2<float>{3.0f, 4.0f}, Vec2<float>{5.0f, 12.0f}, Vec2<float>{8.0f, 15.0f}, Vec2<float>{7.0f, 24.0f}
+        std::array<Vec2<physics923::commons::fp>, 4> a_arr = {
+            Vec2<physics923::commons::fp>{3.0f, 4.0f}, Vec2<physics923::commons::fp>{5.0f, 12.0f}, Vec2<physics923::commons::fp>{8.0f, 15.0f}, Vec2<physics923::commons::fp>{7.0f, 24.0f}
         };
 
-        FourVec2<float> a(a_arr);
-        FourVec2<float> result = a.Normalize();
+        FourVec2<physics923::commons::fp> a(a_arr);
+        FourVec2<physics923::commons::fp> result = a.Normalize();
 
         // Normalized vector for {3.0f, 4.0f} should be {0.6, 0.8}
         EXPECT_FLOAT_EQ(result.x[0], 0.6f);

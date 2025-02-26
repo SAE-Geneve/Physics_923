@@ -2,6 +2,7 @@
 #define PHYSICS_923_LIB_COMMON_RANDOM_H_
 
 #include <random>
+#include "commons.h"
 
 namespace physics923::random
 {
@@ -18,7 +19,7 @@ namespace physics923::random
         }
         else if constexpr (std::is_floating_point_v<T>)
         {
-            std::uniform_real_distribution<float> dist(min_number, max_number);
+            std::uniform_real_distribution<physics923::commons::fp> dist(min_number, max_number);
             return dist(rng);
         }
         throw std::invalid_argument("Invalid type");

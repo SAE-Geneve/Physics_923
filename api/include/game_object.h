@@ -16,19 +16,19 @@ namespace physics923
     private:
         physics::Body body_;
         physics::Collider collider_ = {};
-        float radius_ = 0.f;
+        physics923::commons::fp radius_ = 0.f;
         SDL_Color color_ = SDL_Color{255, 13, 132, 255};
         int collisions_count_ = 0;
 
     public:
         GameObject() = default;
 
-        GameObject(const physics::Body& body, physics::Collider collider, const float radius) : body_(body),
+        GameObject(const physics::Body& body, physics::Collider collider, const physics923::commons::fp radius) : body_(body),
             collider_(std::move(collider)), radius_(radius)
         {
         }
 
-        GameObject(const physics::Body& body, const float radius, const SDL_Color& color) : body_(body),
+        GameObject(const physics::Body& body, const physics923::commons::fp radius, const SDL_Color& color) : body_(body),
             radius_(radius), color_(color)
         {
         }
@@ -37,14 +37,14 @@ namespace physics923
 
         [[nodiscard]] physics::Body& body() { return body_; }
         [[nodiscard]] physics::Collider& collider() { return collider_; }
-        [[nodiscard]] float radius() const { return radius_; }
+        [[nodiscard]] physics923::commons::fp radius() const { return radius_; }
         [[nodiscard]] SDL_Color color() const { return color_; }
         [[nodiscard]] math::Vec2f position() const { return body_.position(); }
         [[nodiscard]] int collisions_count() const { return collisions_count_; }
 
         void set_body(const physics::Body& body) { body_ = body; }
         void set_collider(const physics::Collider& collider) { collider_ = collider; }
-        void set_radius(const float radius) { radius_ = radius; }
+        void set_radius(const physics923::commons::fp radius) { radius_ = radius; }
         void set_color(const SDL_Color& color) { color_ = color; }
         void AddCollision() { collisions_count_++; }
         void SubCollision() { collisions_count_--; }

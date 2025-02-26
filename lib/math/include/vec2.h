@@ -5,6 +5,8 @@
 #include <cmath>
 #include <stdexcept>
 
+#include "commons.h"
+
 namespace physics923::math
 {
     /**
@@ -121,12 +123,12 @@ namespace physics923::math
             return v1.x * v2.y - v1.y * v2.x;
         }
 
-        [[nodiscard]] constexpr Vec2 CrossProduct(const Vec2& v1, float s) const
+        [[nodiscard]] constexpr Vec2 CrossProduct(const Vec2& v1, physics923::commons::fp s) const
         {
             return Vec2(s * v1.y, -s * v1.x);
         }
 
-        [[nodiscard]] constexpr Vec2 CrossProduct(float s, const Vec2& v1) const
+        [[nodiscard]] constexpr Vec2 CrossProduct(physics923::commons::fp s, const Vec2& v1) const
         {
             return Vec2(-s * v1.y, s * v1.x);
         }
@@ -164,7 +166,7 @@ namespace physics923::math
          */
         [[nodiscard]] constexpr Vec2 Normalized() const
         {
-            float mag = Magnitude();
+            physics923::commons::fp mag = Magnitude();
             if (mag == 0) return {0, 0};
             return {x / mag, y / mag};
         }
@@ -183,7 +185,7 @@ namespace physics923::math
         return {scalar * vec.x, scalar * vec.y};
     }
 
-    using Vec2f = Vec2<float>;
+    using Vec2f = Vec2<physics923::commons::fp>;
     using Vec2i = Vec2<int>;
     using Vec2d = Vec2<double>;
 } // namespace math

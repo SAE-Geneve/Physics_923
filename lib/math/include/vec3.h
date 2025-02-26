@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cmath>
 #include <stdexcept>
+#include "commons.h"
 
 namespace physics923::math
 {

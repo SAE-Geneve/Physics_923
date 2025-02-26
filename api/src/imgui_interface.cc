@@ -95,7 +95,7 @@ namespace physics923
                     ImGui::Separator();
 
                     static ImVec4 planetColor = ImVec4(1.0f, 13.f/255.f, 132.f/255.f, 1.0f);  // Default color
-                    if (ImGui::ColorPicker3("Planet Color", reinterpret_cast<float*>(&planetColor)))
+                    if (ImGui::ColorPicker3("Planet Color", reinterpret_cast<physics923::commons::fp*>(&planetColor)))
                     {
                         // Convert the ImVec3 color (0-1 range) to SDL_Color (0-255 range)
                         SDL_Color sdlColor;

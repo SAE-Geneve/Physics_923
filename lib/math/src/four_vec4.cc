@@ -6,9 +6,9 @@ namespace physics923::math
 {
     // Operator+ with SIMD intrinsics
     template <>
-    FourVec4f FourVec4<float>::operator+(const FourVec4<float>& other) const
+    FourVec4f FourVec4<physics923::commons::fp>::operator+(const FourVec4<physics923::commons::fp>& other) const
     {
-        FourVec4<float> result;
+        FourVec4<physics923::commons::fp> result;
         __m128 x1 = _mm_loadu_ps(x.data());
         __m128 y1 = _mm_loadu_ps(y.data());
         __m128 z1 = _mm_loadu_ps(z.data());
@@ -34,9 +34,9 @@ namespace physics923::math
 
     // Operator- with SIMD intrinsics
     template <>
-    FourVec4f FourVec4<float>::operator-(const FourVec4<float>& other) const
+    FourVec4f FourVec4<physics923::commons::fp>::operator-(const FourVec4<physics923::commons::fp>& other) const
     {
-        FourVec4<float> result;
+        FourVec4<physics923::commons::fp> result;
         __m128 x1 = _mm_loadu_ps(x.data());
         __m128 y1 = _mm_loadu_ps(y.data());
         __m128 z1 = _mm_loadu_ps(z.data());
@@ -62,9 +62,9 @@ namespace physics923::math
 
     // Negation operator
     template <>
-    FourVec4f FourVec4<float>::operator-() const
+    FourVec4f FourVec4<physics923::commons::fp>::operator-() const
     {
-        FourVec4<float> result;
+        FourVec4<physics923::commons::fp> result;
         __m128 x1 = _mm_loadu_ps(x.data());
         __m128 y1 = _mm_loadu_ps(y.data());
         __m128 z1 = _mm_loadu_ps(z.data());
@@ -87,9 +87,9 @@ namespace physics923::math
 
     // Scalar multiplication
     template <>
-    FourVec4f FourVec4<float>::operator*(const float scalar) const
+    FourVec4f FourVec4<physics923::commons::fp>::operator*(const physics923::commons::fp scalar) const
     {
-        FourVec4<float> result;
+        FourVec4<physics923::commons::fp> result;
         __m128 x1 = _mm_loadu_ps(x.data());
         __m128 y1 = _mm_loadu_ps(y.data());
         __m128 z1 = _mm_loadu_ps(z.data());
@@ -111,9 +111,9 @@ namespace physics923::math
 
     // Scalar division
     template <>
-    FourVec4f FourVec4<float>::operator/(const float scalar) const
+    FourVec4f FourVec4<physics923::commons::fp>::operator/(const physics923::commons::fp scalar) const
     {
-        FourVec4<float> result;
+        FourVec4<physics923::commons::fp> result;
         __m128 x1 = _mm_loadu_ps(x.data());
         __m128 y1 = _mm_loadu_ps(y.data());
         __m128 z1 = _mm_loadu_ps(z.data());
@@ -135,9 +135,9 @@ namespace physics923::math
 
     // Dot product
     template <>
-    std::array<float, 4> FourVec4<float>::Dot(const FourVec4f& other) const
+    std::array<physics923::commons::fp, 4> FourVec4<physics923::commons::fp>::Dot(const FourVec4f& other) const
     {
-        std::array<float, 4> result;
+        std::array<physics923::commons::fp, 4> result;
 
         __m128 x1 = _mm_loadu_ps(x.data());
         __m128 y1 = _mm_loadu_ps(y.data());
@@ -163,9 +163,9 @@ namespace physics923::math
 
     // Square magnitude
     template <>
-    std::array<float, 4> FourVec4<float>::SquareMagnitude() const
+    std::array<physics923::commons::fp, 4> FourVec4<physics923::commons::fp>::SquareMagnitude() const
     {
-        std::array<float, 4> result;
+        std::array<physics923::commons::fp, 4> result;
 
         __m128 x1 = _mm_loadu_ps(x.data());
         __m128 y1 = _mm_loadu_ps(y.data());
@@ -186,13 +186,13 @@ namespace physics923::math
 
     // Magnitude
     template <>
-    std::array<float, 4> FourVec4<float>::Magnitude() const
+    std::array<physics923::commons::fp, 4> FourVec4<physics923::commons::fp>::Magnitude() const
     {
-        std::array<float, 4> squared_magnitude = SquareMagnitude();
+        std::array<physics923::commons::fp, 4> squared_magnitude = SquareMagnitude();
         __m128 squared_magnitude_ps = _mm_loadu_ps(squared_magnitude.data());
         __m128 magnitude_ps = _mm_sqrt_ps(squared_magnitude_ps);
 
-        std::array<float, 4> result;
+        std::array<physics923::commons::fp, 4> result;
         _mm_storeu_ps(result.data(), magnitude_ps);
 
         return result;
@@ -200,10 +200,10 @@ namespace physics923::math
 
     // Normalize
     template <>
-    FourVec4f FourVec4<float>::Normalize() const
+    FourVec4f FourVec4<physics923::commons::fp>::Normalize() const
     {
-        FourVec4<float> result;
-        std::array<float, 4> magnitude = Magnitude();
+        FourVec4<physics923::commons::fp> result;
+        std::array<physics923::commons::fp, 4> magnitude = Magnitude();
 
         __m128 x1 = _mm_loadu_ps(x.data());
         __m128 y1 = _mm_loadu_ps(y.data());
