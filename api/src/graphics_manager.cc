@@ -19,20 +19,20 @@ namespace physics923
         indices_.clear();
     }
 
-    void GraphicsManager::CreateCircle(const math::Vec2f centre, const float radius, const SDL_Color color, const bool rotation)
+    void GraphicsManager::CreateCircle(const math::Vec2f centre, const physics923::commons::fp radius, const SDL_Color color, const bool rotation)
     {
         //Track where the new circle's vertices start
         const size_t starting_index = vertices_.size();
 
-        constexpr float angle_step = (2 * commons::Pi) / kCircleVertexCount;
+        constexpr physics923::commons::fp angle_step = (2 * commons::Pi) / kCircleVertexCount;
 
         //Add the centre of the circle
         AddVertex(centre, SDL_Color{0, 0, 0, 0});
 
         {
-            const float angle = static_cast<float>(0) * angle_step;
-            const float x = centre.x + radius * std::cos(angle);
-            const float y = centre.y + radius * std::sin(angle);
+            const physics923::commons::fp angle = static_cast<physics923::commons::fp>(0) * angle_step;
+            const physics923::commons::fp x = centre.x + radius * std::cos(angle);
+            const physics923::commons::fp y = centre.y + radius * std::sin(angle);
             if(rotation)
             {
                 AddVertex(math::Vec2f{x, y}, SDL_Color{0, 0, 0, 255});
@@ -47,9 +47,9 @@ namespace physics923
         //Generate vertices
         for (size_t i = 1; i < kCircleVertexCount; i++)
         {
-            const float angle = static_cast<float>(i) * angle_step;
-            const float x = centre.x + radius * std::cos(angle);
-            const float y = centre.y + radius * std::sin(angle);
+            const physics923::commons::fp angle = static_cast<physics923::commons::fp>(i) * angle_step;
+            const physics923::commons::fp x = centre.x + radius * std::cos(angle);
+            const physics923::commons::fp y = centre.y + radius * std::sin(angle);
 
             AddVertex(math::Vec2f{x, y}, color);
         }

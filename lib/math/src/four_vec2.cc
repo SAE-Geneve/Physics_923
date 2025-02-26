@@ -6,9 +6,9 @@ namespace physics923::math
 {
     //Operator+ with SIMD intrinsics
     template <>
-    FourVec2f FourVec2<float>::operator+(const FourVec2<float>& other) const
+    FourVec2f FourVec2<physics923::commons::fp>::operator+(const FourVec2<physics923::commons::fp>& other) const
     {
-        FourVec2<float> result;
+        FourVec2<physics923::commons::fp> result;
         __m128 x1 = _mm_loadu_ps(x.data());
         __m128 x2 = _mm_loadu_ps(other.x.data());
         __m128 y1 = _mm_loadu_ps(y.data());
@@ -25,9 +25,9 @@ namespace physics923::math
 
     //Operator- with SIMD intrinsics
     template <>
-    FourVec2f FourVec2<float>::operator-(const FourVec2<float>& other) const
+    FourVec2f FourVec2<physics923::commons::fp>::operator-(const FourVec2<physics923::commons::fp>& other) const
     {
-        FourVec2<float> result;
+        FourVec2<physics923::commons::fp> result;
         __m128 x1 = _mm_loadu_ps(x.data());
         __m128 x2 = _mm_loadu_ps(other.x.data());
         __m128 y1 = _mm_loadu_ps(y.data());
@@ -43,9 +43,9 @@ namespace physics923::math
     }
 
     template <>
-    FourVec2f FourVec2<float>::operator-() const
+    FourVec2f FourVec2<physics923::commons::fp>::operator-() const
     {
-        FourVec2<float> result;
+        FourVec2<physics923::commons::fp> result;
         __m128 x1 = _mm_loadu_ps(x.data());
         __m128 y1 = _mm_loadu_ps(y.data());
 
@@ -62,9 +62,9 @@ namespace physics923::math
     }
 
     template <>
-    FourVec2f FourVec2<float>::operator*(const float scalar) const
+    FourVec2f FourVec2<physics923::commons::fp>::operator*(const physics923::commons::fp scalar) const
     {
-        FourVec2<float> result;
+        FourVec2<physics923::commons::fp> result;
         __m128 x1 = _mm_loadu_ps(x.data());
         __m128 y1 = _mm_loadu_ps(y.data());
 
@@ -79,9 +79,9 @@ namespace physics923::math
     }
 
     template <>
-    FourVec2f FourVec2<float>::operator*(const std::array<float, 4> scalars) const
+    FourVec2f FourVec2<physics923::commons::fp>::operator*(const std::array<physics923::commons::fp, 4> scalars) const
     {
-        FourVec2<float> result;
+        FourVec2<physics923::commons::fp> result;
 
         // Load x and y components of the current FourVec2f object
         __m128 x1 = _mm_loadu_ps(x.data());
@@ -102,9 +102,9 @@ namespace physics923::math
     }
 
     template <>
-    FourVec2f FourVec2<float>::operator/(const float scalar) const
+    FourVec2f FourVec2<physics923::commons::fp>::operator/(const physics923::commons::fp scalar) const
     {
-        FourVec2<float> result;
+        FourVec2<physics923::commons::fp> result;
         __m128 x1 = _mm_loadu_ps(x.data());
         __m128 y1 = _mm_loadu_ps(y.data());
 
@@ -119,9 +119,9 @@ namespace physics923::math
     }
 
     template <>
-    std::array<float, 4> FourVec2<float>::Dot(const FourVec2f& other) const
+    std::array<physics923::commons::fp, 4> FourVec2<physics923::commons::fp>::Dot(const FourVec2f& other) const
     {
-        std::array<float, 4> result;
+        std::array<physics923::commons::fp, 4> result;
 
         // Load the x and y components of the two vectors
         __m128 x1 = _mm_loadu_ps(x.data());
@@ -143,9 +143,9 @@ namespace physics923::math
     }
 
     template <>
-std::array<float, 4> FourVec2<float>::SquareMagnitude() const
+std::array<physics923::commons::fp, 4> FourVec2<physics923::commons::fp>::SquareMagnitude() const
     {
-        std::array<float, 4> result;
+        std::array<physics923::commons::fp, 4> result;
 
         // Load the x and y components
         __m128 x1 = _mm_loadu_ps(x.data());
@@ -166,17 +166,17 @@ std::array<float, 4> FourVec2<float>::SquareMagnitude() const
 
 
     template <>
-    std::array<float, 4> FourVec2<float>::Magnitude() const
+    std::array<physics923::commons::fp, 4> FourVec2<physics923::commons::fp>::Magnitude() const
     {
         // Call SquareMagnitude to get the squared magnitudes
-        std::array<float, 4> squared_magnitude = SquareMagnitude();
+        std::array<physics923::commons::fp, 4> squared_magnitude = SquareMagnitude();
 
         // Compute the square root of each element in the squared magnitudes
         __m128 squared_magnitude_ps = _mm_loadu_ps(squared_magnitude.data());
         __m128 magnitude_ps = _mm_sqrt_ps(squared_magnitude_ps);
 
         // Store the result in an array
-        std::array<float, 4> result;
+        std::array<physics923::commons::fp, 4> result;
         _mm_storeu_ps(result.data(), magnitude_ps);
 
         return result;
@@ -184,12 +184,12 @@ std::array<float, 4> FourVec2<float>::SquareMagnitude() const
 
 
     template <>
-    FourVec2f FourVec2<float>::Normalize() const
+    FourVec2f FourVec2<physics923::commons::fp>::Normalize() const
     {
-        FourVec2<float> result;
+        FourVec2<physics923::commons::fp> result;
 
         // Call Magnitude to get the magnitudes of the vector elements
-        std::array<float, 4> magnitude = Magnitude();
+        std::array<physics923::commons::fp, 4> magnitude = Magnitude();
 
         // Load the x and y components
         __m128 x1 = _mm_loadu_ps(x.data());

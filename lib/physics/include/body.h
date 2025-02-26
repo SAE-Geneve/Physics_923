@@ -25,22 +25,22 @@ namespace physics923::physics
         math::Vec2f acceleration_ = math::Vec2f::Zero();
 
         //Angular components
-        float orientation_ = 0.0f;
-        float angular_velocity_ = 0.0f;
-        float torque_ = 0.0f;
+        physics923::commons::fp orientation_ = 0.0f;
+        physics923::commons::fp angular_velocity_ = 0.0f;
+        physics923::commons::fp torque_ = 0.0f;
 
         bool is_awake_ = true;
 
-        float mass_ = 1.0f;
-        float inverse_mass_ = 1.0f;
+        physics923::commons::fp mass_ = 1.0f;
+        physics923::commons::fp inverse_mass_ = 1.0f;
 
-        float inertia_ = 1.0f;
-        float inverse_inertia_ = 1.0f;
+        physics923::commons::fp inertia_ = 1.0f;
+        physics923::commons::fp inverse_inertia_ = 1.0f;
 
     public:
         Body() = default;
 
-        Body(const BodyType type, const math::Vec2f position, const math::Vec2f velocity, const float mass)
+        Body(const BodyType type, const math::Vec2f position, const math::Vec2f velocity, const physics923::commons::fp mass)
         {
             type_ = type;
             position_ = position;
@@ -63,7 +63,7 @@ namespace physics923::physics
             }
         };
 
-        Body(const math::Vec2f position, const float mass)
+        Body(const math::Vec2f position, const physics923::commons::fp mass)
         {
             position_ = position;
             mass_ = mass;
@@ -75,20 +75,20 @@ namespace physics923::physics
         [[nodiscard]] math::Vec2f position() const { return position_; }
         [[nodiscard]] math::Vec2f velocity() const { return velocity_; }
         [[nodiscard]] math::Vec2f acceleration() const { return acceleration_; }
-        [[nodiscard]] float orientation() const { return orientation_; }
-        [[nodiscard]] float angular_velocity() const { return angular_velocity_; }
-        [[nodiscard]] float torque() const { return torque_; }
-        [[nodiscard]] float mass() const { return mass_; }
-        [[nodiscard]] float inverse_mass() const { return inverse_mass_; }
-        [[nodiscard]] float inertia() const { return inertia_; }
-        [[nodiscard]] float inverse_inertia() const { return inverse_inertia_; }
+        [[nodiscard]] physics923::commons::fp orientation() const { return orientation_; }
+        [[nodiscard]] physics923::commons::fp angular_velocity() const { return angular_velocity_; }
+        [[nodiscard]] physics923::commons::fp torque() const { return torque_; }
+        [[nodiscard]] physics923::commons::fp mass() const { return mass_; }
+        [[nodiscard]] physics923::commons::fp inverse_mass() const { return inverse_mass_; }
+        [[nodiscard]] physics923::commons::fp inertia() const { return inertia_; }
+        [[nodiscard]] physics923::commons::fp inverse_inertia() const { return inverse_inertia_; }
 
 
         //Setters
         void set_position(const math::Vec2f new_position) { position_ = new_position; }
         void set_velocity(const math::Vec2f new_velocity) { velocity_ = new_velocity; }
 
-        void set_mass(const float new_mass)
+        void set_mass(const physics923::commons::fp new_mass)
         {
             mass_ = new_mass;
             if (new_mass == 0.0f)
@@ -140,7 +140,7 @@ namespace physics923::physics
             }
         }
 
-        void Update(const float delta_time)
+        void Update(const physics923::commons::fp delta_time)
         {
             if (type_ != BodyType::Static)
             {

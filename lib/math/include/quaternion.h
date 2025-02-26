@@ -2,6 +2,7 @@
 #define PHYSICS_923_LIB_MATH_QUATERNION_H_
 
 #include "vec3.h"
+#include "commons.h"
 
 namespace physics923::math
 {
@@ -42,14 +43,14 @@ namespace physics923::math
         }
 
         //TODO: modify once Angle is implemented. Also implement own trigonometry (cos & sin) to be able to constexpr
-        [[nodiscard]] Quaternion EulerToQuaternion(const float x, const float y, const float z) const
+        [[nodiscard]] Quaternion EulerToQuaternion(const physics923::commons::fp x, const physics923::commons::fp y, const physics923::commons::fp z) const
         {
-            const float cosX = std::cos(x * 0.5f);
-            const float sinX = std::sin(x * 0.5f);
-            const float cosY = std::cos(y * 0.5f);
-            const float sinY = std::sin(y * 0.5f);
-            const float cosZ = std::cos(z * 0.5f);
-            const float sinZ = std::sin(z * 0.5f);
+            const physics923::commons::fp cosX = std::cos(x * 0.5f);
+            const physics923::commons::fp sinX = std::sin(x * 0.5f);
+            const physics923::commons::fp cosY = std::cos(y * 0.5f);
+            const physics923::commons::fp sinY = std::sin(y * 0.5f);
+            const physics923::commons::fp cosZ = std::cos(z * 0.5f);
+            const physics923::commons::fp sinZ = std::sin(z * 0.5f);
 
             Quaternion result;
             result.W = cosX*cosY*cosZ + sinX*sinY*sinZ;

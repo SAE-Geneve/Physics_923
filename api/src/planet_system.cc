@@ -16,9 +16,9 @@ namespace physics923
 
         for (std::size_t i = 0; i < kStartingPlanetsCount_; i++)
         {
-            constexpr float margin = 20.0f;
+            constexpr physics923::commons::fp margin = 20.0f;
             const math::Vec2f position(random::Range(margin, kWindowWidth - margin), random::Range(margin, kWindowHeight - margin));
-            const float radius = random::Range(5.f, 20.f);
+            const physics923::commons::fp radius = random::Range(5.f, 20.f);
             const uint8_t alpha = random::Range(10, 255);
 
             CreatePlanet(position, radius, SDL_Color{ 255, 13, 132, alpha });
@@ -27,7 +27,7 @@ namespace physics923
         is_spawner_active_ = false;
     }
 
-    void PlanetSystem::Update(float delta_time, SDL_Color colour)
+    void PlanetSystem::Update(physics923::commons::fp delta_time, SDL_Color colour)
     {
         if(is_spawner_active_)
         {
@@ -48,16 +48,16 @@ namespace physics923
         is_spawner_active_ = false;
     }
 
-    void PlanetSystem::CreatePlanet(const math::Vec2f position, const float radius, const SDL_Color color)
+    void PlanetSystem::CreatePlanet(const math::Vec2f position, const physics923::commons::fp radius, const SDL_Color color)
     {
         math::Vec2f u = star_.position() - position;
-        float r = u.Magnitude();
+        physics923::commons::fp r = u.Magnitude();
 
         if (r > 0)
         {
             // Calculate angular velocity magnitude based on gravitational force
             math::Vec2f tangential_direction = math::Vec2f(-u.y, u.x).Normalized();
-            float orbital_velocity = std::sqrt(kGravitationConstant_ * (star_mass_ / r));
+            physics923::commons::fp orbital_velocity = std::sqrt(kGravitationConstant_ * (star_mass_ / r));
 
             // Calculate angular velocity
             math::Vec2f angular_velocity = tangential_direction * orbital_velocity;
@@ -70,16 +70,16 @@ namespace physics923
 
     }
 
-    void PlanetSystem::UpdatePlanets(float delta_time)
+    void PlanetSystem::UpdatePlanets(physics923::commons::fp delta_time)
     {
         for (auto& planet : planets_)
         {
             math::Vec2f u = star_.position() - planet.position();
-            const float r = u.Magnitude();
+            const physics923::commons::fp r = u.Magnitude();
 
             if (r > 0)
             {
-                const float force_magnitude = kGravitationConstant_ * (planet_mass_ * star_mass_ / (r * r));
+                const physics923::commons::fp force_magnitude = kGravitationConstant_ * (planet_mass_ * star_mass_ / (r * r));
                 const math::Vec2f force = force_magnitude * u.Normalized();
                 planet.body().ApplyForce(force);
             }
@@ -88,7 +88,7 @@ namespace physics923
         }
     }
 
-    void PlanetSystem::UpdatePlanetsSIMD(float delta_time)
+    void PlanetSystem::UpdatePlanetsSIMD(physics923::commons::fp delta_time)
     {
         const std::size_t simdSize = planets_.size() / 4 * 4;
 
@@ -107,10 +107,10 @@ namespace physics923
             }) - planetPositions;
 
             //Calculate distance to the star and force magnitudes
-            std::array<float, 4> distances = u.Magnitude();
+            std::array<physics923::commons::fp, 4> distances = u.Magnitude();
             math::FourVec2f normalizedU = u.Normalize();
 
-            std::array<float, 4> forceMagnitudes = {};
+            std::array<physics923::commons::fp, 4> forceMagnitudes = {};
             for (int j = 0; j < 4; ++j) {
                 if (distances[j] > 0) {
                     forceMagnitudes[j] = kGravitationConstant_ * (planets_[i+j].body().mass() * star_mass_ / (distances[j] * distances[j]));
@@ -130,9 +130,9 @@ namespace physics923
         // Handle any remaining planets that weren't in a set of four
         for (std::size_t i = simdSize; i < planets_.size(); ++i) {
             math::Vec2f u = star_.position() - planets_[i].position();
-            const float r = u.Magnitude();
+            const physics923::commons::fp r = u.Magnitude();
             if (r > 0) {
-                const float force_magnitude = kGravitationConstant_ * (planets_[i].body().mass() * star_mass_ / (r * r));
+                const physics923::commons::fp force_magnitude = kGravitationConstant_ * (planets_[i].body().mass() * star_mass_ / (r * r));
                 const math::Vec2f force = force_magnitude * u.Normalized();
                 planets_[i].body().ApplyForce(force);
             }
@@ -144,14 +144,14 @@ namespace physics923
     {
         math::Vec2i mouse_pos;
         SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
-        const auto mouse_pos_f = math::Vec2f(static_cast<float>(mouse_pos.x), static_cast<float>(mouse_pos.y));
-        if(constexpr float minimum_range = 30;
+        const auto mouse_pos_f = math::Vec2f(static_cast<physics923::commons::fp>(mouse_pos.x), static_cast<physics923::commons::fp>(mouse_pos.y));
+        if(constexpr physics923::commons::fp minimum_range = 30;
             conversions::ConvertToMeters((mouse_pos_f - star_.position()).Magnitude()) > conversions::ConvertToMeters(minimum_range))
         {
             const math::Vec2f random_pos(random::Range(mouse_pos_f.x - minimum_range, mouse_pos_f.x + minimum_range),
                                          random::Range(mouse_pos_f.y - minimum_range, mouse_pos_f.y + minimum_range));
 
-            const float radius = random::Range(5.f, 20.f);
+            const physics923::commons::fp radius = random::Range(5.f, 20.f);
             const uint8_t alpha = random::Range(10, 255);
             colour.a = alpha;
 

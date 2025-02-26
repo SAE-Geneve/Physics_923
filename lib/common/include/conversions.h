@@ -2,20 +2,21 @@
 #define PHYSICS_923_LIB_COMMON_CONVERSIONS_H_
 
 #include "vec2.h"
+#include "commons.h"
 
 namespace physics923::conversions
 {
     //TODO rename conversion
     //TODO radians & angles
-    static constexpr float kMetersPerPixel = 0.01f;
-    static constexpr float kRatioPixelsPerMeter = 100.0f;
+    static constexpr physics923::commons::fp kMetersPerPixel = 0.01f;
+    static constexpr physics923::commons::fp kRatioPixelsPerMeter = 100.0f;
 
-    [[nodiscard]] constexpr float ConvertToMeters(const float pixels) noexcept
+    [[nodiscard]] constexpr physics923::commons::fp ConvertToMeters(const physics923::commons::fp pixels) noexcept
     {
         return pixels * kMetersPerPixel;
     }
 
-    [[nodiscard]] constexpr float ConvertToPixels(const float meters) noexcept
+    [[nodiscard]] constexpr physics923::commons::fp ConvertToPixels(const physics923::commons::fp meters) noexcept
     {
         return meters * kRatioPixelsPerMeter;
     }

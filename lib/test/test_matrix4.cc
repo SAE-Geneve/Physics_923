@@ -1,7 +1,7 @@
 ﻿#include <gtest/gtest.h>
 
 #include <numbers>
-
+#include "commons.h"
 #include "matrix4.h"
 namespace physics923::math
 {
@@ -11,8 +11,8 @@ namespace physics923::math
 
     TEST_F(Matrix4Fixture, MatrixAddition)
     {
-        matrix4<float> mat1{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
-        matrix4<float> mat2{{17, 18, 19, 20}, {21, 22, 23, 24}, {25, 26, 27, 28}, {29, 30, 31, 32}};
+        matrix4<physics923::commons::fp> mat1{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+        matrix4<physics923::commons::fp> mat2{{17, 18, 19, 20}, {21, 22, 23, 24}, {25, 26, 27, 28}, {29, 30, 31, 32}};
         auto result = mat1 + mat2;
 
         EXPECT_FLOAT_EQ(result[0].x, 18);
@@ -35,8 +35,8 @@ namespace physics923::math
 
     TEST_F(Matrix4Fixture, MatrixSubtraction)
     {
-        matrix4<float> mat1{{17, 18, 19, 20}, {21, 22, 23, 24}, {25, 26, 27, 28}, {29, 30, 31, 32}};
-        matrix4<float> mat2{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+        matrix4<physics923::commons::fp> mat1{{17, 18, 19, 20}, {21, 22, 23, 24}, {25, 26, 27, 28}, {29, 30, 31, 32}};
+        matrix4<physics923::commons::fp> mat2{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
         auto result = mat1 - mat2;
 
         EXPECT_FLOAT_EQ(result[0].x, 16);
@@ -59,7 +59,7 @@ namespace physics923::math
 
     TEST_F(Matrix4Fixture, ScalarMultiplication)
     {
-        matrix4<float> mat{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+        matrix4<physics923::commons::fp> mat{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
         auto result = mat * 2.0f;
 
         EXPECT_FLOAT_EQ(result[0].x, 2);
@@ -82,8 +82,8 @@ namespace physics923::math
 
     TEST_F(Matrix4Fixture, MultiplyByVec4)
     {
-        matrix4<float> mat{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
-        Vec4<float> vec{1, 1, 1, 1};
+        matrix4<physics923::commons::fp> mat{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+        Vec4<physics923::commons::fp> vec{1, 1, 1, 1};
         auto result = mat * vec;
 
         EXPECT_FLOAT_EQ(result.x, 10);
@@ -94,21 +94,21 @@ namespace physics923::math
 
     TEST_F(Matrix4Fixture, DeterminantLaplace)
     {
-        matrix4<float> mat{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
+        matrix4<physics923::commons::fp> mat{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
         auto det = mat.determinant();
         EXPECT_FLOAT_EQ(det, 1);
     }
 
     TEST_F(Matrix4Fixture, DeterminantSarrus)
     {
-        matrix4<float> mat{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
+        matrix4<physics923::commons::fp> mat{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
         auto det = mat.determinantSarrus();
         EXPECT_FLOAT_EQ(det, 1);
     }
 
     TEST_F(Matrix4Fixture, Transpose)
     {
-        matrix4<float> mat{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+        matrix4<physics923::commons::fp> mat{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
         auto transposed = mat.transpose();
 
         EXPECT_FLOAT_EQ(transposed[0].x, 1);

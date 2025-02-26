@@ -16,20 +16,20 @@ namespace physics923::timer
         last_time_ = current_time;
     }
 
-    float Timer::DeltaTime() const noexcept
+    physics923::commons::fp Timer::DeltaTime() const noexcept
     {
         return delta_time_.count();
     }
 
-    float Timer::TotalTime() const noexcept
+    physics923::commons::fp Timer::TotalTime() const noexcept
     {
-        return std::chrono::duration_cast<std::chrono::duration<float>>(
+        return std::chrono::duration_cast<std::chrono::duration<physics923::commons::fp>>(
             std::chrono::high_resolution_clock::now() - start_time_).count();
     }
 
-    void Timer::SetFixedDeltaTime(float seconds) noexcept
+    void Timer::SetFixedDeltaTime(physics923::commons::fp seconds) noexcept
     {
-        fixed_delta_time_ = std::chrono::duration<float>(seconds);
+        fixed_delta_time_ = std::chrono::duration<physics923::commons::fp>(seconds);
     }
 
     bool Timer::FixedDeltaTimeStep() noexcept
@@ -42,7 +42,7 @@ namespace physics923::timer
         return false;
     }
 
-    float Timer::FixedDeltaTime() const noexcept
+    physics923::commons::fp Timer::FixedDeltaTime() const noexcept
     {
         return fixed_delta_time_.count();
     }

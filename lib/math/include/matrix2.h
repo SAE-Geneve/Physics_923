@@ -5,6 +5,7 @@
 #include <cassert>
 
 #include "vec2.h"
+#include "commons.h"
 
 namespace physics923::math
 {
@@ -130,7 +131,7 @@ namespace physics923::math
         return mat * scalar;
     }
 
-    using matrix2f = matrix2<float>;
+    using matrix2f = matrix2<physics923::commons::fp>;
     using matrix2i = matrix2<int>;
     using matrix2d = matrix2<double>;
 

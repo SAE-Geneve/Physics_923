@@ -25,9 +25,9 @@ namespace physics923
 
         void AddVertex(math::Vec2f position, SDL_Color color);
         void Clear();
-        void CreateCircle(math::Vec2f centre, float radius, SDL_Color color, bool rotation);
+        void CreateCircle(math::Vec2f centre, physics923::commons::fp radius, SDL_Color color, bool rotation);
         void CreateAABB(math::Vec2f min, math::Vec2f max, SDL_Color color, bool fill_status);
-        void CreateAABB(math::Vec2f centre, float half_size, SDL_Color color, bool fill_status);
+        void CreateAABB(math::Vec2f centre, physics923::commons::fp half_size, SDL_Color color, bool fill_status);
         void CreatePolygon(const std::vector<math::Vec2f>& points, math::Vec2f center, SDL_Color color,
                            bool fill_status);
     };

@@ -13,12 +13,12 @@ namespace physics923
         Clear();
 
         quadtree_ = new physics::Quadtree(math::AABB(math::Vec2f(0, 0),  math::Vec2f(kWindowWidth, kWindowHeight)));
-        constexpr float margin = 20.0f;
+        constexpr physics923::commons::fp margin = 20.0f;
 
         for (size_t i = 0; i < number_of_objects_ / 2 - 1; i++)
         {
             const math::Vec2f position(random::Range(margin, kWindowWidth - margin), random::Range(margin, kWindowHeight - margin));
-            const float radius = random::Range(5.f, 10.f);
+            const physics923::commons::fp radius = random::Range(5.f, 10.f);
 
             math::Circle circle(position, radius);
             CreateObject(i, circle);
@@ -96,14 +96,14 @@ namespace physics923
         collider_to_object_map_.erase(&object.collider());
     }
 
-    void CollisionSystem::Update(float delta_time)
+    void CollisionSystem::Update(physics923::commons::fp delta_time)
     {
         UpdateShapes(delta_time);
         BroadPhase();
         NarrowPhase();
     }
 
-    void CollisionSystem::UpdateShapes(float delta_time)
+    void CollisionSystem::UpdateShapes(physics923::commons::fp delta_time)
     {
         for (auto& object : objects_)
         {
@@ -114,7 +114,7 @@ namespace physics923
 
             auto position = body.position();
 
-            float radius = object.radius();
+            physics923::commons::fp radius = object.radius();
 
             //Check for collision with window borders
             if (position.x - radius < 0)

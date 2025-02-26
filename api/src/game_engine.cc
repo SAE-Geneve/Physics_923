@@ -109,7 +109,7 @@ namespace physics923
                     {
                         int mouse_x, mouse_y;
                         SDL_GetMouseState(&mouse_x, &mouse_y);
-                        const auto mouse_pos = math::Vec2f(static_cast<float>(mouse_x), static_cast<float>(mouse_y));
+                        const auto mouse_pos = math::Vec2f(static_cast<physics923::commons::fp>(mouse_x), static_cast<physics923::commons::fp>(mouse_y));
                         friction_system_->SpawnShape(mouse_pos, math::ShapeType::kCircle);
                     }
                 }
@@ -119,7 +119,7 @@ namespace physics923
                     {
                         int mouse_x, mouse_y;
                         SDL_GetMouseState(&mouse_x, &mouse_y);
-                        const auto mouse_pos = math::Vec2f(static_cast<float>(mouse_x), static_cast<float>(mouse_y));
+                        const auto mouse_pos = math::Vec2f(static_cast<physics923::commons::fp>(mouse_x), static_cast<physics923::commons::fp>(mouse_y));
                         friction_system_->SpawnShape(mouse_pos, math::ShapeType::kAABB);
                     }
                 }
@@ -147,7 +147,7 @@ namespace physics923
 
             // Update the timer
             timer_->Tick();
-            float delta_time = timer_->DeltaTime();
+            physics923::commons::fp delta_time = timer_->DeltaTime();
 
 
             // Fixed Time Step Update

@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cmath>
 #include <stdexcept>
+#include "commons.h"
 
 namespace physics923::math
 {
@@ -113,7 +114,7 @@ namespace physics923::math
         //Normalized vector
         [[nodiscard]] constexpr Vec4 Normalized() const
         {
-            float mag = Magnitude();
+            physics923::commons::fp mag = Magnitude();
             if (mag == 0) return {0, 0, 0, 0};
             return {x / mag, y / mag, z / mag, w / mag};
         }

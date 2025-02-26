@@ -49,8 +49,8 @@ namespace physics923
         void RegisterObject(GameObject& object);
         void UnregisterObject(GameObject& object);
 
-        void Update(float delta_time);
-        void UpdateShapes(float delta_time);
+        void Update(physics923::commons::fp delta_time);
+        void UpdateShapes(physics923::commons::fp delta_time);
 
         void SimplisticBroadPhase();
         void BroadPhase();
