@@ -65,7 +65,7 @@ namespace physics923
       physics::Body body(physics::BodyType::Dynamic,
                          circle.centre(),
                          velocity,
-                         gravity,
+                         math::Vec2f::Zero(),
                          random::Range(1.0f, 50.0f),
                          false);
         physics::Collider collider(circle, random::Range(1.0f, 1.0f), 0, false);
@@ -82,7 +82,7 @@ namespace physics923
       physics::Body body(physics::BodyType::Dynamic,
                          aabb.GetCentre(),
                          velocity,
-                         gravity,
+                         math::Vec2f::Zero(),
                          random::Range(1.0f, 50.0f),
                          false);
 

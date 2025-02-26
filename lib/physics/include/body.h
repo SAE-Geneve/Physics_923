@@ -59,7 +59,7 @@ class Body {
     position_ = position;
     velocity_ = velocity;
     mass_ = mass;
-    
+
     gravity_ = gravity;
     gravity_bound_ = gravity_bound;
 
