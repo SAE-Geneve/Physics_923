@@ -1,10 +1,13 @@
-﻿#include "friction_system.h"
+﻿
+// Version History :
+// 22.02.25 - Modified by Maxence - updated objects of body
+
+#include "friction_system.h"
 
 #include <iostream>
 #include <ranges>
 
 #include "contact_solver.h"
-#include "conversions.h"
 #include "random.h"
 
 namespace physics923
@@ -96,7 +99,12 @@ namespace physics923
     void FrictionSystem::CreateObject(size_t index, math::Circle& circle)
     {
         math::Vec2f velocity(0.0f, 0.0f);
-        physics::Body body(physics::BodyType::Dynamic, circle.centre(), velocity, random::Range(50.f, 100.f));
+        physics::Body body(physics::BodyType::Dynamic,
+                           circle.centre(),
+                           velocity,
+                           gravity,
+                           random::Range(50.f, 100.f),
+                           true);
         physics::Collider collider(circle, random::Range(0.5f, 0.9f), 0.1f, false);
         GameObject object(body, collider, circle.radius());
 
@@ -107,8 +115,16 @@ namespace physics923
     void FrictionSystem::CreateObject(size_t index, math::AABB& aabb)
     {
         math::Vec2f velocity(0.0f, 0.0f);
-        physics::Body body(physics::BodyType::Dynamic, aabb.GetCentre(), velocity, random::Range(50.f, 100.f));
-        physics::Collider collider(aabb, random::Range(0.0f, 0.0f), 0.5f, false);
+        physics::Body body(physics::BodyType::Dynamic,
+                           aabb.GetCentre(),
+                           velocity,
+                           gravity,
+                           random::Range(50.f, 100.f),
+                           true);
+        physics::Collider collider(aabb,
+                                   random::Range(0.0f, 0.0f),
+                                   0.5f,
+                                   true);
         GameObject object(body, collider, aabb.half_size_length());
 
         objects_.push_back(object);
@@ -122,7 +138,12 @@ namespace physics923
         math::AABB ground(math::Vec2f(360.0f, 650.0f), math::Vec2f(840.0f, 750.0f));
 
         math::Vec2f velocity(0.0f, 0.0f);
-        physics::Body body(physics::BodyType::Static, ground.GetCentre(), velocity, 0.0f);
+        physics::Body body(physics::BodyType::Static,
+                           ground.GetCentre(),
+                           velocity,
+                           gravity,
+                           0.0f,
+                           false);
         physics::Collider collider(ground, 1.0f, 0.0f, false);
         GameObject object(body, collider, ground.half_size_length());
 
@@ -202,9 +223,6 @@ namespace physics923
         {
             auto& body = object.body();
             auto& collider = object.collider();
-            constexpr math::Vec2f gravity = conversions::ConvertToPixels(math::Vec2f(0.f, 9.8f));
-
-            body.ApplyGravity(gravity);
 
             body.Update(delta_time);
 

@@ -1,5 +1,8 @@
-﻿#ifndef PHYSICS_923_LIB_PHYSICS_BODY_H_
+#ifndef PHYSICS_923_LIB_PHYSICS_BODY_H_
 #define PHYSICS_923_LIB_PHYSICS_BODY_H_
+
+// Version History :
+// 22.02.25 - Modified by Maxence - created gravity_bound_ and gravity, both in the constructor, moved "ApplyGravity" in private
 
 #include "commons.h"
 #include "vec2.h"
