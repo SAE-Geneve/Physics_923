@@ -1,9 +1,6 @@
 ﻿#ifndef PHYSICS_923_API_FRICTION_SYSTEM_H_
 #define PHYSICS_923_API_FRICTION_SYSTEM_H_
 
-// Version History :
-// 22.02.25 - Modified by Maxence - placed gravity here
-
 #include <unordered_map>
 #include <unordered_set>
 

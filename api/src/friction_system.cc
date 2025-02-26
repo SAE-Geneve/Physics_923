@@ -1,8 +1,4 @@
-﻿
-// Version History :
-// 22.02.25 - Modified by Maxence - updated objects of body
-
-#include "friction_system.h"
+﻿#include "friction_system.h"
 
 #include <iostream>
 #include <ranges>
