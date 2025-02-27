@@ -13,25 +13,32 @@ namespace physics923::physics
 {
     struct ContactSolver
     {
-        std::array<GameObject*, 2> objects_{};
+        std::pair<Body*, Body*> bodies_{};
+        std::pair<Collider*, Collider*> colliders_{};
 
         math::Vec2f contact_point_ = math::Vec2f::Zero();
         math::Vec2f contact_normal_ = math::Vec2f::Zero();
 
         physics923::commons::fp penetration_ = 0.0f;
 
-        void SetContactObjects(const GameObjectPair& pair)
+        void SetContactObjects(const std::pair<Body*, Body*> bodies, const std::pair<Collider*, Collider*> colliders)
         {
-            objects_[0] = pair.gameObjectA_;
-            objects_[1] = pair.gameObjectB_;
+            bodies_ = bodies;
+            colliders_ = colliders;
+        }
+
+        void SwapObjects()
+        {
+            std::swap(bodies_.first, bodies_.second);
+            std::swap(colliders_.first, colliders_.second);
         }
 
         void ResolveContact()
         {
             CalculateProperties();
-            if(objects_[0]->body().type() == BodyType::Static)
+            if(bodies_.first->type() == BodyType::Static)
             {
-                std::swap(objects_[0], objects_[1]);
+                SwapObjects();
                 contact_normal_ = -contact_normal_;
             }
             ResolveVelocities();
@@ -41,18 +48,18 @@ namespace physics923::physics
     private:
         void CalculateProperties()
         {
-            const auto collider_a = objects_[0]->collider();
-            const auto collider_b = objects_[1]->collider();
+            const auto collider_a = colliders_.first;
+            const auto collider_b = colliders_.second;
 
             //Reset properties
             contact_point_ = math::Vec2f::Zero();
             contact_normal_ = math::Vec2f::Zero();
             penetration_ = 0.0f;
 
-            switch (collider_a.GetShapeType())
+            switch (collider_a->GetShapeType())
             {
             case math::ShapeType::kAABB:
-                switch (collider_b.GetShapeType())
+                switch (collider_b->GetShapeType())
                 {
                 case math::ShapeType::kAABB:
                     HandleAABBAABBCollision();
@@ -69,10 +76,10 @@ namespace physics923::physics
                 }
                 break;
             case math::ShapeType::kCircle:
-                switch (collider_b.GetShapeType())
+                switch (collider_b->GetShapeType())
                 {
                 case math::ShapeType::kAABB:
-                    std::swap(objects_[0], objects_[1]);
+                    SwapObjects();
                     CalculateProperties();
                     break;
                 case math::ShapeType::kCircle:
@@ -87,11 +94,11 @@ namespace physics923::physics
                 }
                 break;
             case math::ShapeType::kPolygon:
-                switch (collider_b.GetShapeType())
+                switch (collider_b->GetShapeType())
                 {
                 case math::ShapeType::kAABB:
                 case math::ShapeType::kCircle:
-                    std::swap(objects_[0], objects_[1]);
+                    SwapObjects();
                     CalculateProperties();
                     break;
                 case math::ShapeType::kPolygon:
@@ -110,14 +117,14 @@ namespace physics923::physics
 
         void ResolveVelocities() const
         {
-            auto& body_a = objects_[0]->body();
-            auto& body_b = objects_[1]->body();
+            auto& body_a = bodies_.first;
+            auto& body_b = bodies_.second;
 
-            const auto& collider_a = objects_[0]->collider();
-            const auto& collider_b = objects_[1]->collider();
+            const auto& collider_a = colliders_.first;
+            const auto& collider_b = colliders_.second;
 
             // Calculate the relative velocity between the bodies
-            const math::Vec2f relative_velocity = body_a.velocity() - body_b.velocity();
+            const math::Vec2f relative_velocity = body_a->velocity() - body_b->velocity();
 
             // Relative velocity along Normal
             const physics923::commons::fp separating_velocity = math::Vec2f::Dot(relative_velocity, contact_normal_);
@@ -125,8 +132,8 @@ namespace physics923::physics
             if (separating_velocity > 0.0f) { return; }
 
             // Calculate restitution
-            physics923::commons::fp restitution = (collider_a.bounciness() * body_a.mass() + collider_b.bounciness() * body_b.mass())
-                                / (body_a.mass() + body_b.mass());
+            physics923::commons::fp restitution = (collider_a->bounciness() * body_a->mass() + collider_b->bounciness() * body_b->mass())
+                                / (body_a->mass() + body_b->mass());
 
             // If velocity is very small, set restitution to zero
             constexpr physics923::commons::fp restitution_threshold = 2.0f;
@@ -137,38 +144,38 @@ namespace physics923::physics
 
             // Calculate impulse scalar
             physics923::commons::fp impulse_magnitude = -(1.0f + restitution) * separating_velocity;
-            impulse_magnitude /= (body_a.inverse_mass() + body_b.inverse_mass());
+            impulse_magnitude /= (body_a->inverse_mass() + body_b->inverse_mass());
             math::Vec2f impulse = impulse_magnitude * contact_normal_;
 
             // Debug output
             std::cout << "ResolveVelocities:" << std::endl;
-            std::cout << "  Body A Velocity: " << body_a.velocity().x << " : " << body_a.velocity().y << std::endl;
-            std::cout << "  Body B Velocity: " << body_b.velocity().x << " : " << body_b.velocity().y << std::endl;
+            std::cout << "  Body A Velocity: " << body_a->velocity().x << " : " << body_a->velocity().y << std::endl;
+            std::cout << "  Body B Velocity: " << body_b->velocity().x << " : " << body_b->velocity().y << std::endl;
             std::cout << "  Separating Velocity: " << separating_velocity << std::endl;
             std::cout << "  Impulse Magnitude: " << impulse_magnitude << std::endl;
 
             physics923::commons::fp sleep_velocity_threshold = 10.0f;
             // Apply impulse to the dynamic bodies
-            if (body_a.type() == BodyType::Dynamic)
+            if (body_a->type() == BodyType::Dynamic)
             {
-                body_a.ApplyImpulse(impulse);
-                if (body_a.velocity().Magnitude() < sleep_velocity_threshold)
-                    body_a.set_velocity(math::Vec2f::Zero());
+                body_a->ApplyImpulse(impulse);
+                if (body_a->velocity().Magnitude() < sleep_velocity_threshold)
+                    body_a->set_velocity(math::Vec2f::Zero());
             }
-            if (body_b.type() == BodyType::Dynamic)
+            if (body_b->type() == BodyType::Dynamic)
             {
-                body_b.ApplyImpulse(-impulse);
-                if (body_b.velocity().Magnitude() < sleep_velocity_threshold)
-                    body_b.set_velocity(math::Vec2f::Zero());
+                body_b->ApplyImpulse(-impulse);
+                if (body_b->velocity().Magnitude() < sleep_velocity_threshold)
+                    body_b->set_velocity(math::Vec2f::Zero());
             }
 
             //Friction
             //Tangent vector
             const math::Vec2f tangent = (relative_velocity - separating_velocity * contact_normal_).Normalized();
             // Magnitude to apply
-            const physics923::commons::fp jt = -math::Vec2f::Dot(relative_velocity, tangent) / (body_a.inverse_mass() + body_b.inverse_mass());
+            const physics923::commons::fp jt = -math::Vec2f::Dot(relative_velocity, tangent) / (body_a->inverse_mass() + body_b->inverse_mass());
             const physics923::commons::fp mu = std::sqrt(
-                collider_a.friction() * collider_a.friction() + collider_b.friction() * collider_b.friction());
+                collider_a->friction() * collider_a->friction() + collider_b->friction() * collider_b->friction());
 
             // Clamp friction
             math::Vec2f friction_impulse = math::Vec2f::Zero();
@@ -179,19 +186,19 @@ namespace physics923::physics
             else
             {
                 const physics923::commons::fp dynamic_friction_impulse = std::sqrt(
-                    collider_a.dynamic_friction() * collider_a.dynamic_friction() + collider_b.dynamic_friction() *
-                    collider_b.dynamic_friction());
+                    collider_a->dynamic_friction() * collider_a->dynamic_friction() + collider_b->dynamic_friction() *
+                    collider_b->dynamic_friction());
                 friction_impulse = -impulse_magnitude * tangent * dynamic_friction_impulse;
             }
 
             // Apply impulse to the dynamic bodies
-            if (body_a.type() == BodyType::Dynamic)
+            if (body_a->type() == BodyType::Dynamic)
             {
-                body_a.ApplyImpulse(friction_impulse);
+                body_a->ApplyImpulse(friction_impulse);
             }
-            if (body_b.type() == BodyType::Dynamic)
+            if (body_b->type() == BodyType::Dynamic)
             {
-                body_b.ApplyImpulse(-friction_impulse);
+                body_b->ApplyImpulse(-friction_impulse);
             }
         }
 
@@ -199,10 +206,10 @@ namespace physics923::physics
         {
             if (penetration_ <= 0.0f) { return; }
 
-            auto& body_a = objects_[0]->body();
-            auto& body_b = objects_[1]->body();
-            const auto inverse_mass_a = body_a.inverse_mass();
-            const auto inverse_mass_b = body_b.inverse_mass();
+            auto& body_a = bodies_.first;
+            auto& body_b = bodies_.second;
+            const auto inverse_mass_a = body_a->inverse_mass();
+            const auto inverse_mass_b = body_b->inverse_mass();
             const auto total_inverse_mass = inverse_mass_a + inverse_mass_b;
             if(total_inverse_mass <= std::numeric_limits<physics923::commons::fp>::epsilon()) { return; }
 
@@ -217,31 +224,31 @@ namespace physics923::physics
             // std::cout << "ResolvePositions:" << std::endl;
             // std::cout << "  Penetration: " << penetration_ << std::endl;
             // std::cout << "  Correction: " << correction.x << " : " << correction.y << std::endl;
-            // std::cout << "  Body A Position Before: " << body_a.position().x << " : " << body_a.position().y << std::endl;
-            // std::cout << "  Body B Position Before: " << body_b.position().x << " : " << body_b.position().y << std::endl;
+            // std::cout << "  Body A Position Before: " << body_a->position().x << " : " << body_a->position().y << std::endl;
+            // std::cout << "  Body B Position Before: " << body_b->position().x << " : " << body_b->position().y << std::endl;
 
             // only move the dynamic bodies
-            if (body_a.type() != BodyType::Static)
+            if (body_a->type() != BodyType::Static)
             {
-                body_a.set_position(body_a.position() - correction * inverse_mass_a);
+                body_a->set_position(body_a->position() - correction * inverse_mass_a);
             }
-            if (body_b.type() != BodyType::Static)
+            if (body_b->type() != BodyType::Static)
             {
-                body_b.set_position(body_b.position() + correction * inverse_mass_b);
+                body_b->set_position(body_b->position() + correction * inverse_mass_b);
             }
 
             // // Debug output after position correction
-            // std::cout << "  Body A Position After: " << body_a.position().x << " : " << body_a.position().y << std::endl;
-            // std::cout << "  Body B Position After: " << body_b.position().x << " : " << body_b.position().y << std::endl;
+            // std::cout << "  Body A Position After: " << body_a->position().x << " : " << body_a->position().y << std::endl;
+            // std::cout << "  Body B Position After: " << body_b->position().x << " : " << body_b->position().y << std::endl;
             // std::cout << "-------------------------" << std::endl;
         }
 
         void HandleAABBAABBCollision()
         {
-            const auto& aabb_a = std::get<math::AABB>(objects_[0]->collider().shape());
-            const auto& aabb_b = std::get<math::AABB>(objects_[1]->collider().shape());
-            const auto centre_a = objects_[0]->position();
-            const auto centre_b = objects_[1]->position();
+            const auto& aabb_a = std::get<math::AABB>(colliders_.first->shape());
+            const auto& aabb_b = std::get<math::AABB>(colliders_.second->shape());
+            const auto centre_a = bodies_.first->position();
+            const auto centre_b = bodies_.second->position();
 
             //Calculate the overlap on each axis
             physics923::commons::fp overlap_x = std::min(aabb_a.max_bound().x, aabb_b.max_bound().x) - std::max(
@@ -277,8 +284,8 @@ namespace physics923::physics
 
         void HandleAABBCircleCollision()
 {
-    const auto& aabb = std::get<math::AABB>(objects_[0]->collider().shape());
-    const auto& circle = std::get<math::Circle>(objects_[1]->collider().shape());
+    const auto& aabb = std::get<math::AABB>(colliders_.first->shape());
+    const auto& circle = std::get<math::Circle>(colliders_.second->shape());
     const auto centre = circle.centre();
     const auto radius = circle.radius();
 
@@ -352,10 +359,10 @@ namespace physics923::physics
 
         void HandleCircleCircleCollision()
         {
-            const auto radius_a = objects_[0]->radius();
-            const auto radius_b = objects_[1]->radius();
-            const auto centre_a = objects_[0]->position();
-            const auto centre_b = objects_[1]->position();
+            const auto radius_a = std::get<math::Circle>(colliders_.first->shape()).radius();
+            const auto radius_b = std::get<math::Circle>(colliders_.second->shape()).radius();
+            const auto centre_a = std::get<math::Circle>(colliders_.first->shape()).centre();
+            const auto centre_b = std::get<math::Circle>(colliders_.second->shape()).centre();
 
             //Calculate the vector between the centers
             const math::Vec2f delta = centre_a - centre_b;

@@ -294,8 +294,16 @@ namespace physics923
         }
         else
         {
+            std::pair<physics::Body*, physics::Body*> body_pair;
+            body_pair.first = &pair.gameObjectA_->body();
+            body_pair.second = &pair.gameObjectB_->body();
+
+            std::pair<physics::Collider*, physics::Collider*> collider_pair;
+            collider_pair.first = &pair.gameObjectA_->collider();
+            collider_pair.second = &pair.gameObjectB_->collider();
+
             physics::ContactSolver ContactSolver;
-            ContactSolver.SetContactObjects(pair);
+            ContactSolver.SetContactObjects(body_pair, collider_pair);
             ContactSolver.ResolveContact();
             pair.gameObjectA_->OnCollisionEnter();
             pair.gameObjectB_->OnCollisionEnter();
