@@ -5,7 +5,6 @@
 #include <iostream>
 #include <utility>
 
-#include "game_object.h"
 #include "shape.h"
 #include "vec2.h"
 #include "commons.h"

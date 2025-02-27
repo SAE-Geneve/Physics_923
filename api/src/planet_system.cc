@@ -16,8 +16,9 @@ namespace physics923
                               math::Vec2f(kWindowWidth/2.f, kWindowHeight/2.f),
                               math::Vec2f::Zero(),
                               math::Vec2f::Zero(),
-                              star_mass_,
-                              false);
+                              false,
+                              star_mass_
+                              );
 
         for (std::size_t i = 0; i < kStartingPlanetsCount_; i++)
         {
@@ -69,8 +70,9 @@ namespace physics923
             physics::Body body(physics::BodyType::Dynamic,position,
                                angular_velocity,
                                math::Vec2f::Zero(),
-                               planet_mass_,
-                               false);
+                               false,
+                               planet_mass_
+                               );
             //Random mass: random::Range(1.0f, 50.0f)
 
             auto planet = GameObject(body, radius, color);
