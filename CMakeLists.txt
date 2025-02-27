@@ -36,8 +36,8 @@ endif(ENABLE_GTESTS)
 if(ENABLE_SAMPLES)
     find_package(SDL2 CONFIG REQUIRED)
     find_package(imgui CONFIG REQUIRED)
-    add_subdirectory(api)
+    add_subdirectory(samples)
 endif(ENABLE_SAMPLES)
 
 # Include all subdirectories
-add_subdirectory(lib)
+add_subdirectory(crackitos_physics)
