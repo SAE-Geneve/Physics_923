@@ -1,7 +1,7 @@
-#ifndef PHYSICS_923_LIB_COMMON_COMMONS_H_
-#define PHYSICS_923_LIB_COMMON_COMMONS_H_
+#ifndef CRACKITOS_PHYSICS_COMMON_COMMONS_H_
+#define CRACKITOS_PHYSICS_COMMON_COMMONS_H_
 
-namespace physics923::commons
+namespace crackitos_physics::commons
 {
     using fp = float;
     constexpr static fp kPi = 3.14159265358979323846f;
@@ -13,6 +13,5 @@ namespace physics923::commons
     {
         return abs(value - target) <= kEpsilon;
     }
-
-} // namespace common
-#endif // PHYSICS_923_LIB_COMMON_COMMONS_H_
+} // namespace commons
+#endif // CRACKITOS_PHYSICS_COMMON_COMMONS_H_

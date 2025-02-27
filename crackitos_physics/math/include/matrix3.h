@@ -1,5 +1,5 @@
-﻿#ifndef PHYSICS_923_LIB_MATH_MATRIX3_H_
-#define PHYSICS_923_LIB_MATH_MATRIX3_H_
+﻿#ifndef CRACKITOS_PHYSICS_MATH_MATRIX3_H_
+#define CRACKITOS_PHYSICS_MATH_MATRIX3_H_
 
 #include <array>
 #include <cassert>
@@ -7,9 +7,8 @@
 
 #include "matrix2.h"
 #include "vec3.h"
-#include "commons.h"
 
-namespace physics923::math
+namespace crackitos_physics::math
 {
     template <typename T>
     struct matrix3
@@ -191,5 +190,4 @@ namespace physics923::math
         return mat * scalar;
     }
 } // namespace math
-
-#endif // PHYSICS_923_LIB_MATH_MATRIX3_H_
+#endif // CRACKITOS_PHYSICS_MATH_MATRIX3_H_

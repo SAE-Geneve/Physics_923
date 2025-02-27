@@ -1,6 +1,6 @@
 ﻿#include "timer.h"
 
-namespace physics923::timer
+namespace crackitos_physics::timer
 {
     Timer::Timer()
     {
@@ -16,20 +16,20 @@ namespace physics923::timer
         last_time_ = current_time;
     }
 
-    physics923::commons::fp Timer::DeltaTime() const noexcept
+    crackitos_physics::commons::fp Timer::DeltaTime() const noexcept
     {
         return delta_time_.count();
     }
 
-    physics923::commons::fp Timer::TotalTime() const noexcept
+    crackitos_physics::commons::fp Timer::TotalTime() const noexcept
     {
-        return std::chrono::duration_cast<std::chrono::duration<physics923::commons::fp>>(
+        return std::chrono::duration_cast<std::chrono::duration<crackitos_physics::commons::fp>>(
             std::chrono::high_resolution_clock::now() - start_time_).count();
     }
 
-    void Timer::SetFixedDeltaTime(physics923::commons::fp seconds) noexcept
+    void Timer::SetFixedDeltaTime(crackitos_physics::commons::fp seconds) noexcept
     {
-        fixed_delta_time_ = std::chrono::duration<physics923::commons::fp>(seconds);
+        fixed_delta_time_ = std::chrono::duration<crackitos_physics::commons::fp>(seconds);
     }
 
     bool Timer::FixedDeltaTimeStep() noexcept
@@ -42,7 +42,7 @@ namespace physics923::timer
         return false;
     }
 
-    physics923::commons::fp Timer::FixedDeltaTime() const noexcept
+    crackitos_physics::commons::fp Timer::FixedDeltaTime() const noexcept
     {
         return fixed_delta_time_.count();
     }

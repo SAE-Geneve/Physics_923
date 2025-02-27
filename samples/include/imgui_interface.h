@@ -1,11 +1,12 @@
-﻿#ifndef PHYSICS_923_API_IMGUI_H_
-#define PHYSICS_923_API_IMGUI_H_
+﻿#ifndef PHYSICS_SAMPLES_IMGUI_H_
+#define PHYSICS_SAMPLES_IMGUI_H_
 
 #include <imgui_impl_sdl2.h>
 
+#include "commons.h"
 #include "display.h"
 
-namespace physics923
+namespace crackitos_physics::samples
 {
     class GameEngine;
 
@@ -14,7 +15,7 @@ namespace physics923
     private:
         GameEngine* game_engine_ = nullptr;
         bool show_quadtree_ = true;
-        physics923::commons::fp speed_multiplier_ = 1.0f;
+        crackitos_physics::commons::fp speed_multiplier_ = 1.0f;
         int current_scene_ = 0;
 
         SDL_Color planets_colour_ = {255, 13, 132};
@@ -29,8 +30,8 @@ namespace physics923
         void PassEvents(SDL_Event& event);
 
         [[nodiscard]] bool show_quadtree() const { return show_quadtree_; }
-        [[nodiscard]] physics923::commons::fp speed_multiplier() const { return speed_multiplier_; }
+        [[nodiscard]] crackitos_physics::commons::fp speed_multiplier() const { return speed_multiplier_; }
         [[nodiscard]] SDL_Color planets_colour() const { return planets_colour_; }
     };
-}
-#endif // PHYSICS_923_API_IMGUI_H_
+} // namespace samples
+#endif // PHYSICS_SAMPLES_IMGUI_H_

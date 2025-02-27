@@ -1,5 +1,5 @@
-﻿#ifndef PHYSICS_923_LIB_MATH_MATRIX2_H_
-#define PHYSICS_923_LIB_MATH_MATRIX2_H_
+﻿#ifndef CRACKITOS_PHYSICS_MATH_MATRIX2_H_
+#define CRACKITOS_PHYSICS_MATH_MATRIX2_H_
 
 #include <array>
 #include <cassert>
@@ -7,9 +7,9 @@
 #include "vec2.h"
 #include "commons.h"
 
-namespace physics923::math
+namespace crackitos_physics::math
 {
-    template<typename T>
+    template <typename T>
     struct matrix2
     {
         std::array<Vec2<T>, 2> rows;
@@ -18,10 +18,13 @@ namespace physics923::math
         matrix2() = default;
 
         // Constructor with parameters
-        constexpr matrix2(const Vec2<T>& row1, const Vec2<T>& row2) : rows{{row1, row2}} {}
+        constexpr matrix2(const Vec2<T>& row1, const Vec2<T>& row2) : rows{{row1, row2}}
+        {
+        }
 
         // Constructors with initializer lists (values and vectors)
-        constexpr matrix2(std::initializer_list<T> values) {
+        constexpr matrix2(std::initializer_list<T> values)
+        {
             assert(values.size() == 4 && "Matrix2 requires 4 values");
             auto it = values.begin();
             rows[0].x = *it++;
@@ -30,7 +33,8 @@ namespace physics923::math
             rows[1].y = *it;
         }
 
-        constexpr matrix2(std::initializer_list<Vec2<T>> vectors) {
+        constexpr matrix2(std::initializer_list<Vec2<T>> vectors)
+        {
             assert(vectors.size() == 2 && "Matrix2 requires 2 Vec2");
             auto it = vectors.begin();
             rows[0] = *it++;
@@ -48,13 +52,15 @@ namespace physics923::math
         }
 
         // Access row by index
-        Vec2<T>& operator[](const int index) {
+        Vec2<T>& operator[](const int index)
+        {
             if (index == 0) return rows[0];
             if (index == 1) return rows[1];
             throw std::out_of_range("Index out of range for matrix2");
         }
 
-        const Vec2<T>& operator[](const int index) const {
+        const Vec2<T>& operator[](const int index) const
+        {
             if (index == 0) return rows[0];
             if (index == 1) return rows[1];
             throw std::out_of_range("Index out of range for matrix2");
@@ -131,10 +137,8 @@ namespace physics923::math
         return mat * scalar;
     }
 
-    using matrix2f = matrix2<physics923::commons::fp>;
+    using matrix2f = matrix2<crackitos_physics::commons::fp>;
     using matrix2i = matrix2<int>;
     using matrix2d = matrix2<double>;
-
 } // namespace math
-
-#endif // PHYSICS_923_LIB_MATH_MATRIX2_H_
+#endif // CRACKITOS_PHYSICS_MATH_MATRIX2_H_

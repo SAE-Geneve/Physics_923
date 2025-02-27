@@ -1,5 +1,5 @@
-﻿#ifndef PHYSICS_923_LIB_PHYSICS_QUADTREE_H_
-#define PHYSICS_923_LIB_PHYSICS_QUADTREE_H_
+﻿#ifndef CRACKITOS_PHYSICS_PHYSICS_QUADTREE_H_
+#define CRACKITOS_PHYSICS_PHYSICS_QUADTREE_H_
 
 #include <array>
 #include <memory>
@@ -7,9 +7,8 @@
 
 #include "collider.h"
 #include "shape.h"
-#include "commons.h"
 
-namespace physics923::physics
+namespace crackitos_physics::physics
 {
     static constexpr int kMaxDepth_ = 6;
     static constexpr int kMaxShapeCount_ = 8;
@@ -175,4 +174,4 @@ namespace physics923::physics
 }
 
 
-#endif //PHYSICS_923_LIB_PHYSICS_QUADTREE_H_
+#endif // CRACKITOS_PHYSICS_PHYSICS_QUADTREE_H_

@@ -1,5 +1,5 @@
-#ifndef PHYSICS_923_API_GAME_ENGINE_H_
-#define PHYSICS_923_API_GAME_ENGINE_H_
+#ifndef PHYSICS_SAMPLES_GAME_ENGINE_H_
+#define PHYSICS_SAMPLES_GAME_ENGINE_H_
 
 #include "collision_system.h"
 #include "display.h"
@@ -9,42 +9,43 @@
 #include "planet_system.h"
 #include "timer.h"
 #include "trigger_system.h"
-namespace physics923
+
+namespace crackitos_physics::samples
 {
-enum class SystemScene
-{
-    PlanetSystemScene,
-    TriggerSystemScene,
-    CollisionSystemScene,
-    FrictionSystemScene
-};
+    enum class SystemScene
+    {
+        PlanetSystemScene,
+        TriggerSystemScene,
+        CollisionSystemScene,
+        FrictionSystemScene
+    };
 
-class GameEngine
-{
-private:
-    SystemScene selected_scene_ = SystemScene::PlanetSystemScene;
-    bool is_running_;
+    class GameEngine
+    {
+    private:
+        SystemScene selected_scene_ = SystemScene::PlanetSystemScene;
+        bool is_running_;
 
-    Display* display_;
-    timer::Timer* timer_;
-    GraphicsManager* graphics_manager_;
-    PlanetSystem* planet_system_;
-    TriggerSystem* trigger_system_;
-    CollisionSystem* collision_system_;
-    FrictionSystem* friction_system_;
+        Display* display_;
+        timer::Timer* timer_;
+        GraphicsManager* graphics_manager_;
+        PlanetSystem* planet_system_;
+        TriggerSystem* trigger_system_;
+        CollisionSystem* collision_system_;
+        FrictionSystem* friction_system_;
 
-    ImGuiInterface* imgui_interface_;
+        ImGuiInterface* imgui_interface_;
 
-    void HandleEvents();
-    void RenderQuadtree(SDL_Renderer* renderer, physics::Quadtree& quadtree);
+        void HandleEvents();
+        void RenderQuadtree(SDL_Renderer* renderer, physics::Quadtree& quadtree);
 
-public:
-    GameEngine();
-    ~GameEngine();
+    public:
+        GameEngine();
+        ~GameEngine();
 
-    void ChangeScene(SystemScene new_sample);
+        void ChangeScene(SystemScene new_sample);
 
-    void Run();
-};
-}
-#endif // PHYSICS_923_API_GAME_ENGINE_H_
+        void Run();
+    };
+} // namespace samples
+#endif // PHYSICS_SAMPLES_GAME_ENGINE_H_

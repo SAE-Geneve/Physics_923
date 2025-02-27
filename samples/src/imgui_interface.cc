@@ -3,7 +3,8 @@
 #include <imgui_impl_sdlrenderer2.h>
 
 #include "game_engine.h"
-namespace physics923
+
+namespace crackitos_physics::samples
 {
     void ImGuiInterface::Initialize(Display* display, GameEngine* engine)
     {
@@ -31,14 +32,15 @@ namespace physics923
         if (show_imgui)
         {
             // Set the position and size of the ImGui window
-            ImVec2 window_pos = ImVec2(0, 0);   // Set the position (x, y)
+            ImVec2 window_pos = ImVec2(0, 0); // Set the position (x, y)
             ImVec2 window_size = ImVec2(300, 400); // Set the size (width, height)
             ImGui::SetNextWindowPos(window_pos, ImGuiCond_Once); // Position it once
             ImGui::SetNextWindowSize(window_size, ImGuiCond_Once); // Size it once
 
             // Create a window
             ImGui::Begin("Kuma Engine", nullptr,
-                         ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
+                         ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove |
+                         ImGuiWindowFlags_AlwaysAutoResize);
 
             // Display FPS at the top
             ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
@@ -58,7 +60,7 @@ namespace physics923
                     {
                         current_scene_ = n;
                         speed_multiplier_ = 1.0f;
-                        if(game_engine_)
+                        if (game_engine_)
                         {
                             game_engine_->ChangeScene(static_cast<SystemScene>(current_scene_));
                         }
@@ -87,22 +89,22 @@ namespace physics923
             {
             case SystemScene::PlanetSystemScene: // Planet System
                 {
-
                     ImGui::PushTextWrapPos();
                     ImGui::Text("Left Click: Toggle Spawner");
                     ImGui::PopTextWrapPos();
 
                     ImGui::Separator();
 
-                    static ImVec4 planetColor = ImVec4(1.0f, 13.f/255.f, 132.f/255.f, 1.0f);  // Default color
-                    if (ImGui::ColorPicker3("Planet Color", reinterpret_cast<physics923::commons::fp*>(&planetColor)))
+                    static ImVec4 planetColor = ImVec4(1.0f, 13.f / 255.f, 132.f / 255.f, 1.0f); // Default color
+                    if (ImGui::ColorPicker3("Planet Color",
+                                            reinterpret_cast<crackitos_physics::commons::fp*>(&planetColor)))
                     {
                         // Convert the ImVec3 color (0-1 range) to SDL_Color (0-255 range)
                         SDL_Color sdlColor;
                         sdlColor.r = static_cast<Uint8>(planetColor.x * 255);
                         sdlColor.g = static_cast<Uint8>(planetColor.y * 255);
                         sdlColor.b = static_cast<Uint8>(planetColor.z * 255);
-                        sdlColor.a = 255;  // Full opacity, since ColorPicker3 does not have an alpha channel
+                        sdlColor.a = 255; // Full opacity, since ColorPicker3 does not have an alpha channel
                         planets_colour_ = sdlColor;
                     }
 
@@ -168,4 +170,4 @@ namespace physics923
         ImGui_ImplSDL2_Shutdown();
         ImGui::DestroyContext();
     }
-}
+} // namespace samples

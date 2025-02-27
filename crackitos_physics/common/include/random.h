@@ -1,10 +1,11 @@
-﻿#ifndef PHYSICS_923_LIB_COMMON_RANDOM_H_
-#define PHYSICS_923_LIB_COMMON_RANDOM_H_
+﻿#ifndef CRACKITOS_PHYSICS_COMMON_RANDOM_H_
+#define CRACKITOS_PHYSICS_COMMON_RANDOM_H_
 
 #include <random>
+
 #include "commons.h"
 
-namespace physics923::random
+namespace crackitos_physics::random
 {
     template <typename T>
     [[nodiscard]] T Range(const T min_number, const T max_number)
@@ -19,10 +20,10 @@ namespace physics923::random
         }
         else if constexpr (std::is_floating_point_v<T>)
         {
-            std::uniform_real_distribution<physics923::commons::fp> dist(min_number, max_number);
+            std::uniform_real_distribution<crackitos_physics::commons::fp> dist(min_number, max_number);
             return dist(rng);
         }
         throw std::invalid_argument("Invalid type");
     }
-}
-#endif //PHYSICS_923_LIB_COMMON_RANDOM_H_
+} // namespace random
+#endif // CRACKITOS_PHYSICS_COMMON_RANDOM_H_

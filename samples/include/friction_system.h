@@ -1,5 +1,5 @@
-﻿#ifndef PHYSICS_923_API_FRICTION_SYSTEM_H_
-#define PHYSICS_923_API_FRICTION_SYSTEM_H_
+﻿#ifndef PHYSICS_SAMPLES_FRICTION_SYSTEM_H_
+#define PHYSICS_SAMPLES_FRICTION_SYSTEM_H_
 
 #include <unordered_map>
 #include <unordered_set>
@@ -11,7 +11,7 @@
 #include "shape.h"
 #include "timer.h"
 
-namespace physics923
+namespace crackitos_physics::samples
 {
     class FrictionSystem
     {
@@ -53,8 +53,8 @@ namespace physics923
         void RegisterObject(GameObject& object);
         void UnregisterObject(GameObject& object);
 
-        void Update(physics923::commons::fp delta_time);
-        void UpdateShapes(physics923::commons::fp delta_time);
+        void Update(crackitos_physics::commons::fp delta_time);
+        void UpdateShapes(crackitos_physics::commons::fp delta_time);
 
         void SimplisticBroadPhase();
         void BroadPhase();
@@ -64,5 +64,5 @@ namespace physics923
         static void OnPairCollideStay(const GameObjectPair& pair);
         static void OnPairCollideEnd(const GameObjectPair& pair);
     };
-}
-#endif //PHYSICS_923_API_FRICTION_SYSTEM_H_
+} // namespace samples
+#endif // PHYSICS_SAMPLES_FRICTION_SYSTEM_H_

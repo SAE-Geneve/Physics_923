@@ -6,9 +6,10 @@
 #include "display.h"
 #include "random.h"
 
-namespace physics923
+namespace crackitos_physics::samples
 {
-    CollisionSystem::CollisionSystem(): quadtree_(math::AABB(math::Vec2f(0, 0), math::Vec2f(kWindowWidth, kWindowHeight)))
+    CollisionSystem::CollisionSystem(): quadtree_(math::AABB(math::Vec2f(0, 0),
+                                                             math::Vec2f(kWindowWidth, kWindowHeight)))
     {
     }
 
@@ -16,20 +17,22 @@ namespace physics923
     {
         Clear();
 
-        constexpr physics923::commons::fp margin = 20.0f;
+        constexpr crackitos_physics::commons::fp margin = 20.0f;
 
         for (size_t i = 0; i < number_of_objects_ / 2 - 1; i++)
         {
-            const math::Vec2f position(random::Range(margin, kWindowWidth - margin), random::Range(margin, kWindowHeight - margin));
-            const physics923::commons::fp radius = random::Range(5.f, 10.f);
+            const math::Vec2f position(random::Range(margin, kWindowWidth - margin),
+                                       random::Range(margin, kWindowHeight - margin));
+            const crackitos_physics::commons::fp radius = random::Range(5.f, 10.f);
 
             math::Circle circle(position, radius);
             CreateObject(i, circle);
         }
         for (size_t i = number_of_objects_ / 2 - 1; i < number_of_objects_; i++)
         {
-            const math::Vec2f position(random::Range(margin, kWindowWidth - margin), random::Range(margin, kWindowHeight - margin));
-            math::Vec2f half_size_vec = math::Vec2f(random::Range(5.f, 10.f),random::Range(5.f, 10.f));
+            const math::Vec2f position(random::Range(margin, kWindowWidth - margin),
+                                       random::Range(margin, kWindowHeight - margin));
+            math::Vec2f half_size_vec = math::Vec2f(random::Range(5.f, 10.f), random::Range(5.f, 10.f));
             auto half_size_length = half_size_vec.Magnitude();
 
             math::AABB aabb(position, half_size_vec, half_size_length);
@@ -54,11 +57,11 @@ namespace physics923
     void CollisionSystem::CreateObject(size_t index, math::Circle& circle)
     {
         math::Vec2f velocity(random::Range(-50.0f, 50.0f), random::Range(-50.0f, 50.0f));
-      physics::Body body(physics::BodyType::Dynamic,
-                         circle.centre(),
-                         velocity,
-                         math::Vec2f::Zero(),
-                         false, random::Range(1.0f, 50.0f));
+        physics::Body body(physics::BodyType::Dynamic,
+                           circle.centre(),
+                           velocity,
+                           math::Vec2f::Zero(),
+                           false, random::Range(1.0f, 50.0f));
         physics::Collider collider(circle, random::Range(1.0f, 1.0f), 0, false);
         GameObject object(body, collider, circle.radius());
 
@@ -70,12 +73,12 @@ namespace physics923
     {
         math::Vec2f velocity(random::Range(-50.0f, 50.0f), random::Range(-50.0f, 50.0f));
 
-      physics::Body body(physics::BodyType::Dynamic,
-                         aabb.GetCentre(),
-                         velocity,
-                         math::Vec2f::Zero(),
-                         false,
-                         random::Range(1.0f, 50.0f));
+        physics::Body body(physics::BodyType::Dynamic,
+                           aabb.GetCentre(),
+                           velocity,
+                           math::Vec2f::Zero(),
+                           false,
+                           random::Range(1.0f, 50.0f));
 
         physics::Collider collider(aabb, random::Range(1.0f, 1.0f), 0, false);
         GameObject object(body, collider, aabb.half_size_length());
@@ -103,14 +106,14 @@ namespace physics923
         collider_to_object_map_.erase(&object.collider());
     }
 
-    void CollisionSystem::Update(physics923::commons::fp delta_time)
+    void CollisionSystem::Update(crackitos_physics::commons::fp delta_time)
     {
         UpdateShapes(delta_time);
         BroadPhase();
         NarrowPhase();
     }
 
-    void CollisionSystem::UpdateShapes(physics923::commons::fp delta_time)
+    void CollisionSystem::UpdateShapes(crackitos_physics::commons::fp delta_time)
     {
         for (auto& object : objects_)
         {
@@ -121,7 +124,7 @@ namespace physics923
 
             auto position = body.position();
 
-            physics923::commons::fp radius = object.radius();
+            crackitos_physics::commons::fp radius = object.radius();
 
             //Check for collision with window borders
             if (position.x - radius < 0)
@@ -129,7 +132,7 @@ namespace physics923
                 position.x = radius;
                 body.set_velocity(math::Vec2f(-body.velocity().x, body.velocity().y));
             }
-            if(position.x + radius > 1200)
+            if (position.x + radius > 1200)
             {
                 position.x = 1200 - radius;
                 body.set_velocity(math::Vec2f(-body.velocity().x, body.velocity().y));
@@ -139,7 +142,7 @@ namespace physics923
                 position.y = radius;
                 body.set_velocity(math::Vec2f(body.velocity().x, -body.velocity().y));
             }
-            if(position.y + radius > 800)
+            if (position.y + radius > 800)
             {
                 position.y = 800 - radius;
                 body.set_velocity(math::Vec2f(body.velocity().x, -body.velocity().y));
@@ -184,7 +187,6 @@ namespace physics923
         // Update the potential pairs for narrow phase to process
         potential_pairs_ = std::move(new_potential_pairs);
     }
-
 
 
     void CollisionSystem::BroadPhase()
@@ -275,7 +277,7 @@ namespace physics923
     //Called on the first collision frame
     void CollisionSystem::OnPairCollideStart(const GameObjectPair& pair)
     {
-        if(!pair.gameObjectA_ || !pair.gameObjectB_){return;}
+        if (!pair.gameObjectA_ || !pair.gameObjectB_) { return; }
 
         pair.gameObjectA_->AddCollision();
         pair.gameObjectB_->AddCollision();
@@ -302,9 +304,10 @@ namespace physics923
             pair.gameObjectB_->OnCollisionEnter();
         }
     }
+
     void CollisionSystem::OnPairCollideStay(const GameObjectPair& pair)
     {
-        if(!pair.gameObjectA_ || !pair.gameObjectB_){return;}
+        if (!pair.gameObjectA_ || !pair.gameObjectB_) { return; }
 
         if (pair.gameObjectA_->collider().is_trigger() || pair.gameObjectB_->collider().is_trigger())
         {
@@ -338,7 +341,6 @@ namespace physics923
         }
         else
         {
-
             if (pair.gameObjectA_->collisions_count() <= 0)
             {
                 pair.gameObjectA_->OnCollisionExit();
@@ -349,4 +351,4 @@ namespace physics923
             }
         }
     }
-}
+} // namespace samples

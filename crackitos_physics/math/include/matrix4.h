@@ -1,5 +1,5 @@
-﻿#ifndef PHYSICS_923_LIB_MATH_MATRIX4_H_
-#define PHYSICS_923_LIB_MATH_MATRIX4_H_
+﻿#ifndef CRACKITOS_PHYSICS_MATH_MATRIX4_H_
+#define CRACKITOS_PHYSICS_MATH_MATRIX4_H_
 
 #include <array>
 #include <cassert>
@@ -7,9 +7,8 @@
 
 #include "matrix3.h"
 #include "vec4.h"
-#include "commons.h"
 
-namespace physics923::math
+namespace crackitos_physics::math
 {
     template <typename T>
     struct matrix4
@@ -170,5 +169,4 @@ namespace physics923::math
         }
     };
 } // namespace math
-
-#endif // PHYSICS_923_LIB_MATH_MATRIX4_H_
+#endif // CRACKITOS_PHYSICS_MATH_MATRIX4_H_

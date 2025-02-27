@@ -1,15 +1,13 @@
-﻿#ifndef PHYSICS_923_API_DISPLAY_H_
-#define PHYSICS_923_API_DISPLAY_H_
+﻿#ifndef PHYSICS_SAMPLES_DISPLAY_H_
+#define PHYSICS_SAMPLES_DISPLAY_H_
 
 #include <SDL_render.h>
 #include <SDL_video.h>
-#include "commons.h"
 
-namespace physics923
+namespace crackitos_physics::samples
 {
     static constexpr int kWindowWidth = 1200;
     static constexpr int kWindowHeight = 800;
-
 
     class Display
     {
@@ -29,5 +27,5 @@ namespace physics923
 
         void Clear() const;
     };
-}
-#endif // PHYSICS_923_API_DISPLAY_H_
+} // namespace samples
+#endif // PHYSICS_SAMPLES_DISPLAY_H_

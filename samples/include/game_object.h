@@ -1,5 +1,5 @@
-﻿#ifndef PHYSICS_923_API_GAME_OBJECT_H_
-#define PHYSICS_923_API_GAME_OBJECT_H_
+﻿#ifndef PHYSICS_SAMPLES_GAME_OBJECT_H_
+#define PHYSICS_SAMPLES_GAME_OBJECT_H_
 
 #include <SDL_pixels.h>
 
@@ -9,27 +9,29 @@
 #include "collider.h"
 #include "random.h"
 
-namespace physics923
+namespace crackitos_physics::samples
 {
     class GameObject
     {
     private:
         physics::Body body_;
         physics::Collider collider_ = {};
-        physics923::commons::fp radius_ = 0.f;
+        crackitos_physics::commons::fp radius_ = 0.f;
         SDL_Color color_ = SDL_Color{255, 13, 132, 255};
         int collisions_count_ = 0;
 
     public:
         GameObject() = default;
 
-        GameObject(const physics::Body& body, physics::Collider collider, const physics923::commons::fp radius) : body_(body),
-            collider_(std::move(collider)), radius_(radius)
+        GameObject(const physics::Body& body, physics::Collider collider,
+                   const crackitos_physics::commons::fp radius) : body_(body),
+                                                                  collider_(std::move(collider)), radius_(radius)
         {
         }
 
-        GameObject(const physics::Body& body, const physics923::commons::fp radius, const SDL_Color& color) : body_(body),
-            radius_(radius), color_(color)
+        GameObject(const physics::Body& body, const crackitos_physics::commons::fp radius,
+                   const SDL_Color& color) : body_(body),
+                                             radius_(radius), color_(color)
         {
         }
 
@@ -37,14 +39,14 @@ namespace physics923
 
         [[nodiscard]] physics::Body& body() { return body_; }
         [[nodiscard]] physics::Collider& collider() { return collider_; }
-        [[nodiscard]] physics923::commons::fp radius() const { return radius_; }
+        [[nodiscard]] crackitos_physics::commons::fp radius() const { return radius_; }
         [[nodiscard]] SDL_Color color() const { return color_; }
         [[nodiscard]] math::Vec2f position() const { return body_.position(); }
         [[nodiscard]] int collisions_count() const { return collisions_count_; }
 
         void set_body(const physics::Body& body) { body_ = body; }
         void set_collider(const physics::Collider& collider) { collider_ = collider; }
-        void set_radius(const physics923::commons::fp radius) { radius_ = radius; }
+        void set_radius(const crackitos_physics::commons::fp radius) { radius_ = radius; }
         void set_color(const SDL_Color& color) { color_ = color; }
         void AddCollision() { collisions_count_++; }
         void SubCollision() { collisions_count_--; }
@@ -91,24 +93,26 @@ namespace physics923
     };
 }
 
-    namespace std
+namespace std
+{
+    template <>
+    struct std::hash<crackitos_physics::samples::GameObjectPair>
     {
-        template <>
-        struct std::hash<physics923::GameObjectPair>
+        std::size_t operator()(const crackitos_physics::samples::GameObjectPair& pair) const noexcept
         {
-            std::size_t operator()(const physics923::GameObjectPair& pair) const noexcept
-            {
-                // Ensure consistent ordering by hashing the pointers in a sorted manner
-                const physics923::GameObject* first = pair.gameObjectA_ < pair.gameObjectB_ ? pair.gameObjectA_ : pair.gameObjectB_;
-                const physics923::GameObject* second = pair.gameObjectA_ < pair.gameObjectB_
-                                                           ? pair.gameObjectB_
-                                                           : pair.gameObjectA_;
+            // Ensure consistent ordering by hashing the pointers in a sorted manner
+            const crackitos_physics::samples::GameObject* first = pair.gameObjectA_ < pair.gameObjectB_
+                                                             ? pair.gameObjectA_
+                                                             : pair.gameObjectB_;
+            const crackitos_physics::samples::GameObject* second = pair.gameObjectA_ < pair.gameObjectB_
+                                                              ? pair.gameObjectB_
+                                                              : pair.gameObjectA_;
 
-                std::size_t h1 = std::hash<const physics923::GameObject*>{}(first);
-                std::size_t h2 = std::hash<const physics923::GameObject*>{}(second);
-                // Combine hashes
-                return h1 ^ (h2 << 1);
-            }
-        };
+            std::size_t h1 = std::hash<const crackitos_physics::samples::GameObject*>{}(first);
+            std::size_t h2 = std::hash<const crackitos_physics::samples::GameObject*>{}(second);
+            // Combine hashes
+            return h1 ^ (h2 << 1);
+        }
     };
-#endif // PHYSICS_923_API_GAME_OBJECT_H_
+} // namespace samples
+#endif // PHYSICS_SAMPLES_GAME_OBJECT_H_

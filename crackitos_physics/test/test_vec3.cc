@@ -3,10 +3,7 @@
 #include "vec3.h"
 #include "commons.h"
 
-/**
- * \brief Tests for Vec3 with ints
- */
-namespace physics923::math
+namespace crackitos_physics::math
 {
     struct Vec3iOperatorFixture :
         public testing::TestWithParam<std::pair<Vec3<int>, Vec3<int>>>
@@ -112,10 +109,10 @@ namespace physics923::math
     );
 
     /**
-     * \brief Tests for Vec3 with physics923::commons::fps
+     * \brief Tests for Vec3 with crackitos_physics::commons::fps
      */
     struct Vec3fOperatorFixture :
-        public testing::TestWithParam<std::pair<Vec3<physics923::commons::fp>, Vec3<physics923::commons::fp>>>
+        public testing::TestWithParam<std::pair<Vec3<crackitos_physics::commons::fp>, Vec3<crackitos_physics::commons::fp>>>
     {
     };
 
@@ -149,14 +146,14 @@ namespace physics923::math
     TEST_P(Vec3fOperatorFixture, Dot)
     {
         auto [v1, v2] = GetParam();
-        const auto result = Vec3<physics923::commons::fp>::Dot(v1, v2);
+        const auto result = Vec3<crackitos_physics::commons::fp>::Dot(v1, v2);
         EXPECT_FLOAT_EQ(result, v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
     }
 
     TEST_P(Vec3fOperatorFixture, Cross)
     {
         auto [v1, v2] = GetParam();
-        const auto result = Vec3<physics923::commons::fp>::Cross(v1, v2);
+        const auto result = Vec3<crackitos_physics::commons::fp>::Cross(v1, v2);
         EXPECT_FLOAT_EQ(result.x, v1.y * v2.z - v1.z * v2.y);
         EXPECT_FLOAT_EQ(result.y, v1.z * v2.x - v1.x * v2.z);
         EXPECT_FLOAT_EQ(result.z, v1.x * v2.y - v1.y * v2.x);
@@ -212,9 +209,9 @@ namespace physics923::math
                                  std::pair{ math::Vec3{-10.5f, -15.3f, 5.0f}, math::Vec3{-25.8f, 35.2f, 0.0f} },
                                  std::pair{ math::Vec3{1.0f, 3.0f, 1.5f}, math::Vec3{2.2f, 4.1f, 0.8f} },
                                  std::pair{ math::Vec3{10.7f, 15.8f, 10.1f}, math::Vec3{25.3f, 35.4f, 5.5f} },
-                                 std::pair{ math::Vec3<physics923::commons::fp>{}, math::Vec3<physics923::commons::fp>{} },
-                                 std::pair{ math::Vec3{1.5f, 5.1f, 2.8f}, math::Vec3<physics923::commons::fp>{} },
-                                 std::pair{ math::Vec3<physics923::commons::fp>{}, math::Vec3{1.9f, 7.6f, 3.3f} }
+                                 std::pair{ math::Vec3<crackitos_physics::commons::fp>{}, math::Vec3<crackitos_physics::commons::fp>{} },
+                                 std::pair{ math::Vec3{1.5f, 5.1f, 2.8f}, math::Vec3<crackitos_physics::commons::fp>{} },
+                                 std::pair{ math::Vec3<crackitos_physics::commons::fp>{}, math::Vec3{1.9f, 7.6f, 3.3f} }
                              )
 
     );

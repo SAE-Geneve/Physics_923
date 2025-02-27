@@ -1,5 +1,5 @@
-﻿#ifndef PHYSICS_923_LIB_PHYSICS_CONTACT_SOLVER_H_
-#define PHYSICS_923_LIB_PHYSICS_CONTACT_SOLVER_H_
+﻿#ifndef CRACKITOS_PHYSICS_PHYSICS_CONTACT_SOLVER_H_
+#define CRACKITOS_PHYSICS_PHYSICS_CONTACT_SOLVER_H_
 
 #include <array>
 #include <iostream>
@@ -9,7 +9,7 @@
 #include "vec2.h"
 #include "commons.h"
 
-namespace physics923::physics
+namespace crackitos_physics::physics
 {
     struct ContactSolver
     {
@@ -19,7 +19,7 @@ namespace physics923::physics
         math::Vec2f contact_point_ = math::Vec2f::Zero();
         math::Vec2f contact_normal_ = math::Vec2f::Zero();
 
-        physics923::commons::fp penetration_ = 0.0f;
+        crackitos_physics::commons::fp penetration_ = 0.0f;
 
         void SetContactObjects(const std::pair<Body*, Body*> bodies, const std::pair<Collider*, Collider*> colliders)
         {
@@ -127,23 +127,23 @@ namespace physics923::physics
             const math::Vec2f relative_velocity = body_a->velocity() - body_b->velocity();
 
             // Relative velocity along Normal
-            const physics923::commons::fp separating_velocity = math::Vec2f::Dot(relative_velocity, contact_normal_);
+            const crackitos_physics::commons::fp separating_velocity = math::Vec2f::Dot(relative_velocity, contact_normal_);
 
             if (separating_velocity > 0.0f) { return; }
 
             // Calculate restitution
-            physics923::commons::fp restitution = (collider_a->bounciness() * body_a->mass() + collider_b->bounciness() * body_b->mass())
+            crackitos_physics::commons::fp restitution = (collider_a->bounciness() * body_a->mass() + collider_b->bounciness() * body_b->mass())
                                 / (body_a->mass() + body_b->mass());
 
             // If velocity is very small, set restitution to zero
-            constexpr physics923::commons::fp restitution_threshold = 2.0f;
+            constexpr crackitos_physics::commons::fp restitution_threshold = 2.0f;
             if (std::abs(separating_velocity) < restitution_threshold)
             {
                 restitution = 0.0f;
             }
 
             // Calculate impulse scalar
-            physics923::commons::fp impulse_magnitude = -(1.0f + restitution) * separating_velocity;
+            crackitos_physics::commons::fp impulse_magnitude = -(1.0f + restitution) * separating_velocity;
             impulse_magnitude /= (body_a->inverse_mass() + body_b->inverse_mass());
             math::Vec2f impulse = impulse_magnitude * contact_normal_;
 
@@ -154,7 +154,7 @@ namespace physics923::physics
             std::cout << "  Separating Velocity: " << separating_velocity << std::endl;
             std::cout << "  Impulse Magnitude: " << impulse_magnitude << std::endl;
 
-            physics923::commons::fp sleep_velocity_threshold = 10.0f;
+            crackitos_physics::commons::fp sleep_velocity_threshold = 10.0f;
             // Apply impulse to the dynamic bodies
             if (body_a->type() == BodyType::Dynamic)
             {
@@ -173,8 +173,8 @@ namespace physics923::physics
             //Tangent vector
             const math::Vec2f tangent = (relative_velocity - separating_velocity * contact_normal_).Normalized();
             // Magnitude to apply
-            const physics923::commons::fp jt = -math::Vec2f::Dot(relative_velocity, tangent) / (body_a->inverse_mass() + body_b->inverse_mass());
-            const physics923::commons::fp mu = std::sqrt(
+            const crackitos_physics::commons::fp jt = -math::Vec2f::Dot(relative_velocity, tangent) / (body_a->inverse_mass() + body_b->inverse_mass());
+            const crackitos_physics::commons::fp mu = std::sqrt(
                 collider_a->friction() * collider_a->friction() + collider_b->friction() * collider_b->friction());
 
             // Clamp friction
@@ -185,7 +185,7 @@ namespace physics923::physics
             }
             else
             {
-                const physics923::commons::fp dynamic_friction_impulse = std::sqrt(
+                const crackitos_physics::commons::fp dynamic_friction_impulse = std::sqrt(
                     collider_a->dynamic_friction() * collider_a->dynamic_friction() + collider_b->dynamic_friction() *
                     collider_b->dynamic_friction());
                 friction_impulse = -impulse_magnitude * tangent * dynamic_friction_impulse;
@@ -211,12 +211,12 @@ namespace physics923::physics
             const auto inverse_mass_a = body_a->inverse_mass();
             const auto inverse_mass_b = body_b->inverse_mass();
             const auto total_inverse_mass = inverse_mass_a + inverse_mass_b;
-            if(total_inverse_mass <= std::numeric_limits<physics923::commons::fp>::epsilon()) { return; }
+            if(total_inverse_mass <= std::numeric_limits<crackitos_physics::commons::fp>::epsilon()) { return; }
 
             //Correct positions to avoid objects sinking into each other
             //Only correct position if the penetration is above this threshold
             // physics923::commons::fp penetration_correction = std::max(penetration_, 0.01f);
-            constexpr physics923::commons::fp correction_percent = 1.0f;
+            constexpr crackitos_physics::commons::fp correction_percent = 1.0f;
             // const math::Vec2f correction = contact_normal_ * (penetration_correction * correction_percent);
             const math::Vec2f correction = contact_normal_ * (penetration_ * correction_percent);
 
@@ -251,9 +251,9 @@ namespace physics923::physics
             const auto centre_b = bodies_.second->position();
 
             //Calculate the overlap on each axis
-            physics923::commons::fp overlap_x = std::min(aabb_a.max_bound().x, aabb_b.max_bound().x) - std::max(
+            crackitos_physics::commons::fp overlap_x = std::min(aabb_a.max_bound().x, aabb_b.max_bound().x) - std::max(
                 aabb_a.min_bound().x, aabb_b.min_bound().x);
-            physics923::commons::fp overlap_y = std::min(aabb_a.max_bound().y, aabb_b.max_bound().y) - std::max(
+            crackitos_physics::commons::fp overlap_y = std::min(aabb_a.max_bound().y, aabb_b.max_bound().y) - std::max(
                 aabb_a.min_bound().y, aabb_b.min_bound().y);
 
             if (overlap_x <= 0.0f || overlap_y <= 0.0f)
@@ -297,7 +297,7 @@ namespace physics923::physics
 
     // Calculate the vector from the circle center to the closest point
     const math::Vec2f delta = closest_point - centre;
-    const physics923::commons::fp distance = delta.Magnitude();
+    const crackitos_physics::commons::fp distance = delta.Magnitude();
 
     if (distance >= radius)
     {
@@ -305,7 +305,7 @@ namespace physics923::physics
         return; // No collision
     }
 
-    if (distance > std::numeric_limits<physics923::commons::fp>::epsilon())
+    if (distance > std::numeric_limits<crackitos_physics::commons::fp>::epsilon())
     {
         // Case: Circle's center is outside the AABB
         contact_normal_ = delta / distance; // Normalized vector
@@ -316,13 +316,13 @@ namespace physics923::physics
     {
         // Case: Circle's center is inside the AABB
         // Find the minimum distance to an edge of the AABB
-        physics923::commons::fp left_dist = std::abs(centre.x - aabb.min_bound().x);
-        physics923::commons::fp right_dist = std::abs(aabb.max_bound().x - centre.x);
-        physics923::commons::fp bottom_dist = std::abs(centre.y - aabb.min_bound().y);
-        physics923::commons::fp top_dist = std::abs(aabb.max_bound().y - centre.y);
+        crackitos_physics::commons::fp left_dist = std::abs(centre.x - aabb.min_bound().x);
+        crackitos_physics::commons::fp right_dist = std::abs(aabb.max_bound().x - centre.x);
+        crackitos_physics::commons::fp bottom_dist = std::abs(centre.y - aabb.min_bound().y);
+        crackitos_physics::commons::fp top_dist = std::abs(aabb.max_bound().y - centre.y);
 
         // Determine the edge with the smallest distance
-        physics923::commons::fp min_dist = std::min({left_dist, right_dist, bottom_dist, top_dist});
+        crackitos_physics::commons::fp min_dist = std::min({left_dist, right_dist, bottom_dist, top_dist});
 
         if (min_dist == left_dist)
         {
@@ -366,8 +366,8 @@ namespace physics923::physics
 
             //Calculate the vector between the centers
             const math::Vec2f delta = centre_a - centre_b;
-            physics923::commons::fp dist = delta.Magnitude();
-            physics923::commons::fp total_radius = radius_a + radius_b;
+            crackitos_physics::commons::fp dist = delta.Magnitude();
+            crackitos_physics::commons::fp total_radius = radius_a + radius_b;
 
             if (dist >= total_radius)
             {
@@ -375,7 +375,7 @@ namespace physics923::physics
                 return; // No collision
             }
 
-            if (dist < std::numeric_limits<physics923::commons::fp>::epsilon())
+            if (dist < std::numeric_limits<crackitos_physics::commons::fp>::epsilon())
             {
                 contact_normal_ = math::Vec2f(1.0f, 0.0f); // Arbitrary normal
                 penetration_ = total_radius;       // Total overlap
@@ -401,5 +401,5 @@ namespace physics923::physics
             //This would involve checking for edge intersections and calculating the contact point, normal, and penetration depth
         }
     };
-}
-#endif //PHYSICS_923_LIB_PHYSICS_CONTACT_SOLVER_H_
+} // namespace physics
+#endif // CRACKITOS_PHYSICS_PHYSICS_CONTACT_SOLVER_H_

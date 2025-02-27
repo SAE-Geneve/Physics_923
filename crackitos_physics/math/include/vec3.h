@@ -1,12 +1,11 @@
-﻿#ifndef PHYSICS_923_LIB_MATH_VEC3_H_
-#define PHYSICS_923_LIB_MATH_VEC3_H_
+﻿#ifndef CRACKITOS_PHYSICS_MATH_VEC3_H_
+#define CRACKITOS_PHYSICS_MATH_VEC3_H_
 
 #include <cassert>
 #include <cmath>
 #include <stdexcept>
-#include "commons.h"
 
-namespace physics923::math
+namespace crackitos_physics::math
 {
     /**
      * \brief Vec3 is a mathematical object represented by three values of type T
@@ -142,4 +141,4 @@ namespace physics923::math
         return {scalar * vec.x, scalar * vec.y, scalar * vec.z};
     }
 } // namespace math
-#endif // PHYSICS_923_LIB_MATH_VEC3_H_
+#endif // CRACKITOS_PHYSICS_MATH_VEC3_H_

@@ -1,12 +1,12 @@
-﻿#ifndef PHYSICS_923_LIB_MATH_FOUR_VEC4_H_
-#define PHYSICS_923_LIB_MATH_FOUR_VEC4_H_
+﻿#ifndef CRACKITOS_PHYSICS_MATH_FOUR_VEC4_H_
+#define CRACKITOS_PHYSICS_MATH_FOUR_VEC4_H_
 
 #include <array>
 
 #include "vec4.h"
 #include "commons.h"
 
-namespace physics923::math
+namespace crackitos_physics::math
 {
     template <typename T>
     struct FourVec4
@@ -32,36 +32,36 @@ namespace physics923::math
         FourVec4<T> operator+(const FourVec4<T>& other) const;
         FourVec4<T> operator-(const FourVec4<T>& other) const;
         FourVec4<T> operator-() const; //Opposite
-        FourVec4<T> operator*(const physics923::commons::fp scalar) const; //Multiply by scalar
-        FourVec4<T> operator/(const physics923::commons::fp scalar) const; //Divide by scalar
-        std::array<physics923::commons::fp, 4> Dot(const FourVec4<T>& other) const; //Dot
-        std::array<physics923::commons::fp, 4> SquareMagnitude() const; //SquareMagnitude
-        std::array<physics923::commons::fp, 4> Magnitude() const; //Magnitude/Sqrroot
+        FourVec4<T> operator*(const crackitos_physics::commons::fp scalar) const; //Multiply by scalar
+        FourVec4<T> operator/(const crackitos_physics::commons::fp scalar) const; //Divide by scalar
+        std::array<crackitos_physics::commons::fp, 4> Dot(const FourVec4<T>& other) const; //Dot
+        std::array<crackitos_physics::commons::fp, 4> SquareMagnitude() const; //SquareMagnitude
+        std::array<crackitos_physics::commons::fp, 4> Magnitude() const; //Magnitude/Sqrroot
         FourVec4<T> Normalize() const; //Normalize
     };
 
     using FourVec4i = FourVec4<int32_t>;
-    using FourVec4f = FourVec4<physics923::commons::fp>;
+    using FourVec4f = FourVec4<crackitos_physics::commons::fp>;
 
     //Specialization for physics923::commons::fp
     template <>
-    FourVec4f FourVec4<physics923::commons::fp>::operator+(const FourVec4f& other) const;
+    FourVec4f FourVec4<crackitos_physics::commons::fp>::operator+(const FourVec4f& other) const;
     template <>
-    FourVec4f FourVec4<physics923::commons::fp>::operator-(const FourVec4f& other) const;
+    FourVec4f FourVec4<crackitos_physics::commons::fp>::operator-(const FourVec4f& other) const;
     template <>
-    FourVec4f FourVec4<physics923::commons::fp>::operator-() const;
+    FourVec4f FourVec4<crackitos_physics::commons::fp>::operator-() const;
     template <>
-    FourVec4f FourVec4<physics923::commons::fp>::operator*(const physics923::commons::fp scalar) const;
+    FourVec4f FourVec4<crackitos_physics::commons::fp>::operator*(const crackitos_physics::commons::fp scalar) const;
     template <>
-    FourVec4f FourVec4<physics923::commons::fp>::operator/(const physics923::commons::fp scalar) const;
+    FourVec4f FourVec4<crackitos_physics::commons::fp>::operator/(const crackitos_physics::commons::fp scalar) const;
     template <>
-    std::array<physics923::commons::fp, 4> FourVec4<physics923::commons::fp>::Dot(const FourVec4f& other) const;
+    std::array<crackitos_physics::commons::fp, 4> FourVec4<crackitos_physics::commons::fp>::Dot(
+        const FourVec4f& other) const;
     template <>
-    std::array<physics923::commons::fp, 4> FourVec4<physics923::commons::fp>::SquareMagnitude() const;
+    std::array<crackitos_physics::commons::fp, 4> FourVec4<crackitos_physics::commons::fp>::SquareMagnitude() const;
     template <>
-    std::array<physics923::commons::fp, 4> FourVec4<physics923::commons::fp>::Magnitude() const;
+    std::array<crackitos_physics::commons::fp, 4> FourVec4<crackitos_physics::commons::fp>::Magnitude() const;
     template <>
-    FourVec4f FourVec4<physics923::commons::fp>::Normalize() const;
-}
-
-#endif //KUMA_ENGINE_LIB_MATH_FOUR_VEC4_H_
+    FourVec4f FourVec4<crackitos_physics::commons::fp>::Normalize() const;
+} // namespace math
+#endif // CRACKITOS_PHYSICS_MATH_FOUR_VEC4_H_

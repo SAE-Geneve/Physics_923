@@ -2,7 +2,7 @@
 
 #include "commons.h"
 
-namespace physics923
+namespace crackitos_physics::samples
 {
     void GraphicsManager::AddVertex(const math::Vec2f position, const SDL_Color color)
     {
@@ -19,21 +19,22 @@ namespace physics923
         indices_.clear();
     }
 
-    void GraphicsManager::CreateCircle(const math::Vec2f centre, const physics923::commons::fp radius, const SDL_Color color, const bool rotation)
+    void GraphicsManager::CreateCircle(const math::Vec2f centre, const crackitos_physics::commons::fp radius,
+                                       const SDL_Color color, const bool rotation)
     {
         //Track where the new circle's vertices start
         const size_t starting_index = vertices_.size();
 
-        constexpr physics923::commons::fp angle_step = (2 * commons::kPi) / kCircleVertexCount;
+        constexpr crackitos_physics::commons::fp angle_step = (2 * commons::kPi) / kCircleVertexCount;
 
         //Add the centre of the circle
         AddVertex(centre, SDL_Color{0, 0, 0, 0});
 
         {
-            const physics923::commons::fp angle = static_cast<physics923::commons::fp>(0) * angle_step;
-            const physics923::commons::fp x = centre.x + radius * std::cos(angle);
-            const physics923::commons::fp y = centre.y + radius * std::sin(angle);
-            if(rotation)
+            const crackitos_physics::commons::fp angle = static_cast<crackitos_physics::commons::fp>(0) * angle_step;
+            const crackitos_physics::commons::fp x = centre.x + radius * std::cos(angle);
+            const crackitos_physics::commons::fp y = centre.y + radius * std::sin(angle);
+            if (rotation)
             {
                 AddVertex(math::Vec2f{x, y}, SDL_Color{0, 0, 0, 255});
             }
@@ -47,9 +48,9 @@ namespace physics923
         //Generate vertices
         for (size_t i = 1; i < kCircleVertexCount; i++)
         {
-            const physics923::commons::fp angle = static_cast<physics923::commons::fp>(i) * angle_step;
-            const physics923::commons::fp x = centre.x + radius * std::cos(angle);
-            const physics923::commons::fp y = centre.y + radius * std::sin(angle);
+            const crackitos_physics::commons::fp angle = static_cast<crackitos_physics::commons::fp>(i) * angle_step;
+            const crackitos_physics::commons::fp x = centre.x + radius * std::cos(angle);
+            const crackitos_physics::commons::fp y = centre.y + radius * std::sin(angle);
 
             AddVertex(math::Vec2f{x, y}, color);
         }
@@ -57,9 +58,9 @@ namespace physics923
         //Generate indices
         for (size_t i = 0; i < kCircleVertexCount - 1; i++)
         {
-            indices_.push_back(static_cast<int>(starting_index));          //Center vertex
-            indices_.push_back(static_cast<int>(starting_index + i + 1));  //Current outer vertex
-            indices_.push_back(static_cast<int>(starting_index + i + 2));  //Next outer vertex
+            indices_.push_back(static_cast<int>(starting_index)); //Center vertex
+            indices_.push_back(static_cast<int>(starting_index + i + 1)); //Current outer vertex
+            indices_.push_back(static_cast<int>(starting_index + i + 2)); //Next outer vertex
         }
 
 
@@ -67,10 +68,10 @@ namespace physics923
         indices_.push_back(static_cast<int>(starting_index));
         indices_.push_back(static_cast<int>(starting_index + kCircleVertexCount));
         indices_.push_back(static_cast<int>(starting_index + 1));
-
     }
 
-    void GraphicsManager::CreateAABB(const math::Vec2f min, const math::Vec2f max, const SDL_Color color, bool fill_status)
+    void GraphicsManager::CreateAABB(const math::Vec2f min, const math::Vec2f max, const SDL_Color color,
+                                     bool fill_status)
     {
         const size_t starting_index = vertices_.size();
         AddVertex(min, color);
@@ -87,7 +88,8 @@ namespace physics923
         indices_.push_back(static_cast<int>(starting_index + 3));
     }
 
-    void GraphicsManager::CreatePolygon(const std::vector<math::Vec2f>& points, const math::Vec2f center, const SDL_Color color, bool fill_status)
+    void GraphicsManager::CreatePolygon(const std::vector<math::Vec2f>& points, const math::Vec2f center,
+                                        const SDL_Color color, bool fill_status)
     {
         const size_t starting_index = vertices_.size();
 
@@ -102,9 +104,9 @@ namespace physics923
         //Generate indices
         for (size_t i = 0; i < points.size() - 1; i++)
         {
-            indices_.push_back(static_cast<int>(starting_index));          //Center vertex
-            indices_.push_back(static_cast<int>(starting_index + i + 1));  //Current outer vertex
-            indices_.push_back(static_cast<int>(starting_index + i + 2));  //Next outer vertex
+            indices_.push_back(static_cast<int>(starting_index)); //Center vertex
+            indices_.push_back(static_cast<int>(starting_index + i + 1)); //Current outer vertex
+            indices_.push_back(static_cast<int>(starting_index + i + 2)); //Next outer vertex
         }
 
 
@@ -113,4 +115,4 @@ namespace physics923
         indices_.push_back(static_cast<int>(starting_index + points.size()));
         indices_.push_back(static_cast<int>(starting_index + 1));
     }
-}
+} // namespace samples

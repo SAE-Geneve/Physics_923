@@ -2,18 +2,17 @@
 
 #include <SDL.h>
 
-namespace physics923
+namespace crackitos_physics::samples
 {
     Display::Display()
     {
-
         SDL_Init(SDL_INIT_VIDEO);
         window_ = SDL_CreateWindow("SDL2 Window",
-            SDL_WINDOWPOS_CENTERED,
-            SDL_WINDOWPOS_CENTERED,
-            window_width_,
-            window_height_,
-            SDL_WINDOW_SHOWN);
+                                   SDL_WINDOWPOS_CENTERED,
+                                   SDL_WINDOWPOS_CENTERED,
+                                   window_width_,
+                                   window_height_,
+                                   SDL_WINDOW_SHOWN);
 
         if (window_ == nullptr)
         {
@@ -44,4 +43,4 @@ namespace physics923
         SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 255);
         SDL_RenderClear(renderer_);
     }
-}
+} // namespace samples

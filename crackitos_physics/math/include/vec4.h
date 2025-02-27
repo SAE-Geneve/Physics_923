@@ -1,12 +1,13 @@
-﻿#ifndef PHYSICS_923_LIB_MATH_VEC4_H_
-#define PHYSICS_923_LIB_MATH_VEC4_H_
+﻿#ifndef CRACKITOS_PHYSICS_MATH_VEC4_H_
+#define CRACKITOS_PHYSICS_MATH_VEC4_H_
 
 #include <cassert>
 #include <cmath>
 #include <stdexcept>
+
 #include "commons.h"
 
-namespace physics923::math
+namespace crackitos_physics::math
 {
     /**
      * \brief Vec4 is a mathematical object represented by four values of type T
@@ -114,7 +115,7 @@ namespace physics923::math
         //Normalized vector
         [[nodiscard]] constexpr Vec4 Normalized() const
         {
-            physics923::commons::fp mag = Magnitude();
+            crackitos_physics::commons::fp mag = Magnitude();
             if (mag == 0) return {0, 0, 0, 0};
             return {x / mag, y / mag, z / mag, w / mag};
         }
@@ -133,4 +134,4 @@ namespace physics923::math
         return {scalar * vec.x, scalar * vec.y, scalar * vec.z, scalar * vec.w};
     }
 } // namespace math
-#endif // PHYSICS_923_LIB_MATH_VEC4_H_
+#endif // CRACKITOS_PHYSICS_MATH_VEC4_H_

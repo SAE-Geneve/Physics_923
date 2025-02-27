@@ -6,7 +6,7 @@
 #include "display.h"
 #include "random.h"
 
-namespace physics923
+namespace crackitos_physics::samples
 {
     TriggerSystem::TriggerSystem(): quadtree_(math::AABB(math::Vec2f(0, 0), math::Vec2f(kWindowWidth, kWindowHeight)))
     {
@@ -21,13 +21,13 @@ namespace physics923
     {
         Clear();
 
-        constexpr physics923::commons::fp margin = 20.0f;
+        constexpr crackitos_physics::commons::fp margin = 20.0f;
 
         for (size_t i = 0; i < number_of_objects_ / 2 - 1; i++)
         {
             const math::Vec2f position(random::Range(margin, kWindowWidth - margin),
                                        random::Range(margin, kWindowHeight - margin));
-            const physics923::commons::fp radius = random::Range(5.f, 10.f);
+            const crackitos_physics::commons::fp radius = random::Range(5.f, 10.f);
             math::Circle circle(position, radius);
             CreateObject(i, circle);
         }
@@ -65,7 +65,7 @@ namespace physics923
                            math::Vec2f::Zero(),
                            false,
                            random::Range(1.0f, 50.0f)
-                           );
+        );
         physics::Collider collider(circle, random::Range(1.0f, 1.0f), 0, true);
         GameObject object(body, collider, circle.radius());
 
@@ -83,7 +83,7 @@ namespace physics923
                            math::Vec2f::Zero(),
                            false,
                            random::Range(1.0f, 50.0f)
-                           );
+        );
 
         physics::Collider collider(aabb, random::Range(1.0f, 1.0f), 0, true);
         GameObject object(body, collider, aabb.half_size_length());
@@ -111,14 +111,14 @@ namespace physics923
         collider_to_object_map_.erase(&object.collider());
     }
 
-    void TriggerSystem::Update(const physics923::commons::fp delta_time)
+    void TriggerSystem::Update(const crackitos_physics::commons::fp delta_time)
     {
         UpdateShapes(delta_time);
         BroadPhase();
         NarrowPhase();
     }
 
-    void TriggerSystem::UpdateShapes(const physics923::commons::fp delta_time)
+    void TriggerSystem::UpdateShapes(const crackitos_physics::commons::fp delta_time)
     {
         for (auto& object : objects_)
         {
@@ -129,7 +129,7 @@ namespace physics923
 
             auto position = body.position();
 
-            const physics923::commons::fp radius = object.radius();
+            const crackitos_physics::commons::fp radius = object.radius();
 
             //Check for collision with window borders
             if (position.x - radius < 0)
@@ -356,4 +356,4 @@ namespace physics923
             }
         }
     }
-}
+} // namespace samples

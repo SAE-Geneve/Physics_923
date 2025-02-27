@@ -1,28 +1,28 @@
-﻿#ifndef PHYSICS_923_LIB_PHYSICS_COLLIDER_H_
-#define PHYSICS_923_LIB_PHYSICS_COLLIDER_H_
+﻿#ifndef CRACKITOS_PHYSICS_PHYSICS_COLLIDER_H_
+#define CRACKITOS_PHYSICS_PHYSICS_COLLIDER_H_
 
 #include <variant>
 
 #include "shape.h"
 #include "commons.h"
 
-namespace physics923::physics
+namespace crackitos_physics::physics
 {
  class Collider
  {
  private:
   std::variant<math::Circle, math::AABB, math::Polygon> shape_ = math::Circle(0);
 
-  physics923::commons::fp bounciness_ = 0.0f;
-  physics923::commons::fp friction_ = 0.0f;
-  physics923::commons::fp dynamic_friction_ = 0.0f;
-  physics923::commons::fp offset_ = 0.0f;
+  crackitos_physics::commons::fp bounciness_ = 0.0f;
+  crackitos_physics::commons::fp friction_ = 0.0f;
+  crackitos_physics::commons::fp dynamic_friction_ = 0.0f;
+  crackitos_physics::commons::fp offset_ = 0.0f;
 
   bool is_trigger_ = false;
 
   public:
   Collider() = default;
-  Collider(const std::variant<math::Circle, math::AABB, math::Polygon>& shape, const physics923::commons::fp bounciness, const physics923::commons::fp friction, const bool is_trigger)
+  Collider(const std::variant<math::Circle, math::AABB, math::Polygon>& shape, const crackitos_physics::commons::fp bounciness, const crackitos_physics::commons::fp friction, const bool is_trigger)
   {
    shape_ = shape;
    bounciness_ = bounciness;
@@ -32,14 +32,14 @@ namespace physics923::physics
   };
 
   [[nodiscard]] std::variant<math::Circle, math::AABB, math::Polygon> shape() const { return shape_; }
-  [[nodiscard]] physics923::commons::fp bounciness() const { return bounciness_; }
-  [[nodiscard]] physics923::commons::fp friction() const { return friction_; }
-  [[nodiscard]] physics923::commons::fp dynamic_friction() const { return dynamic_friction_; }
+  [[nodiscard]] crackitos_physics::commons::fp bounciness() const { return bounciness_; }
+  [[nodiscard]] crackitos_physics::commons::fp friction() const { return friction_; }
+  [[nodiscard]] crackitos_physics::commons::fp dynamic_friction() const { return dynamic_friction_; }
   [[nodiscard]] bool is_trigger() const { return is_trigger_; }
 
   void set_shape(const std::variant<math::Circle, math::AABB, math::Polygon>& shape){ shape_ = shape; }
-  void set_bounciness(const physics923::commons::fp restitution){ bounciness_ = restitution; }
-  void set_friction(const physics923::commons::fp friction){ friction_ = friction; }
+  void set_bounciness(const crackitos_physics::commons::fp restitution){ bounciness_ = restitution; }
+  void set_friction(const crackitos_physics::commons::fp friction){ friction_ = friction; }
   void set_is_trigger(const bool is_trigger){ is_trigger_ = is_trigger; }
 
   [[nodiscard]] math::AABB GetBoundingBox() const {
@@ -70,6 +70,6 @@ namespace physics923::physics
   }
  };
 
-}
+} // namespace physics
 
-#endif //PHYSICS_923_LIB_PHYSICS_COLLIDER_H_
+#endif // CRACKITOS_PHYSICS_PHYSICS_COLLIDER_H_

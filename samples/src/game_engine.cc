@@ -8,7 +8,7 @@
 #include "imgui_interface.h"
 #include "random.h"
 
-namespace physics923
+namespace crackitos_physics::samples
 {
     GameEngine::GameEngine()
     {
@@ -38,7 +38,8 @@ namespace physics923
     void GameEngine::ChangeScene(const SystemScene new_sample)
     {
         // Perform cleanup for the current scene
-        switch (selected_scene_) {
+        switch (selected_scene_)
+        {
         case SystemScene::PlanetSystemScene: // Planet System
             planet_system_->Clear(); // Hypothetical cleanup method
             break;
@@ -59,7 +60,8 @@ namespace physics923
         selected_scene_ = new_sample;
 
         // Initialize the new scene
-        switch (selected_scene_) {
+        switch (selected_scene_)
+        {
         case SystemScene::PlanetSystemScene: // Planet System
             planet_system_->Initialize();
             break;
@@ -109,7 +111,8 @@ namespace physics923
                     {
                         int mouse_x, mouse_y;
                         SDL_GetMouseState(&mouse_x, &mouse_y);
-                        const auto mouse_pos = math::Vec2f(static_cast<physics923::commons::fp>(mouse_x), static_cast<physics923::commons::fp>(mouse_y));
+                        const auto mouse_pos = math::Vec2f(static_cast<crackitos_physics::commons::fp>(mouse_x),
+                                                           static_cast<crackitos_physics::commons::fp>(mouse_y));
                         friction_system_->SpawnShape(mouse_pos, math::ShapeType::kCircle);
                     }
                 }
@@ -119,7 +122,8 @@ namespace physics923
                     {
                         int mouse_x, mouse_y;
                         SDL_GetMouseState(&mouse_x, &mouse_y);
-                        const auto mouse_pos = math::Vec2f(static_cast<physics923::commons::fp>(mouse_x), static_cast<physics923::commons::fp>(mouse_y));
+                        const auto mouse_pos = math::Vec2f(static_cast<crackitos_physics::commons::fp>(mouse_x),
+                                                           static_cast<crackitos_physics::commons::fp>(mouse_y));
                         friction_system_->SpawnShape(mouse_pos, math::ShapeType::kAABB);
                     }
                 }
@@ -165,7 +169,7 @@ namespace physics923
 
             // Update the timer
             timer_->Tick();
-            physics923::commons::fp delta_time = timer_->DeltaTime();
+            crackitos_physics::commons::fp delta_time = timer_->DeltaTime();
 
 
             // Fixed Time Step Update
@@ -174,7 +178,8 @@ namespace physics923
                 // Update all systems with the fixed time step
                 if (selected_scene_ == SystemScene::PlanetSystemScene)
                 {
-                    planet_system_->Update(timer_->FixedDeltaTime() * imgui_interface_->speed_multiplier() * 1000.0f, imgui_interface_->planets_colour());
+                    planet_system_->Update(timer_->FixedDeltaTime() * imgui_interface_->speed_multiplier() * 1000.0f,
+                                           imgui_interface_->planets_colour());
                 }
                 else if (selected_scene_ == SystemScene::TriggerSystemScene)
                 {
@@ -197,7 +202,8 @@ namespace physics923
             // Render all systems based on the current state
             if (selected_scene_ == SystemScene::PlanetSystemScene)
             {
-                graphics_manager_->CreateCircle(planet_system_->star()->position(), 10.f, SDL_Color(255,255,255,150) , false);
+                graphics_manager_->CreateCircle(planet_system_->star()->position(), 10.f, SDL_Color(255, 255, 255, 150),
+                                                false);
                 for (auto p : planet_system_->planets())
                 {
                     graphics_manager_->CreateCircle(p.position(), p.radius(), p.color(), false);
@@ -220,7 +226,10 @@ namespace physics923
                         break;
                     }
                 }
-                if(imgui_interface_->show_quadtree()){RenderQuadtree(display_->renderer(),trigger_system_->quadtree());}
+                if (imgui_interface_->show_quadtree())
+                {
+                    RenderQuadtree(display_->renderer(), trigger_system_->quadtree());
+                }
             }
             else if (selected_scene_ == SystemScene::CollisionSystemScene)
             {
@@ -239,7 +248,10 @@ namespace physics923
                         break;
                     }
                 }
-                if(imgui_interface_->show_quadtree()){RenderQuadtree(display_->renderer(),collision_system_->quadtree());}
+                if (imgui_interface_->show_quadtree())
+                {
+                    RenderQuadtree(display_->renderer(), collision_system_->quadtree());
+                }
             }
             else if (selected_scene_ == SystemScene::FrictionSystemScene)
             {
@@ -258,7 +270,10 @@ namespace physics923
                         break;
                     }
                 }
-                if(imgui_interface_->show_quadtree()){RenderQuadtree(display_->renderer(),friction_system_->quadtree());}
+                if (imgui_interface_->show_quadtree())
+                {
+                    RenderQuadtree(display_->renderer(), friction_system_->quadtree());
+                }
             }
 
             // Render the graphics
@@ -274,4 +289,4 @@ namespace physics923
         }
         // End()
     }
-}
+} // namespace samples

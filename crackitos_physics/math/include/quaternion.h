@@ -1,10 +1,10 @@
-﻿#ifndef PHYSICS_923_LIB_MATH_QUATERNION_H_
-#define PHYSICS_923_LIB_MATH_QUATERNION_H_
+﻿#ifndef CRACKITOS_PHYSICS_MATH_QUATERNION_H_
+#define CRACKITOS_PHYSICS_MATH_QUATERNION_H_
 
 #include "vec3.h"
 #include "commons.h"
 
-namespace physics923::math
+namespace crackitos_physics::math
 {
     template <typename T>
     struct Quaternion
@@ -12,12 +12,17 @@ namespace physics923::math
         // W is the real part, V is the imaginary part comprised of x, y, z
         // Default is the identity quaternion
         T W{1};
-        Vec3<T> V{0,0,0};
+        Vec3<T> V{0, 0, 0};
 
         Quaternion() = default;
 
-        Quaternion(T w, const Vec3<T>& v) : W{w}, V{v} {}
-        Quaternion(T w, T x, T y, T z) : W{w}, V{x, y, z} {};
+        Quaternion(T w, const Vec3<T>& v) : W{w}, V{v}
+        {
+        }
+
+        Quaternion(T w, T x, T y, T z) : W{w}, V{x, y, z}
+        {
+        };
 
         static constexpr Quaternion Identity()
         {
@@ -28,7 +33,7 @@ namespace physics923::math
         {
             Quaternion result;
             result.W = W * other.W - Vec3<T>::Dot(V, other.V);
-            result.V = V*other.W + other.V*W + Vec3<T>::Cross(V, other.V);
+            result.V = V * other.W + other.V * W + Vec3<T>::Cross(V, other.V);
             return result;
         }
 
@@ -43,25 +48,25 @@ namespace physics923::math
         }
 
         //TODO: modify once Angle is implemented. Also implement own trigonometry (cos & sin) to be able to constexpr
-        [[nodiscard]] Quaternion EulerToQuaternion(const physics923::commons::fp x, const physics923::commons::fp y, const physics923::commons::fp z) const
+        [[nodiscard]] Quaternion EulerToQuaternion(const crackitos_physics::commons::fp x,
+                                                   const crackitos_physics::commons::fp y,
+                                                   const crackitos_physics::commons::fp z) const
         {
-            const physics923::commons::fp cosX = std::cos(x * 0.5f);
-            const physics923::commons::fp sinX = std::sin(x * 0.5f);
-            const physics923::commons::fp cosY = std::cos(y * 0.5f);
-            const physics923::commons::fp sinY = std::sin(y * 0.5f);
-            const physics923::commons::fp cosZ = std::cos(z * 0.5f);
-            const physics923::commons::fp sinZ = std::sin(z * 0.5f);
+            const crackitos_physics::commons::fp cosX = std::cos(x * 0.5f);
+            const crackitos_physics::commons::fp sinX = std::sin(x * 0.5f);
+            const crackitos_physics::commons::fp cosY = std::cos(y * 0.5f);
+            const crackitos_physics::commons::fp sinY = std::sin(y * 0.5f);
+            const crackitos_physics::commons::fp cosZ = std::cos(z * 0.5f);
+            const crackitos_physics::commons::fp sinZ = std::sin(z * 0.5f);
 
             Quaternion result;
-            result.W = cosX*cosY*cosZ + sinX*sinY*sinZ;
-            result.V.x = sinX*cosY*cosZ - cosX*sinY*sinZ;
-            result.V.y = cosX*sinY*cosZ + sinX*cosY*sinZ;
-            result.V.z = cosX*cosY*sinZ - sinX*sinY*cosZ;
+            result.W = cosX * cosY * cosZ + sinX * sinY * sinZ;
+            result.V.x = sinX * cosY * cosZ - cosX * sinY * sinZ;
+            result.V.y = cosX * sinY * cosZ + sinX * cosY * sinZ;
+            result.V.z = cosX * cosY * sinZ - sinX * sinY * cosZ;
 
             return result;
         }
     };
 } // namespace math
-
-
-#endif //PHYSICS_923_LIB_MATH_QUATERNION_H_
+#endif // CRACKITOS_PHYSICS_MATH_QUATERNION_H_

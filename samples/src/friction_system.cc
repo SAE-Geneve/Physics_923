@@ -6,7 +6,7 @@
 #include "contact_solver.h"
 #include "random.h"
 
-namespace physics923
+namespace crackitos_physics::samples
 {
     FrictionSystem::FrictionSystem(): quadtree_(math::AABB(math::Vec2f(0, 0), math::Vec2f(kWindowWidth, kWindowHeight)))
     {
@@ -20,7 +20,7 @@ namespace physics923
     void FrictionSystem::Initialize()
     {
         Clear();
-       timer_ = new timer::Timer();
+        timer_ = new timer::Timer();
         objects_.reserve(1000);
         CreateGround();
     }
@@ -41,7 +41,7 @@ namespace physics923
     {
         const size_t i = objects_.size();
         math::Vec2f new_position = pos;
-        const physics923::commons::fp radius = random::Range(5.f, 20.f);
+        const crackitos_physics::commons::fp radius = random::Range(5.f, 20.f);
 
         constexpr int max_retries = 10; // Limit retries to avoid infinite loops.
         for (int retry = 0; retry < max_retries; ++retry)
@@ -67,8 +67,8 @@ namespace physics923
         {
         case math::ShapeType::kAABB:
             {
-                const physics923::commons::fp half_size_x = random::Range(5.f, 20.f);
-                const physics923::commons::fp half_size_y = radius;
+                const crackitos_physics::commons::fp half_size_x = random::Range(5.f, 20.f);
+                const crackitos_physics::commons::fp half_size_y = radius;
                 const auto half_size_vec = math::Vec2f(half_size_x, half_size_y);
                 const auto half_size_length = half_size_vec.Magnitude();
                 math::AABB aabb(new_position, half_size_vec, half_size_length);
@@ -97,7 +97,7 @@ namespace physics923
                            gravity,
                            true,
                            random::Range(50.f, 100.f)
-                           );
+        );
         physics::Collider collider(circle, random::Range(0.5f, 0.9f), 0.1f, false);
         GameObject object(body, collider, circle.radius());
 
@@ -114,7 +114,7 @@ namespace physics923
                            gravity,
                            true,
                            random::Range(50.f, 100.f)
-                           );
+        );
         physics::Collider collider(aabb,
                                    random::Range(0.0f, 0.0f),
                                    0.5f,
@@ -203,7 +203,7 @@ namespace physics923
     }
 
 
-    void FrictionSystem::Update(const physics923::commons::fp delta_time)
+    void FrictionSystem::Update(const crackitos_physics::commons::fp delta_time)
     {
         UpdateShapes(delta_time);
         RemoveOutOfBoundsObjects();
@@ -211,7 +211,7 @@ namespace physics923
         NarrowPhase();
     }
 
-    void FrictionSystem::UpdateShapes(const physics923::commons::fp delta_time)
+    void FrictionSystem::UpdateShapes(const crackitos_physics::commons::fp delta_time)
     {
         for (auto& object : objects_)
         {
@@ -455,4 +455,4 @@ namespace physics923
             }
         }
     }
-}
+} // namespace samples
