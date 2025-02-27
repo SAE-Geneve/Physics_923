@@ -63,8 +63,9 @@ namespace physics923
                            circle.centre(),
                            velocity,
                            math::Vec2f::Zero(),
-                           random::Range(1.0f, 50.0f),
-                           false);
+                           false,
+                           random::Range(1.0f, 50.0f)
+                           );
         physics::Collider collider(circle, random::Range(1.0f, 1.0f), 0, true);
         GameObject object(body, collider, circle.radius());
 
@@ -80,8 +81,9 @@ namespace physics923
                            aabb.GetCentre(),
                            velocity,
                            math::Vec2f::Zero(),
-                           random::Range(1.0f, 50.0f),
-                           false);
+                           false,
+                           random::Range(1.0f, 50.0f)
+                           );
 
         physics::Collider collider(aabb, random::Range(1.0f, 1.0f), 0, true);
         GameObject object(body, collider, aabb.half_size_length());
