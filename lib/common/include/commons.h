@@ -4,14 +4,14 @@
 namespace physics923::commons
 {
     using fp = float;
-    constexpr static fp Pi = 3.14159265358979323846f;
-    constexpr static fp Epsilon = 0.000001f;
+    constexpr static fp kPi = 3.14159265358979323846f;
+    constexpr static fp kEpsilon = 0.000001f;
 
 
     template <typename T>
     [[nodiscard]] constexpr bool Approx(T value, T target)
     {
-        return abs(value - target) <= Epsilon;
+        return abs(value - target) <= kEpsilon;
     }
 
 } // namespace common

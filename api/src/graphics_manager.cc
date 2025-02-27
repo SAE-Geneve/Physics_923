@@ -24,7 +24,7 @@ namespace physics923
         //Track where the new circle's vertices start
         const size_t starting_index = vertices_.size();
 
-        constexpr physics923::commons::fp angle_step = (2 * commons::Pi) / kCircleVertexCount;
+        constexpr physics923::commons::fp angle_step = (2 * commons::kPi) / kCircleVertexCount;
 
         //Add the centre of the circle
         AddVertex(centre, SDL_Color{0, 0, 0, 0});

@@ -116,7 +116,7 @@ class Body {
 
   void ApplyForce(const math::Vec2f force) {
     if (type_ == BodyType::Dynamic) {
-      if (force.Magnitude() > commons::Epsilon) {
+      if (force.Magnitude() > commons::kEpsilon) {
         is_awake_ = true;
       }
       acceleration_ += force * inverse_mass_;
