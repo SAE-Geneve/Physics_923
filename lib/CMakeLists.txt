@@ -23,14 +23,11 @@ target_include_directories(lib PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/physics/include
 )
 
-# Link dependencies
-target_link_libraries(lib PUBLIC SDL2::SDL2 imgui::imgui)
-
 # Enable Tracy if profiling is enabled
 if(ENABLE_PROFILING)
     target_link_libraries(lib PUBLIC Tracy::TracyClient)
     target_compile_definitions(lib PUBLIC TRACY_ENABLE=1)
-endif()
+endif(ENABLE_PROFILING)
 
 # Compiler Warnings
 if(MSVC)
@@ -40,7 +37,7 @@ else()
 endif()
 
 # === GOOGLE TEST SETUP ===
-
+if (ENABLE_GTESTS)
 # Automatically find all test files inside lib/test/
 file(GLOB_RECURSE TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/test/*.cc)
 
@@ -52,3 +49,4 @@ target_link_libraries(core_tests PRIVATE lib GTest::gtest GTest::gtest_main)
 
 # Register tests with CTest
 add_test(NAME CoreTests COMMAND core_tests)
+endif (ENABLE_GTESTS)
