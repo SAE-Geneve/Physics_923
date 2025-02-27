@@ -206,7 +206,7 @@ namespace physics923
     void FrictionSystem::Update(const physics923::commons::fp delta_time)
     {
         UpdateShapes(delta_time);
-        //RemoveOutOfBoundsObjects();
+        RemoveOutOfBoundsObjects();
         BroadPhase();
         NarrowPhase();
     }
