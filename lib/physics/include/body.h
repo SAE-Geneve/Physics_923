@@ -94,6 +94,7 @@ class Body {
   //Setters
   void set_position(const math::Vec2f new_position) { position_ = new_position; }
   void set_velocity(const math::Vec2f new_velocity) { velocity_ = new_velocity; }
+  void set_gravity_bound(const bool new_gravity_bound) { gravity_bound_ = new_gravity_bound; }
 
   void set_mass(const physics923::commons::fp new_mass) {
     mass_ = new_mass;

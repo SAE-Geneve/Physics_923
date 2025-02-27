@@ -99,8 +99,9 @@ namespace physics923
                            circle.centre(),
                            velocity,
                            gravity,
-                           random::Range(50.f, 100.f),
-                           true);
+                           true,
+                           random::Range(50.f, 100.f)
+                           );
         physics::Collider collider(circle, random::Range(0.5f, 0.9f), 0.1f, false);
         GameObject object(body, collider, circle.radius());
 
@@ -115,8 +116,9 @@ namespace physics923
                            aabb.GetCentre(),
                            velocity,
                            gravity,
-                           random::Range(50.f, 100.f),
-                           true);
+                           true,
+                           random::Range(50.f, 100.f)
+                           );
         physics::Collider collider(aabb,
                                    random::Range(0.0f, 0.0f),
                                    0.5f,
@@ -138,8 +140,8 @@ namespace physics923
                            ground.GetCentre(),
                            velocity,
                            gravity,
-                           0.0f,
-                           false);
+                           false,
+                           0.0f);
         physics::Collider collider(ground, 1.0f, 0.0f, false);
         GameObject object(body, collider, ground.half_size_length());
 
