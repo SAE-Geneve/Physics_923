@@ -36,6 +36,7 @@ private:
     ImGuiInterface* imgui_interface_;
 
     void HandleEvents();
+    void RenderQuadtree(SDL_Renderer* renderer, physics::Quadtree& quadtree);
 
 public:
     GameEngine();

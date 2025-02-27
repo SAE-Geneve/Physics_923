@@ -8,11 +8,14 @@
 
 namespace physics923
 {
+    CollisionSystem::CollisionSystem(): quadtree_(math::AABB(math::Vec2f(0, 0), math::Vec2f(kWindowWidth, kWindowHeight)))
+    {
+    }
+
     void CollisionSystem::Initialize()
     {
         Clear();
 
-        quadtree_ = new physics::Quadtree(math::AABB(math::Vec2f(0, 0),  math::Vec2f(kWindowWidth, kWindowHeight)));
         constexpr physics923::commons::fp margin = 20.0f;
 
         for (size_t i = 0; i < number_of_objects_ / 2 - 1; i++)
@@ -36,13 +39,6 @@ namespace physics923
 
     void CollisionSystem::Clear()
     {
-        if (quadtree_)
-        {
-            quadtree_->Clear();
-            delete quadtree_;
-            quadtree_ = nullptr;
-        }
-
         for (size_t i = 0; i < number_of_objects_; ++i)
         {
             DeleteObject(i);
@@ -62,8 +58,7 @@ namespace physics923
                          circle.centre(),
                          velocity,
                          math::Vec2f::Zero(),
-                         random::Range(1.0f, 50.0f),
-                         false);
+                         false, random::Range(1.0f, 50.0f));
         physics::Collider collider(circle, random::Range(1.0f, 1.0f), 0, false);
         GameObject object(body, collider, circle.radius());
 
@@ -79,8 +74,8 @@ namespace physics923
                          aabb.GetCentre(),
                          velocity,
                          math::Vec2f::Zero(),
-                         random::Range(1.0f, 50.0f),
-                         false);
+                         false,
+                         random::Range(1.0f, 50.0f));
 
         physics::Collider collider(aabb, random::Range(1.0f, 1.0f), 0, false);
         GameObject object(body, collider, aabb.half_size_length());
@@ -196,10 +191,10 @@ namespace physics923
     {
         std::unordered_map<GameObjectPair, bool> new_potential_pairs;
 
-        quadtree_->Clear();
+        quadtree_.Clear();
         for (auto& object : objects_)
         {
-            quadtree_->Insert(&object.collider());
+            quadtree_.Insert(&object.collider());
         }
 
         // Use AABB tests for broad phase
@@ -208,7 +203,7 @@ namespace physics923
             auto& collider = object.collider();
             // Get the AABB of the collider for broad phase test
             auto range = collider.GetBoundingBox();
-            auto potentialColliders = quadtree_->Query(range);
+            auto potentialColliders = quadtree_.Query(range);
 
             for (auto& otherCollider : potentialColliders)
             {

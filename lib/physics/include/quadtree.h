@@ -1,8 +1,6 @@
 ﻿#ifndef PHYSICS_923_LIB_PHYSICS_QUADTREE_H_
 #define PHYSICS_923_LIB_PHYSICS_QUADTREE_H_
 
-#include <SDL_render.h>
-
 #include <array>
 #include <memory>
 #include <vector>
@@ -104,25 +102,15 @@ namespace physics923::physics
             }
         }
 
-        //Method to draw the quadtree node
-        void Draw(SDL_Renderer* renderer) const
+        // Provide access to bounding boxes for external rendering
+        void GetBoundingBoxes(std::vector<math::AABB>& boxes) const
         {
-            //Draw the bounding box of this node
-            SDL_Rect rect;
-            rect.x = static_cast<int>(bounding_box_.min_bound().x);
-            rect.y = static_cast<int>(bounding_box_.min_bound().y);
-            rect.w = static_cast<int>(bounding_box_.max_bound().x - bounding_box_.min_bound().x);
-            rect.h = static_cast<int>(bounding_box_.max_bound().y - bounding_box_.min_bound().y);
-
-            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-            SDL_RenderDrawRect(renderer, &rect); //Draw the rectangle
-
-            //Recursively draw the children
+            boxes.push_back(bounding_box_); // Store this node’s bounding box
             for (const auto& child : children_)
             {
                 if (child)
                 {
-                    child->Draw(renderer);
+                    child->GetBoundingBoxes(boxes);
                 }
             }
         }
@@ -132,11 +120,28 @@ namespace physics923::physics
     {
     private:
         std::unique_ptr<QuadtreeNode> root_;
+        std::vector<math::AABB> bounding_boxes_; // Preallocated storage for bounding boxes
+
+        // Helper function to compute the maximum number of nodes
+        static constexpr int ComputeMaxNodes()
+        {
+            int total_nodes = 0;
+            int nodes_at_depth = 1; // Start with root node
+
+            for (int i = 0; i <= kMaxDepth_; ++i)
+            {
+                total_nodes += nodes_at_depth;
+                nodes_at_depth *= 4; // Each node can split into 4
+            }
+
+            return total_nodes;
+        }
 
     public:
         explicit Quadtree(const math::AABB& boundary)
             : root_(std::make_unique<QuadtreeNode>(boundary))
         {
+            bounding_boxes_.reserve(ComputeMaxNodes()); // Preallocate memory
         }
 
         void Insert(Collider* collider)
@@ -159,10 +164,12 @@ namespace physics923::physics
             root_ = std::make_unique<QuadtreeNode>(root_->bounding_box_);
         }
 
-        //Method to draw the quadtree, for testing purposes
-        void Draw(SDL_Renderer* renderer) const
+        // Fetch all bounding boxes for external rendering
+        const std::vector<math::AABB>& GetBoundingBoxes()
         {
-            root_->Draw(renderer);
+            bounding_boxes_.clear(); // Clear but keep capacity
+            root_->GetBoundingBoxes(bounding_boxes_);
+            return bounding_boxes_;
         }
     };
 }

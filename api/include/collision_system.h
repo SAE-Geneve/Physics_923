@@ -16,7 +16,7 @@ class CollisionSystem
 private:
     int number_of_objects_ = 200;
     std::array<GameObject, 200> objects_ = {};
-    physics::Quadtree* quadtree_ = nullptr;
+    physics::Quadtree quadtree_;
 
     std::unordered_map<GameObjectPair, bool> potential_pairs_;
     std::unordered_set<GameObjectPair> active_pairs_;
@@ -24,14 +24,14 @@ private:
     std::unordered_map<physics::Collider*, GameObject*> collider_to_object_map_;
 
 public:
-    CollisionSystem() = default;
+    CollisionSystem();
     ~CollisionSystem() = default;
 
     void Initialize();
     void Clear();
 
     std::array<GameObject, 200> objects() { return objects_; }
-    [[nodiscard]] physics::Quadtree* quadtree() const { return quadtree_; }
+    [[nodiscard]] physics::Quadtree& quadtree() { return quadtree_; }
 
     void CreateObject(size_t index, math::Circle& circle);
     void CreateObject(size_t index, math::AABB& aabb);

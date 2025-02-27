@@ -155,7 +155,7 @@ namespace physics923
         SDL_GetMouseState(&mouse_pos.x, &mouse_pos.y);
         const auto mouse_pos_f = math::Vec2f(static_cast<physics923::commons::fp>(mouse_pos.x), static_cast<physics923::commons::fp>(mouse_pos.y));
         if(constexpr physics923::commons::fp minimum_range = 30;
-            conversions::ConvertToMeters((mouse_pos_f - star_.position()).Magnitude()) > conversions::ConvertToMeters(minimum_range))
+            conversions::PixelsToMeters((mouse_pos_f - star_.position()).Magnitude()) > conversions::PixelsToMeters(minimum_range))
         {
             const math::Vec2f random_pos(random::Range(mouse_pos_f.x - minimum_range, mouse_pos_f.x + minimum_range),
                                          random::Range(mouse_pos_f.y - minimum_range, mouse_pos_f.y + minimum_range));

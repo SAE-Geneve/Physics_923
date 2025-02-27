@@ -8,6 +8,10 @@
 
 namespace physics923
 {
+    FrictionSystem::FrictionSystem(): quadtree_(math::AABB(math::Vec2f(0, 0), math::Vec2f(kWindowWidth, kWindowHeight)))
+    {
+    }
+
     FrictionSystem::~FrictionSystem()
     {
         Clear();
@@ -16,21 +20,13 @@ namespace physics923
     void FrictionSystem::Initialize()
     {
         Clear();
-        quadtree_ = new physics::Quadtree(math::AABB(math::Vec2f(0, 0), math::Vec2f(1200, 800)));
-        timer_ = new timer::Timer();
+       timer_ = new timer::Timer();
         objects_.reserve(1000);
         CreateGround();
     }
 
     void FrictionSystem::Clear()
     {
-        if (quadtree_)
-        {
-            quadtree_->Clear();
-            delete quadtree_;
-            quadtree_ = nullptr;
-        }
-
         delete timer_;
         timer_ = nullptr;
 
@@ -270,10 +266,10 @@ namespace physics923
     {
         std::unordered_map<GameObjectPair, bool> new_potential_pairs;
 
-        quadtree_->Clear();
+        quadtree_.Clear();
         for (auto& object : objects_)
         {
-            quadtree_->Insert(&object.collider());
+            quadtree_.Insert(&object.collider());
         }
 
         // Use AABB tests for broad phase
@@ -282,7 +278,7 @@ namespace physics923
             auto& collider = object.collider();
             // Get the AABB of the collider for broad phase test
             auto range = collider.GetBoundingBox();
-            auto potentialColliders = quadtree_->Query(range);
+            auto potentialColliders = quadtree_.Query(range);
 
             for (auto& otherCollider : potentialColliders)
             {

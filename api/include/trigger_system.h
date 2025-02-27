@@ -14,23 +14,22 @@ namespace physics923
     private:
         int number_of_objects_ = 400;
         std::array<GameObject, 400> objects_ = {};
-        physics::Quadtree* quadtree_ = nullptr;
+        physics::Quadtree quadtree_;
 
         std::unordered_map<GameObjectPair, bool> potential_pairs_;
         std::unordered_set<GameObjectPair> active_pairs_;
 
         //Mapping from Collider to GameObject
         std::unordered_map<physics::Collider*, GameObject*> collider_to_object_map_;
-
     public:
-        TriggerSystem() = default;
+        TriggerSystem();
         ~TriggerSystem();
 
         void Initialize();
         void Clear();
 
         std::array<GameObject, 400> objects() { return objects_; }
-        [[nodiscard]] physics::Quadtree* quadtree() const { return quadtree_; }
+        [[nodiscard]] physics::Quadtree& quadtree() { return quadtree_; }
 
         void CreateObject(size_t index, math::Circle& circle);
         void CreateObject(size_t index, math::AABB& aabb);

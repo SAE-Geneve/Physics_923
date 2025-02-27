@@ -18,7 +18,7 @@ namespace physics923
     private:
         std::vector<GameObject> objects_;
 
-        physics::Quadtree* quadtree_ = nullptr;
+        physics::Quadtree quadtree_;
 
         std::unordered_map<GameObjectPair, bool> potential_pairs_;
         std::unordered_set<GameObjectPair> active_pairs_;
@@ -27,20 +27,20 @@ namespace physics923
         //Mapping from Collider to GameObject
 
         //Create the gravity for the scene
-        static constexpr math::Vec2f gravity = conversions::ConvertToPixels(math::Vec2f(0.f, 9.8f));
+        static constexpr math::Vec2f gravity = conversions::MetersToPixels(math::Vec2f(0.f, 9.8f));
 
         timer::Timer* timer_ = nullptr;
         math::AABB frame_bounds_ = math::AABB(math::Vec2f(0, 0), math::Vec2f(kWindowWidth, kWindowHeight));
 
     public:
-        FrictionSystem() = default;
+        FrictionSystem();
         ~FrictionSystem();
 
         void Initialize();
         void Clear();
 
         std::vector<GameObject> objects() { return objects_; }
-        [[nodiscard]] physics::Quadtree* quadtree() const { return quadtree_; }
+        [[nodiscard]] physics::Quadtree& quadtree() { return quadtree_; }
 
         void SpawnShape(math::Vec2f pos, math::ShapeType type);
         void CreateObject(size_t index, math::Circle& circle);

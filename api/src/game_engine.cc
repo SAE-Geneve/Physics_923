@@ -133,6 +133,24 @@ namespace physics923
         }
     }
 
+    void GameEngine::RenderQuadtree(SDL_Renderer* renderer, physics::Quadtree& quadtree)
+    {
+        const std::vector<math::AABB>& boxes = quadtree.GetBoundingBoxes(); // No copying
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        for (const auto& box : boxes)
+        {
+            SDL_Rect rect;
+            rect.x = static_cast<int>(box.min_bound().x);
+            rect.y = static_cast<int>(box.min_bound().y);
+            rect.w = static_cast<int>(box.max_bound().x - box.min_bound().x);
+            rect.h = static_cast<int>(box.max_bound().y - box.min_bound().y);
+
+            SDL_RenderDrawRect(renderer, &rect);
+        }
+    }
+
+
     void GameEngine::Run()
     {
         ChangeScene(selected_scene_);
@@ -202,7 +220,7 @@ namespace physics923
                         break;
                     }
                 }
-                if(imgui_interface_->show_quadtree()){trigger_system_->quadtree()->Draw(display_->renderer());}
+                if(imgui_interface_->show_quadtree()){RenderQuadtree(display_->renderer(),trigger_system_->quadtree());}
             }
             else if (selected_scene_ == SystemScene::CollisionSystemScene)
             {
@@ -221,7 +239,7 @@ namespace physics923
                         break;
                     }
                 }
-                if(imgui_interface_->show_quadtree()){collision_system_->quadtree()->Draw(display_->renderer());}
+                if(imgui_interface_->show_quadtree()){RenderQuadtree(display_->renderer(),collision_system_->quadtree());}
             }
             else if (selected_scene_ == SystemScene::FrictionSystemScene)
             {
@@ -240,7 +258,7 @@ namespace physics923
                         break;
                     }
                 }
-                if(imgui_interface_->show_quadtree()){friction_system_->quadtree()->Draw(display_->renderer());}
+                if(imgui_interface_->show_quadtree()){RenderQuadtree(display_->renderer(),friction_system_->quadtree());}
             }
 
             // Render the graphics
