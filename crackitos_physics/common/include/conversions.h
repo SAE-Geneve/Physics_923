@@ -6,18 +6,21 @@
 
 namespace crackitos_physics::conversions
 {
-    static constexpr crackitos_physics::commons::fp kMetersPerPixel = 0.01f;
-    static constexpr crackitos_physics::commons::fp kRatioPixelsPerMeter = 100.0f;
+    static constexpr commons::fp kMetersPerPixel = 0.01f;
+    static constexpr commons::fp kRatioPixelsPerMeter = 100.0f;
+    //TODO switch to nttp (non type template parameter) & std::ratio
+    // helpers
+    // struct of statics
 
     [[nodiscard]]
 
-    constexpr crackitos_physics::commons::fp PixelsToMeters(const crackitos_physics::commons::fp pixels) noexcept
+    constexpr commons::fp PixelsToMeters(const commons::fp pixels) noexcept
     {
         return pixels * kMetersPerPixel;
     }
 
-    [[nodiscard]] constexpr crackitos_physics::commons::fp MetersToPixels(
-        const crackitos_physics::commons::fp meters) noexcept
+    [[nodiscard]] constexpr commons::fp MetersToPixels(
+        const commons::fp meters) noexcept
     {
         return meters * kRatioPixelsPerMeter;
     }
@@ -32,15 +35,16 @@ namespace crackitos_physics::conversions
         return pixels_pos * kRatioPixelsPerMeter;
     }
 
+    //TODO class degree and radian with constructors for both & cast operator
+
     //input a radian value and it returns a degree value
-    [[nodiscard]] constexpr crackitos_physics::commons::fp RadToDegree(const crackitos_physics::commons::fp& rad_value)
+    [[nodiscard]] constexpr commons::fp RadToDegree(const commons::fp& rad_value)
     {
         return rad_value * 180 / commons::kPi;
     }
 
     //input a degree value and it returns a radian
-    [[nodiscard]] constexpr crackitos_physics::commons::fp DegreeToRad(
-        const crackitos_physics::commons::fp& degrees_value)
+    [[nodiscard]] constexpr commons::fp DegreeToRad(const commons::fp& degrees_value)
     {
         return degrees_value * commons::kPi / 180;
     }
