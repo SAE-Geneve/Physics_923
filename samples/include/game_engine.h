@@ -26,15 +26,15 @@ namespace crackitos_physics::samples
         SystemScene selected_scene_ = SystemScene::PlanetSystemScene;
         bool is_running_;
 
-        Display* display_;
-        timer::Timer* timer_;
-        GraphicsManager* graphics_manager_;
-        PlanetSystem* planet_system_;
-        TriggerSystem* trigger_system_;
-        CollisionSystem* collision_system_;
-        FrictionSystem* friction_system_;
+        Display display_{};
+        timer::Timer timer_{};
+        GraphicsManager graphics_manager_{};
+        PlanetSystem planet_system_{};
+        TriggerSystem trigger_system_{};
+        CollisionSystem collision_system_{};
+        FrictionSystem friction_system_{};
 
-        ImGuiInterface* imgui_interface_;
+        ImGuiInterface imgui_interface_{};
 
         void HandleEvents();
         void RenderQuadtree(SDL_Renderer* renderer, physics::Quadtree& quadtree);
