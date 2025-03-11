@@ -1,5 +1,4 @@
 # samples/CMakeLists.txt
-
 if(ENABLE_SAMPLES)
 
 	# Collect source and header files
