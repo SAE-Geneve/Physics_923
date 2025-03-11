@@ -16,20 +16,20 @@ namespace crackitos_physics::timer
         last_time_ = current_time;
     }
 
-    crackitos_physics::commons::fp Timer::DeltaTime() const noexcept
+    commons::fp Timer::DeltaTime() const noexcept
     {
         return delta_time_.count();
     }
 
-    crackitos_physics::commons::fp Timer::TotalTime() const noexcept
+    commons::fp Timer::TotalTime() const noexcept
     {
-        return std::chrono::duration_cast<std::chrono::duration<crackitos_physics::commons::fp>>(
+        return std::chrono::duration_cast<std::chrono::duration<commons::fp>>(
             std::chrono::high_resolution_clock::now() - start_time_).count();
     }
 
-    void Timer::SetFixedDeltaTime(crackitos_physics::commons::fp seconds) noexcept
+    void Timer::SetFixedDeltaTime(commons::fp seconds) noexcept
     {
-        fixed_delta_time_ = std::chrono::duration<crackitos_physics::commons::fp>(seconds);
+        fixed_delta_time_ = std::chrono::duration<commons::fp>(seconds);
     }
 
     bool Timer::FixedDeltaTimeStep() noexcept
@@ -42,7 +42,7 @@ namespace crackitos_physics::timer
         return false;
     }
 
-    crackitos_physics::commons::fp Timer::FixedDeltaTime() const noexcept
+    commons::fp Timer::FixedDeltaTime() const noexcept
     {
         return fixed_delta_time_.count();
     }

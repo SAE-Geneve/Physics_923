@@ -12,18 +12,21 @@ namespace crackitos_physics::random
     {
         static_assert(std::is_arithmetic_v<T>, "T must be arithmetic type");
 
-        std::mt19937 rng(std::random_device{}());
+        static std::mt19937 rng(std::random_device{}());
         if constexpr (std::is_integral_v<T>)
         {
-            std::uniform_int_distribution<int> dist(min_number, max_number);
+            static std::uniform_int_distribution<int> dist(min_number, max_number);
             return dist(rng);
         }
         else if constexpr (std::is_floating_point_v<T>)
         {
-            std::uniform_real_distribution<crackitos_physics::commons::fp> dist(min_number, max_number);
+            std::uniform_real_distribution<commons::fp> dist(min_number, max_number);
             return dist(rng);
         }
-        throw std::invalid_argument("Invalid type");
+        else
+        {
+            throw std::invalid_argument("Invalid type");
+        }
     }
 } // namespace random
 #endif // CRACKITOS_PHYSICS_COMMON_RANDOM_H_

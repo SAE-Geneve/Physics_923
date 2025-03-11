@@ -20,16 +20,12 @@ namespace crackitos_physics::samples
     void FrictionSystem::Initialize()
     {
         Clear();
-        timer_ = new timer::Timer();
         objects_.reserve(1000);
         CreateGround();
     }
 
     void FrictionSystem::Clear()
     {
-        delete timer_;
-        timer_ = nullptr;
-
         objects_.clear();
         potential_pairs_.clear();
         active_pairs_.clear();
