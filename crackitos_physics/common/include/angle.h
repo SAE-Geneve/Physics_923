@@ -27,12 +27,12 @@ template<typename From, typename To>
 constexpr To Convert(From from);
 
 template<>
-constexpr Rad Convert<Deg, Rad>(Deg deg) {
+constexpr Rad Convert(Deg deg) {
   return Rad{deg.value * (commons::kPi / 180.0)};
 }
 
 template<>
-constexpr Deg Convert<Rad, Deg>(Rad rad) {
+constexpr Deg Convert(Rad rad) {
   return Deg{rad.value * (180.0 / commons::kPi)};
 }
 }

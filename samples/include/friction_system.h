@@ -6,63 +6,67 @@
 
 #include "display.h"
 #include "game_object.h"
-#include "conversions.h"
 #include "quadtree.h"
 #include "shape.h"
 #include "timer.h"
+#include "distance.h"
 
-namespace crackitos_physics::samples
-{
-    class FrictionSystem
-    {
-    private:
-        std::vector<GameObject> objects_;
+namespace crackitos_physics::samples {
+class FrictionSystem {
+ private:
+  std::vector<GameObject> objects_;
 
-        physics::Quadtree quadtree_;
+  physics::Quadtree quadtree_;
 
-        std::unordered_map<GameObjectPair, bool> potential_pairs_;
-        std::unordered_set<GameObjectPair> active_pairs_;
+  std::unordered_map<GameObjectPair, bool> potential_pairs_;
+  std::unordered_set<GameObjectPair> active_pairs_;
 
-        std::unordered_map<physics::Collider*, GameObject*> collider_to_object_map_;
-        //Mapping from Collider to GameObject
+  std::unordered_map<physics::Collider *, GameObject *> collider_to_object_map_;
+  //Mapping from Collider to GameObject
 
-        //Create the gravity for the scene
-        static constexpr math::Vec2f gravity = conversions::MetersToPixels(math::Vec2f(0.f, 9.8f));
+  //Create the gravity for the scene
+  distance::Meter gravity_in_meter_x = distance::Meter(0.0f);
+  distance::Meter gravity_in_meter_y = distance::Meter(0.9f);
+  const math::Vec2f
+      gravity = math::Vec2f(static_cast<float>(distance::Convert<distance::Meter, distance::Pixel>(
+                                gravity_in_meter_x).value),
+                            static_cast<float>(distance::Convert<distance::Meter,
+                                                                 distance::Pixel>(gravity_in_meter_y).value));
 
-        timer::Timer* timer_ = nullptr;
-        math::AABB frame_bounds_ = math::AABB(math::Vec2f(0, 0), math::Vec2f(kWindowWidth, kWindowHeight));
+  timer::Timer *timer_ = nullptr;
+  math::AABB frame_bounds_ = math::AABB(math::Vec2f(0, 0), math::Vec2f(kWindowWidth, kWindowHeight));
 
-    public:
-        FrictionSystem();
-        ~FrictionSystem();
+ public:
+  FrictionSystem();
+  ~FrictionSystem();
 
-        void Initialize();
-        void Clear();
+  void Initialize();
+  void Clear();
 
-        std::vector<GameObject> objects() { return objects_; }
-        [[nodiscard]] physics::Quadtree& quadtree() { return quadtree_; }
+  std::vector<GameObject> objects() { return objects_; }
+  [[nodiscard]] physics::Quadtree &quadtree() { return quadtree_; }
 
-        void SpawnShape(math::Vec2f pos, math::ShapeType type);
-        void CreateObject(size_t index, math::Circle& circle);
-        void CreateObject(size_t index, math::AABB& aabb);
-        //void CreateObject(size_t index, math::Polygon& polygon);
-        void CreateGround();
-        void DeleteObject(size_t index);
-        void RemoveOutOfBoundsObjects();
+  void SpawnShape(math::Vec2f pos, math::ShapeType type);
+  void CreateObject(size_t index, math::Circle &circle);
+  void CreateObject(size_t index, math::AABB &aabb);
+  //void CreateObject(size_t index, math::Polygon& polygon);
+  void CreateGround();
+  void DeleteObject(size_t index);
+  void RemoveOutOfBoundsObjects();
 
-        void RegisterObject(GameObject& object);
-        void UnregisterObject(GameObject& object);
+  void RegisterObject(GameObject &object);
+  void UnregisterObject(GameObject &object);
 
-        void Update(crackitos_physics::commons::fp delta_time);
-        void UpdateShapes(crackitos_physics::commons::fp delta_time);
+  void Update(crackitos_physics::commons::fp delta_time);
+  void UpdateShapes(crackitos_physics::commons::fp delta_time);
 
-        void SimplisticBroadPhase();
-        void BroadPhase();
-        void NarrowPhase();
+  void SimplisticBroadPhase();
+  void BroadPhase();
+  void NarrowPhase();
 
-        static void OnPairCollideStart(const GameObjectPair& pair);
-        static void OnPairCollideStay(const GameObjectPair& pair);
-        static void OnPairCollideEnd(const GameObjectPair& pair);
-    };
+  static void OnPairCollideStart(const GameObjectPair &pair);
+  static void OnPairCollideStay(const GameObjectPair &pair);
+  static void OnPairCollideEnd(const GameObjectPair &pair);
+};
 } // namespace samples
 #endif // PHYSICS_SAMPLES_FRICTION_SYSTEM_H_

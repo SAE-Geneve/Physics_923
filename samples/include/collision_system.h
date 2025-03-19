@@ -4,9 +4,8 @@
 #include <unordered_map>
 
 #include "game_object.h"
-#include "conversions.h"
 #include "quadtree.h"
-#include "trigger_system.h"
+#include <unordered_set>
 
 namespace crackitos_physics::samples
 {

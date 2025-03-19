@@ -2,12 +2,10 @@
 #define PHYSICS_SAMPLES_GAME_ENGINE_H_
 
 #include "collision_system.h"
-#include "display.h"
 #include "friction_system.h"
 #include "graphics_manager.h"
 #include "imgui_interface.h"
 #include "planet_system.h"
-#include "timer.h"
 #include "trigger_system.h"
 
 namespace crackitos_physics::samples

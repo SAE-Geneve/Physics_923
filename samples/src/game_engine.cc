@@ -188,7 +188,7 @@ namespace crackitos_physics::samples
             {
                 graphics_manager_.CreateCircle(planet_system_.star()->position(), 10.f, SDL_Color(255, 255, 255, 150),
                                                 false);
-                for (auto p : planet_system_.planets())
+                for (const auto& p : planet_system_.planets())
                 {
                     graphics_manager_.CreateCircle(p.position(), p.radius(), p.color(), false);
                 }
