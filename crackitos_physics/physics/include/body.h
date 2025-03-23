@@ -146,7 +146,7 @@ namespace crackitos_physics::physics
         {
             if (type_ == BodyType::Dynamic)
             {
-                velocity_ += impulse * inverse_mass_;
+                velocity_ = velocity_ + impulse * inverse_mass_;
             }
         }
 

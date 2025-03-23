@@ -17,13 +17,13 @@ namespace crackitos_physics::samples
     {
         Clear();
 
-        constexpr crackitos_physics::commons::fp margin = 20.0f;
+        constexpr commons::fp margin = 20.0f;
 
         for (size_t i = 0; i < number_of_objects_ / 2 - 1; i++)
         {
             const math::Vec2f position(random::Range(margin, kWindowWidth - margin),
                                        random::Range(margin, kWindowHeight - margin));
-            const crackitos_physics::commons::fp radius = random::Range(5.f, 10.f);
+            const commons::fp radius = random::Range(5.f, 10.f);
 
             math::Circle circle(position, radius);
             CreateObject(i, circle);
@@ -106,14 +106,15 @@ namespace crackitos_physics::samples
         collider_to_object_map_.erase(&object.collider());
     }
 
-    void CollisionSystem::Update(crackitos_physics::commons::fp delta_time)
+    void CollisionSystem::Update(commons::fp delta_time)
     {
         UpdateShapes(delta_time);
         BroadPhase();
         NarrowPhase();
+        PostResolveContactIterations(solver_iterations);
     }
 
-    void CollisionSystem::UpdateShapes(crackitos_physics::commons::fp delta_time)
+    void CollisionSystem::UpdateShapes(commons::fp delta_time)
     {
         for (auto& object : objects_)
         {
@@ -124,7 +125,7 @@ namespace crackitos_physics::samples
 
             auto position = body.position();
 
-            crackitos_physics::commons::fp radius = object.radius();
+            commons::fp radius = object.radius();
 
             //Check for collision with window borders
             if (position.x - radius < 0)
@@ -176,7 +177,7 @@ namespace crackitos_physics::samples
                 auto rangeB = colliderB.GetBoundingBox();
 
                 // Check for AABB overlap
-                if (math::Intersect(rangeA, rangeB))
+                if (Intersect(rangeA, rangeB))
                 {
                     GameObjectPair pair{&objectA, &objectB};
                     new_potential_pairs[pair] = true;
@@ -213,7 +214,7 @@ namespace crackitos_physics::samples
                 {
                     // Avoid self-collision
                     // Only test AABB overlap in broad phase
-                    if (math::Intersect(range, otherCollider->GetBoundingBox()))
+                    if (Intersect(range, otherCollider->GetBoundingBox()))
                     {
                         GameObject* objectA = collider_to_object_map_[&collider];
                         GameObject* objectB = collider_to_object_map_[otherCollider];
@@ -237,31 +238,12 @@ namespace crackitos_physics::samples
 
         for (const auto& pair : potential_pairs_ | std::views::keys)
         {
-            if (!pair.gameObjectA_ || !pair.gameObjectB_)
-            {
-                continue;
-            }
+            if (!pair.gameObjectA_ || !pair.gameObjectB_) continue;
 
-            bool intersect = std::visit([](auto&& shape_a, auto&& shape_b)
-                                        {
-                                            return math::Intersect(shape_a, shape_b);
-                                        }, pair.gameObjectA_->collider().shape(),
-                                        pair.gameObjectB_->collider().shape());
+            bool is_new_pair = active_pairs_.find(pair) == active_pairs_.end();
+            ResolveCollisionPair(pair, is_new_pair);
 
-            if (intersect)
-            {
-                newActivePairs.insert(pair);
-
-                // If this is a new collision Keep for triggers?
-                if (active_pairs_.find(pair) == active_pairs_.end())
-                {
-                    OnPairCollideStart(pair);
-                }
-                else
-                {
-                    OnPairCollideStay(pair);
-                }
-            }
+            newActivePairs.insert(pair);
         }
 
         for (const auto& pair : active_pairs_)
@@ -271,55 +253,63 @@ namespace crackitos_physics::samples
                 OnPairCollideEnd(pair);
             }
         }
+
         active_pairs_ = std::move(newActivePairs);
     }
 
-    //Called on the first collision frame
-    void CollisionSystem::OnPairCollideStart(const GameObjectPair& pair)
+
+    //TODO sometimes the oncollision does not trigger? They don't change color but still bump?
+
+    void CollisionSystem::ResolveCollisionPair(const GameObjectPair& pair, bool is_new_pair)
     {
-        if (!pair.gameObjectA_ || !pair.gameObjectB_) { return; }
+        if (!pair.gameObjectA_ || !pair.gameObjectB_) return;
 
-        pair.gameObjectA_->AddCollision();
-        pair.gameObjectB_->AddCollision();
+        physics::ContactSolver solver;
+        solver.SetContactObjects(
+            { &pair.gameObjectA_->body(), &pair.gameObjectB_->body() },
+            { &pair.gameObjectA_->collider(), &pair.gameObjectB_->collider() }
+        );
+        solver.CalculateProperties();
 
+        if (solver.penetration_ <= 0.0f) return;
+
+        // Trigger behavior
         if (pair.gameObjectA_->collider().is_trigger() || pair.gameObjectB_->collider().is_trigger())
         {
-            pair.gameObjectA_->OnTriggerEnter();
-            pair.gameObjectB_->OnTriggerEnter();
+            if (is_new_pair)
+            {
+                pair.gameObjectA_->OnTriggerEnter();
+                pair.gameObjectB_->OnTriggerEnter();
+            }
+            else
+            {
+                pair.gameObjectA_->OnTriggerStay();
+                pair.gameObjectB_->OnTriggerStay();
+            }
         }
         else
         {
-            std::pair<physics::Body*, physics::Body*> body_pair;
-            body_pair.first = &pair.gameObjectA_->body();
-            body_pair.second = &pair.gameObjectB_->body();
-
-            std::pair<physics::Collider*, physics::Collider*> collider_pair;
-            collider_pair.first = &pair.gameObjectA_->collider();
-            collider_pair.second = &pair.gameObjectB_->collider();
-
-            physics::ContactSolver ContactSolver;
-            ContactSolver.SetContactObjects(body_pair, collider_pair);
-            ContactSolver.ResolveContact();
-            pair.gameObjectA_->OnCollisionEnter();
-            pair.gameObjectB_->OnCollisionEnter();
+            if (is_new_pair)
+            {
+                pair.gameObjectA_->AddCollision();
+                pair.gameObjectB_->AddCollision();
+                solver.ResolveContact();
+                pair.gameObjectA_->OnCollisionEnter();
+                pair.gameObjectB_->OnCollisionEnter();
+            }
+            else
+            {
+                solver.ResolveContact(); // Optional: resolve every frame
+                // Optionally add OnCollisionStay()
+                // pair.gameObjectA_->OnCollisionStay();
+                // pair.gameObjectB_->OnCollisionStay();
+            }
         }
+
+        active_pairs_.insert(pair);
     }
 
-    void CollisionSystem::OnPairCollideStay(const GameObjectPair& pair)
-    {
-        if (!pair.gameObjectA_ || !pair.gameObjectB_) { return; }
 
-        if (pair.gameObjectA_->collider().is_trigger() || pair.gameObjectB_->collider().is_trigger())
-        {
-            pair.gameObjectA_->OnTriggerStay();
-            pair.gameObjectB_->OnTriggerStay();
-        }
-        else
-        {
-            //pair.gameObjectA_->OnCollisionStay();
-            //pair.gameObjectB_->OnCollisionStay();
-        }
-    }
 
     void CollisionSystem::OnPairCollideEnd(const GameObjectPair& pair)
     {
@@ -351,4 +341,30 @@ namespace crackitos_physics::samples
             }
         }
     }
+
+    void CollisionSystem::PostResolveContactIterations(const int iterations) const
+    {
+        for (int i = 1; i < iterations; ++i)
+        {
+            for (const auto& pair : active_pairs_)
+            {
+                if (!pair.gameObjectA_ || !pair.gameObjectB_) continue;
+
+                if (pair.gameObjectA_->collider().is_trigger() || pair.gameObjectB_->collider().is_trigger())
+                    continue;
+
+                physics::ContactSolver solver;
+                solver.SetContactObjects(
+                    { &pair.gameObjectA_->body(), &pair.gameObjectB_->body() },
+                    { &pair.gameObjectA_->collider(), &pair.gameObjectB_->collider() }
+                );
+                solver.CalculateProperties();
+                if (solver.penetration_ > 0.0f)
+                {
+                    solver.ResolveContact();
+                }
+            }
+        }
+    }
+
 } // namespace samples

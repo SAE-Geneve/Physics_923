@@ -7,11 +7,16 @@
 #include "quadtree.h"
 #include <unordered_set>
 
+#include "contact_solver.h"
+
 namespace crackitos_physics::samples
 {
+
+
     class CollisionSystem
     {
-    private:
+    private: //TODO add this to world if it's kept in (as a cosntant)
+        int solver_iterations = 3;
         int number_of_objects_ = 200;
         std::array<GameObject, 200> objects_ = {};
         physics::Quadtree quadtree_;
@@ -45,10 +50,10 @@ namespace crackitos_physics::samples
         void SimplisticBroadPhase();
         void BroadPhase();
         void NarrowPhase();
+        void ResolveCollisionPair(const GameObjectPair& pair, bool is_new_pair);
 
-        static void OnPairCollideStart(const GameObjectPair& pair);
-        static void OnPairCollideStay(const GameObjectPair& pair);
         static void OnPairCollideEnd(const GameObjectPair& pair);
+        void PostResolveContactIterations(int iterations) const;
     };
 } // namespace samples
 #endif // PHYSICS_SAMPLES_COLLISION_SYSTEM_H_

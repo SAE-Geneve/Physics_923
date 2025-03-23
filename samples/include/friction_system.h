@@ -14,6 +14,7 @@
 namespace crackitos_physics::samples {
 class FrictionSystem {
  private:
+   int solver_iterations = 3;
   std::vector<GameObject> objects_;
 
   physics::Quadtree quadtree_;
@@ -26,7 +27,7 @@ class FrictionSystem {
 
   //Create the gravity for the scene
   distance::Meter gravity_in_meter_x = distance::Meter(0.0f);
-  distance::Meter gravity_in_meter_y = distance::Meter(0.9f);
+  distance::Meter gravity_in_meter_y = distance::Meter(9.81f);
   const math::Vec2f
       gravity = math::Vec2f(static_cast<float>(distance::Convert<distance::Meter, distance::Pixel>(
                                 gravity_in_meter_x).value),
@@ -63,10 +64,12 @@ class FrictionSystem {
   void SimplisticBroadPhase();
   void BroadPhase();
   void NarrowPhase();
+  void ResolveCollisionPair(const GameObjectPair& pair, bool is_new_pair);
 
   static void OnPairCollideStart(const GameObjectPair &pair);
   static void OnPairCollideStay(const GameObjectPair &pair);
   static void OnPairCollideEnd(const GameObjectPair &pair);
+  void PostResolveContactIterations(int iterations) const;
 };
 } // namespace samples
 #endif // PHYSICS_SAMPLES_FRICTION_SYSTEM_H_

@@ -24,21 +24,21 @@ namespace crackitos_physics::math
         Vec2f max_bound_ = Vec2f::Zero();
         Vec2f centre_ = Vec2f::Zero();
         Vec2f half_size_vec_ = Vec2f::Zero();
-        crackitos_physics::commons::fp half_size_length_ = 0.0f;
+        commons::fp half_size_length_ = 0.0f;
 
     public:
         constexpr AABB(const Vec2f min_bound, const Vec2f max_bound) : min_bound_(min_bound), max_bound_(max_bound)
         {
             centre_ = (min_bound + max_bound) * 0.5f;
-            half_size_vec_ = max_bound - centre_;
-            half_size_length_ = (max_bound - centre_).Magnitude();
+            half_size_vec_ = (max_bound_ - min_bound_) * 0.5f;
+            half_size_length_ = half_size_vec_.Magnitude();
         }
 
         constexpr AABB(const Vec2f min_bound,
                        const Vec2f max_bound,
                        const Vec2f centre,
                        const Vec2f half_size_vec,
-                       const crackitos_physics::commons::fp half_size_length) :
+                       const commons::fp half_size_length) :
             min_bound_(min_bound),
             max_bound_(max_bound),
             centre_(centre),
@@ -48,11 +48,11 @@ namespace crackitos_physics::math
         }
 
         constexpr AABB(const Vec2f centre, const Vec2f half_size_vec,
-                       const crackitos_physics::commons::fp half_size_length)
+                       const commons::fp half_size_length)
         {
-            half_size_vec_ = half_size_vec;
-            min_bound_ = Vec2f(centre - half_size_vec_);
-            max_bound_ = Vec2f(centre + half_size_vec_);
+            half_size_vec_ = {std::abs(half_size_vec.x), std::abs(half_size_vec.y)};
+            min_bound_ = centre - half_size_vec_;
+            max_bound_ = centre + half_size_vec_;
             centre_ = centre;
             half_size_length_ = half_size_length;;
         }
@@ -61,48 +61,61 @@ namespace crackitos_physics::math
 
         [[nodiscard]] constexpr Vec2f min_bound() const { return min_bound_; }
         [[nodiscard]] constexpr Vec2f max_bound() const { return max_bound_; }
-        [[nodiscard]] constexpr crackitos_physics::commons::fp half_size_length() const { return half_size_length_; }
-        [[nodiscard]] constexpr Vec2f half_size_vec() const { return half_size_vec_; }
+        [[nodiscard]] constexpr commons::fp half_size_length() const { return half_size_length_; }
+        //TODO maybe delete half_size_vec member (& length), and just use these functions
+        [[nodiscard]] constexpr Vec2f half_size_vec() const { return (max_bound_ - min_bound_) * 0.5f; }
 
         void set_min_bound(const Vec2f bound)
         {
             min_bound_ = bound;
             centre_ = (min_bound_ + max_bound_) * 0.5f;
-            half_size_vec_ = max_bound_ - centre_;
-            half_size_length_ = (max_bound_ - centre_).Magnitude();
+            half_size_vec_ = (max_bound_ - min_bound_) * 0.5f;
+            half_size_length_ = half_size_vec_.Magnitude();
         }
 
         void set_max_bound(const Vec2f bound)
         {
             max_bound_ = bound;
             centre_ = (min_bound_ + max_bound_) * 0.5f;
-            half_size_vec_ = max_bound_ - centre_;
-            half_size_length_ = (max_bound_ - centre_).Magnitude();
+            half_size_vec_ = (max_bound_ - min_bound_) * 0.5f;
+            half_size_length_ = half_size_vec_.Magnitude();
         }
 
         [[nodiscard]] constexpr bool Contains(const Vec2f point) const
         {
-            if (point.x < min_bound_.x) return false;
-            if (point.x > max_bound_.x) return false;
-            if (point.y < min_bound_.y) return false;
-            if (point.y > max_bound_.y) return false;
-            return true;
+            return (point.x >= min_bound_.x && point.x <= max_bound_.x &&
+                point.y >= min_bound_.y && point.y <= max_bound_.y);
         }
+
 
         [[nodiscard]] AABB GetBoundingBox() const
         {
             return *this;
         }
 
-        [[nodiscard]] Vec2f GetCentre() const { return (min_bound_ + max_bound_) * 0.5f; }
+        [[nodiscard]] Vec2f ClosestPoint(const Vec2f& point) const
+        {
+            return {
+                std::clamp(point.x, min_bound_.x, max_bound_.x),
+                std::clamp(point.y, min_bound_.y, max_bound_.y)
+            };
+        }
+
+
+        [[nodiscard]] Vec2f GetCentre() const
+        {
+            return (min_bound_ + max_bound_) * 0.5f;
+        }
+
         [[nodiscard]] static constexpr ShapeType GetShapeType() { return ShapeType::kAABB; }
 
         void UpdatePosition(const Vec2f position)
         {
             centre_ = position;
-            min_bound_ = Vec2f(centre_ - half_size_vec_);
-            max_bound_ = Vec2f(centre_ + half_size_vec_);
+            min_bound_ = centre_ - half_size_vec_;
+            max_bound_ = centre_ + half_size_vec_;
         }
+
 
         bool operator==(const AABB& other) const
         {
@@ -114,23 +127,23 @@ namespace crackitos_physics::math
     {
     private:
         Vec2f centre_ = Vec2f::Zero();
-        crackitos_physics::commons::fp radius_ = 0.0f;
+        commons::fp radius_ = 0.0f;
 
     public:
-        constexpr Circle(const Vec2f center, const crackitos_physics::commons::fp radius) : centre_(center),
-            radius_(radius)
+        constexpr Circle(const Vec2f center, const commons::fp radius) : centre_(center),
+                                                                         radius_(radius)
         {
         }
 
-        explicit constexpr Circle(const crackitos_physics::commons::fp radius) : centre_(Vec2f::Zero()), radius_(radius)
+        explicit constexpr Circle(const commons::fp radius) : centre_(Vec2f::Zero()), radius_(radius)
         {
         }
 
         [[nodiscard]] constexpr Vec2f centre() const { return centre_; }
-        [[nodiscard]] constexpr crackitos_physics::commons::fp radius() const { return radius_; }
+        [[nodiscard]] constexpr commons::fp radius() const { return radius_; }
 
         void set_centre(const Vec2f center) { centre_ = center; }
-        void set_radius(const crackitos_physics::commons::fp radius) { radius_ = radius; }
+        void set_radius(const commons::fp radius) { radius_ = radius; }
 
         [[nodiscard]] bool Contains(const Vec2f point) const
         {
@@ -208,12 +221,13 @@ namespace crackitos_physics::math
     {
         const Vec2f segment = segment_end - segment_start;
         const Vec2f point_to_start = compare_point - segment_start;
-        const crackitos_physics::commons::fp t = std::clamp(point_to_start.Dot(segment) / segment.SquareMagnitude(),
-                                                            0.0f, 1.0f);
+        const commons::fp t = std::clamp(point_to_start.Dot(segment) / segment.SquareMagnitude(),
+                                         0.0f, 1.0f);
         const Vec2f closest_point = segment_start + segment * t;
 
         return closest_point;
     }
+
 
     //Intersections between shapes
     [[nodiscard]] constexpr bool Intersect(const AABB& aabb_a, const AABB& aabb_b)
@@ -226,8 +240,8 @@ namespace crackitos_physics::math
     [[nodiscard]] constexpr bool Intersect(const Circle& circle_a, const Circle& circle_b)
     {
         const Vec2f delta = circle_a.centre() - circle_b.centre();
-        const crackitos_physics::commons::fp distanceSquared = delta.SquareMagnitude();
-        const crackitos_physics::commons::fp radiusSum = circle_a.radius() + circle_b.radius();
+        const commons::fp distanceSquared = delta.SquareMagnitude();
+        const commons::fp radiusSum = circle_a.radius() + circle_b.radius();
         return distanceSquared < radiusSum * radiusSum;
     }
 
@@ -245,21 +259,21 @@ namespace crackitos_physics::math
                 const Vec2f axis = edge.Perpendicular();
 
                 //Project all vertices of polygon_a onto the axis
-                crackitos_physics::commons::fp min_a = vertices[0].Dot(axis);
-                crackitos_physics::commons::fp max_a = min_a;
+                commons::fp min_a = vertices[0].Dot(axis);
+                commons::fp max_a = min_a;
                 for (const auto& vertex : polygon_a.vertices())
                 {
-                    crackitos_physics::commons::fp projection = vertex.Dot(axis);
+                    commons::fp projection = vertex.Dot(axis);
                     min_a = std::min(min_a, projection);
                     max_a = std::max(max_a, projection);
                 }
 
                 //Project all vertices of polygon_b onto the axis
-                crackitos_physics::commons::fp min_b = polygon_b.vertices()[0].Dot(axis);
-                crackitos_physics::commons::fp max_b = min_b;
+                commons::fp min_b = polygon_b.vertices()[0].Dot(axis);
+                commons::fp max_b = min_b;
                 for (const auto& vertex : polygon_b.vertices())
                 {
-                    crackitos_physics::commons::fp projection = vertex.Dot(axis);
+                    commons::fp projection = vertex.Dot(axis);
                     min_b = std::min(min_b, projection);
                     max_b = std::max(max_b, projection);
                 }
@@ -280,16 +294,16 @@ namespace crackitos_physics::math
     [[nodiscard]] constexpr bool Intersect(const AABB& aabb, const Circle& circle)
     {
         const Vec2f& centre = circle.centre();
-        const crackitos_physics::commons::fp radius = circle.radius();
+        const commons::fp radius = circle.radius();
 
         // Clamp the circle center to the nearest point in the AABB
-        crackitos_physics::commons::fp closest_x = std::clamp(centre.x, aabb.min_bound().x, aabb.max_bound().x);
-        crackitos_physics::commons::fp closest_y = std::clamp(centre.y, aabb.min_bound().y, aabb.max_bound().y);
+        commons::fp closest_x = std::clamp(centre.x, aabb.min_bound().x, aabb.max_bound().x);
+        commons::fp closest_y = std::clamp(centre.y, aabb.min_bound().y, aabb.max_bound().y);
 
         // Compute the distance from the circle's center to this point
         Vec2f closest_point(closest_x, closest_y);
         return (closest_point - centre).SquareMagnitude() <= (radius * radius) + std::numeric_limits<
-            crackitos_physics::commons::fp>::epsilon();
+            commons::fp>::epsilon();
     }
 
     [[nodiscard]] constexpr bool Intersect(const AABB& aabb, const Polygon& polygon)
