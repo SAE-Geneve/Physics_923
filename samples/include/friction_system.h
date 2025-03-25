@@ -14,7 +14,6 @@
 namespace crackitos_physics::samples {
 class FrictionSystem {
  private:
-   int solver_iterations = 3;
   std::vector<GameObject> objects_;
 
   physics::Quadtree quadtree_;
@@ -66,10 +65,7 @@ class FrictionSystem {
   void NarrowPhase();
   void ResolveCollisionPair(const GameObjectPair& pair, bool is_new_pair);
 
-  static void OnPairCollideStart(const GameObjectPair &pair);
-  static void OnPairCollideStay(const GameObjectPair &pair);
   static void OnPairCollideEnd(const GameObjectPair &pair);
-  void PostResolveContactIterations(int iterations) const;
 };
 } // namespace samples
 #endif // PHYSICS_SAMPLES_FRICTION_SYSTEM_H_

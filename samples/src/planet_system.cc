@@ -13,7 +13,6 @@ void PlanetSystem::Initialize() {
   star_ = physics::Body(physics::BodyType::Static,
                         math::Vec2f(kWindowWidth / 2.f, kWindowHeight / 2.f),
                         math::Vec2f::Zero(),
-                        math::Vec2f::Zero(),
                         false,
                         star_mass_
   );
@@ -63,7 +62,6 @@ void PlanetSystem::CreatePlanet(const math::Vec2f position, const crackitos_phys
     math::Vec2f angular_velocity = tangential_direction * orbital_velocity;
     physics::Body body(physics::BodyType::Dynamic, position,
                        angular_velocity,
-                       math::Vec2f::Zero(),
                        false,
                        planet_mass_
     );

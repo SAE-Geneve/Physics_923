@@ -15,8 +15,7 @@ namespace crackitos_physics::samples
 
     class CollisionSystem
     {
-    private: //TODO add this to world if it's kept in (as a cosntant)
-        int solver_iterations = 3;
+    private:
         int number_of_objects_ = 200;
         std::array<GameObject, 200> objects_ = {};
         physics::Quadtree quadtree_;
@@ -53,7 +52,6 @@ namespace crackitos_physics::samples
         void ResolveCollisionPair(const GameObjectPair& pair, bool is_new_pair);
 
         static void OnPairCollideEnd(const GameObjectPair& pair);
-        void PostResolveContactIterations(int iterations) const;
     };
 } // namespace samples
 #endif // PHYSICS_SAMPLES_COLLISION_SYSTEM_H_

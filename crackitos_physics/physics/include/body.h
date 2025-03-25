@@ -14,6 +14,17 @@ namespace crackitos_physics::physics
         None
     };
 
+    struct BodyHandle
+    {
+        int id = -1; // Unique ID
+        int generation = 0; // Prevents accessing deleted bodies
+
+        bool operator==(const BodyHandle& other) const
+        {
+            return id == other.id && generation == other.generation;
+        }
+    };
+
     class Body
     {
     private:
@@ -23,21 +34,20 @@ namespace crackitos_physics::physics
         math::Vec2f position_ = math::Vec2f::Zero();
         math::Vec2f velocity_ = math::Vec2f::Zero();
         math::Vec2f acceleration_ = math::Vec2f::Zero();
-        math::Vec2f gravity_ = math::Vec2f::Zero();
 
         //Angular components
-        crackitos_physics::commons::fp orientation_ = 0.0f;
-        crackitos_physics::commons::fp angular_velocity_ = 0.0f;
-        crackitos_physics::commons::fp torque_ = 0.0f;
+        commons::fp orientation_ = 0.0f;
+        commons::fp angular_velocity_ = 0.0f;
+        commons::fp torque_ = 0.0f;
 
         bool is_awake_ = true;
         bool gravity_bound_ = false;
 
-        crackitos_physics::commons::fp mass_ = 1.0f;
-        crackitos_physics::commons::fp inverse_mass_ = 1.0f;
+        commons::fp mass_ = 1.0f;
+        commons::fp inverse_mass_ = 1.0f;
 
-        crackitos_physics::commons::fp inertia_ = 1.0f;
-        crackitos_physics::commons::fp inverse_inertia_ = 1.0f;
+        commons::fp inertia_ = 1.0f;
+        commons::fp inverse_inertia_ = 1.0f;
 
         void ApplyGravity(const math::Vec2f gravity)
         {
@@ -53,16 +63,14 @@ namespace crackitos_physics::physics
         Body(const BodyType type,
              const math::Vec2f position,
              const math::Vec2f velocity,
-             const math::Vec2f gravity,
              const bool gravity_bound,
-             const crackitos_physics::commons::fp mass)
+             const commons::fp mass)
         {
             type_ = type;
             position_ = position;
             velocity_ = velocity;
             mass_ = mass;
 
-            gravity_ = gravity;
             gravity_bound_ = gravity_bound;
 
             if (type_ == BodyType::Static)
@@ -81,7 +89,7 @@ namespace crackitos_physics::physics
             }
         };
 
-        Body(const math::Vec2f position, const crackitos_physics::commons::fp mass)
+        Body(const math::Vec2f position, const commons::fp mass)
         {
             position_ = position;
             mass_ = mass;
@@ -93,20 +101,20 @@ namespace crackitos_physics::physics
         [[nodiscard]] math::Vec2f position() const { return position_; }
         [[nodiscard]] math::Vec2f velocity() const { return velocity_; }
         [[nodiscard]] math::Vec2f acceleration() const { return acceleration_; }
-        [[nodiscard]] crackitos_physics::commons::fp orientation() const { return orientation_; }
-        [[nodiscard]] crackitos_physics::commons::fp angular_velocity() const { return angular_velocity_; }
-        [[nodiscard]] crackitos_physics::commons::fp torque() const { return torque_; }
-        [[nodiscard]] crackitos_physics::commons::fp mass() const { return mass_; }
-        [[nodiscard]] crackitos_physics::commons::fp inverse_mass() const { return inverse_mass_; }
-        [[nodiscard]] crackitos_physics::commons::fp inertia() const { return inertia_; }
-        [[nodiscard]] crackitos_physics::commons::fp inverse_inertia() const { return inverse_inertia_; }
+        [[nodiscard]] commons::fp orientation() const { return orientation_; }
+        [[nodiscard]] commons::fp angular_velocity() const { return angular_velocity_; }
+        [[nodiscard]] commons::fp torque() const { return torque_; }
+        [[nodiscard]] commons::fp mass() const { return mass_; }
+        [[nodiscard]] commons::fp inverse_mass() const { return inverse_mass_; }
+        [[nodiscard]] commons::fp inertia() const { return inertia_; }
+        [[nodiscard]] commons::fp inverse_inertia() const { return inverse_inertia_; }
 
         //Setters
         void set_position(const math::Vec2f new_position) { position_ = new_position; }
         void set_velocity(const math::Vec2f new_velocity) { velocity_ = new_velocity; }
         void set_gravity_bound(const bool new_gravity_bound) { gravity_bound_ = new_gravity_bound; }
 
-        void set_mass(const crackitos_physics::commons::fp new_mass)
+        void set_mass(const commons::fp new_mass)
         {
             mass_ = new_mass;
             if (new_mass == 0.0f)
@@ -150,12 +158,14 @@ namespace crackitos_physics::physics
             }
         }
 
-        void Update(const crackitos_physics::commons::fp delta_time)
+        void Update(const commons::fp delta_time, const math::Vec2f& gravity = math::Vec2f::Zero())
         {
             if (type_ != BodyType::Static)
             {
-                ApplyGravity(gravity_);
-
+                if (type_ == BodyType::Dynamic && gravity_bound_)
+                {
+                    ApplyForce(gravity);
+                }
                 velocity_ += acceleration_ * delta_time;
                 position_ += velocity_ * delta_time;
             }
