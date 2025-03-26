@@ -6,7 +6,6 @@
 #include "display.h"
 #include "physics_world.h"
 #include "shape.h"
-#include "timer.h"
 #include "contact_listener.h"
 
 namespace crackitos_physics::samples {
@@ -20,7 +19,7 @@ namespace crackitos_physics::samples {
     };
 
     // Contact Listener for Logging Events
-    class TestingContactListener : public physics::ContactListener
+    class TestingContactListener final : public physics::ContactListener
     {
     public:
         void OnTriggerEnter(const physics::ColliderPair& pair) override;
@@ -34,7 +33,6 @@ namespace crackitos_physics::samples {
 
     // Main Testing System
     class TestingSystem {
-    private:
         physics::PhysicsWorld physics_world_;
         TestingContactListener contact_listener_;
 
@@ -54,7 +52,7 @@ namespace crackitos_physics::samples {
         void SetGravity(const math::Vec2f& gravity);
 
         void UpdateTestingObjects();
-        const std::vector<TestingObject>& testing_objects() const { return testing_objects_; }
+        [[nodiscard]] const std::vector<TestingObject>& testing_objects() const { return testing_objects_; }
 
         [[nodiscard]] physics::PhysicsWorld& physics_world() { return physics_world_; }
         [[nodiscard]] const physics::PhysicsWorld& physics_world() const { return physics_world_; } // Const version

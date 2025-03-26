@@ -42,7 +42,7 @@ namespace crackitos_physics::physics
 
     BodyHandle PhysicsWorld::CreateBody(const Body& body_def)
     {
-        int id = static_cast<int>(bodies_.size());
+        const int id = static_cast<int>(bodies_.size());
         bodies_.push_back(body_def);
         body_generations_.push_back(0);
         return {id, body_generations_[id]};
@@ -50,14 +50,14 @@ namespace crackitos_physics::physics
 
     ColliderHandle PhysicsWorld::CreateCollider(const BodyHandle body, const Collider& collider_def)
     {
-        int id = (int)colliders_.size();
+        const int id = static_cast<int>(colliders_.size());
         colliders_.emplace_back(collider_def);
         colliders_[id].set_body_handle(body);
         collider_generations_.push_back(0);
         return {id, collider_generations_[id]};
     }
 
-    void PhysicsWorld::RemoveBody(BodyHandle body)
+    void PhysicsWorld::RemoveBody(const BodyHandle body)
     {
         if (body.id < 0 || body.id >= static_cast<int>(bodies_.size())) return;
 
@@ -65,7 +65,7 @@ namespace crackitos_physics::physics
         body_generations_[body.id]++;
     }
 
-    void PhysicsWorld::RemoveCollider(ColliderHandle collider)
+    void PhysicsWorld::RemoveCollider(const ColliderHandle collider)
     {
         if (collider.id < 0 || collider.id >= static_cast<int>(colliders_.size())) return;
 
@@ -73,7 +73,7 @@ namespace crackitos_physics::physics
         collider_generations_[collider.id]++;
     }
 
-    const Body& PhysicsWorld::GetBody(BodyHandle body) const
+    const Body& PhysicsWorld::GetBody(const BodyHandle body) const
     {
         if (body.id < 0 || body.id >= static_cast<int>(bodies_.size()) || body_generations_[body.id] != body.generation)
         {
@@ -82,7 +82,7 @@ namespace crackitos_physics::physics
         return bodies_[body.id];
     }
 
-    const Collider& PhysicsWorld::GetCollider(ColliderHandle collider) const
+    const Collider& PhysicsWorld::GetCollider(const ColliderHandle collider) const
     {
         if (collider.id < 0 || collider.id >= static_cast<int>(colliders_.size()) || collider_generations_[collider.id] != collider.generation)
         {
@@ -221,7 +221,7 @@ namespace crackitos_physics::physics
 
             if (body.type() == BodyType::Static)
             {
-                ColliderHandle collider_handle{static_cast<int>(id), collider_generations_[id]};
+                const ColliderHandle collider_handle{static_cast<int>(id), collider_generations_[id]};
                 quadtree_.Insert(collider_handle, collider.GetBoundingBox());
             }
         }
@@ -238,7 +238,7 @@ namespace crackitos_physics::physics
 
             if (body.type() != BodyType::Static)
             {
-                ColliderHandle collider_handle{static_cast<int>(id), collider_generations_[id]};
+                const ColliderHandle collider_handle{static_cast<int>(id), collider_generations_[id]};
                 quadtree_.Insert(collider_handle, collider.GetBoundingBox());
             }
         }
@@ -267,7 +267,7 @@ namespace crackitos_physics::physics
 
             if (solver.penetration_ > 0.0f)
             {
-                bool is_new_pair = !active_pairs_.contains(pair);
+                const bool is_new_pair = !active_pairs_.contains(pair);
                 ResolveCollisionPair(pair, is_new_pair);
                 newActivePairs.insert(pair);
             }
@@ -301,14 +301,14 @@ namespace crackitos_physics::physics
     }
 
 
-    void PhysicsWorld::ResolveCollisionPair(const ColliderPair& pair, bool is_new_pair)
+    void PhysicsWorld::ResolveCollisionPair(const ColliderPair& pair, const bool is_new_pair)
     {
-        ColliderHandle colA = pair.colliderA;
-        ColliderHandle colB = pair.colliderB;
+        const ColliderHandle colA = pair.colliderA;
+        const ColliderHandle colB = pair.colliderB;
 
         // Get associated bodies
-        BodyHandle bodyA = colliders_[colA.id].body_handle();
-        BodyHandle bodyB = colliders_[colB.id].body_handle();
+        const BodyHandle bodyA = colliders_[colA.id].body_handle();
+        const BodyHandle bodyB = colliders_[colB.id].body_handle();
 
         // Ensure both colliders are linked to valid bodies
         if (bodyA.id < 0 || bodyA.id >= static_cast<int>(bodies_.size()) ||

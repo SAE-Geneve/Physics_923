@@ -49,7 +49,7 @@ namespace crackitos_physics::samples
     //Initialize & Clear
     void TestingSystem::Initialize()
     {
-        auto system_gravity = math::Vec2f(
+        constexpr auto system_gravity = math::Vec2f(
             static_cast<commons::fp>(distance::Convert<distance::Meter, distance::Pixel>(distance::Meter(0.f)).value),
             static_cast<commons::fp>(distance::Convert<distance::Meter, distance::Pixel>(distance::Meter(100.f)).value)
         );

@@ -71,7 +71,7 @@ namespace crackitos_physics::physics
         [[nodiscard]] const Body& GetBody(BodyHandle body) const;
         [[nodiscard]] const Collider& GetCollider(ColliderHandle collider) const;
 
-        std::vector<std::pair<BodyHandle, ColliderHandle>> GetBodiesWithColliders() const;
+        [[nodiscard]] std::vector<std::pair<BodyHandle, ColliderHandle>> GetBodiesWithColliders() const;
 
         void Update(commons::fp delta_time);
         void StepSimulation();

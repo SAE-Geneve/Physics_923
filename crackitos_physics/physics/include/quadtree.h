@@ -21,7 +21,7 @@ namespace crackitos_physics::physics
         std::vector<ColliderHandle> colliders_; //Colliders stored in each node
         int depth_;
 
-        explicit QuadtreeNode(const math::AABB& box, const int depth = 0);
+        explicit QuadtreeNode(const math::AABB& box, int depth = 0);
 
         //Subdivide the node into 4 child quadrants
         void Subdivide();
@@ -63,11 +63,11 @@ namespace crackitos_physics::physics
 
         void Insert(ColliderHandle collider, const math::AABB& shapeAABB) const;
 
-        std::vector<ColliderHandle> Query(const math::AABB& range) const;
+        [[nodiscard]] std::vector<ColliderHandle> Query(const math::AABB& range) const;
 
         void BuildPotentialPairs();
 
-        const std::unordered_set<ColliderPair>& GetPotentialPairs() const;
+        [[nodiscard]] const std::unordered_set<ColliderPair>& GetPotentialPairs() const;
 
         void Clear();
 
