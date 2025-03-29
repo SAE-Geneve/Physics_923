@@ -47,7 +47,6 @@ class TriggerSystem{
   void Initialize();
   void Clear();
 
-
   void CreateObject(const math::Vec2f& pos, math::ShapeType type);
 
   void Update(crackitos_physics::commons::fp delta_time);

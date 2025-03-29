@@ -88,14 +88,13 @@ void TriggerSystem::CreateObject(const math::Vec2f& pos, math::ShapeType type){
       float half_size_x = random::Range(5.f, 20.f);
       float half_size_y = random::Range(5.f, 20.f);
 
-      math::AABB aabb(pos, math::Vec2f(half_size_x, half_size_y),
-                      math::Vec2f(half_size_x, half_size_y).Magnitude());
+      math::AABB aabb(pos, math::Vec2f(half_size_x, half_size_y), math::Vec2f(half_size_x, half_size_y).Magnitude());
 
       physics::Body body_def(physics::BodyType::Dynamic, pos, velocity,
                              false, random::Range(50.f, 100.f));
       body = physics_world_.CreateBody(body_def);
 
-      physics::Collider collider_def(aabb, random::Range(0.0f, 0.0f), 0.5f, false, body);
+      physics::Collider collider_def(aabb, random::Range(0.0f, 0.0f), 0.5f, true, body);
       physics_world_.CreateCollider(body, collider_def);
       break;
     }
@@ -109,7 +108,7 @@ void TriggerSystem::CreateObject(const math::Vec2f& pos, math::ShapeType type){
       physics::Body body_def(physics::BodyType::Dynamic, pos, velocity, false, random::Range(1.0f, 50.f));
       body = physics_world_.CreateBody(body_def);
 
-      physics::Collider collider_def(circle, random::Range(0.2f, 0.8f), 0.5f, false, body);
+      physics::Collider collider_def(circle, random::Range(0.2f, 0.8f), 0.5f, true, body);
       physics_world_.CreateCollider(body, collider_def);
 
       break;
@@ -132,12 +131,22 @@ void TriggerSystem::UpdateTriggerObjects()
 
   auto bodies_with_colliders = physics_world_.GetBodiesWithColliders();
 
-  for (const auto& [body_handle, collider_handle] : bodies_with_colliders) {
+  for (const auto& [body_handle, collider_handle] : bodies_with_colliders)
+  {
+    const physics::Body& body = physics_world_.GetBody(body_handle);
+    auto position = body.position(); // Get current position
+
+
+    if (position.x < 0 || position.x > kWindowWidth ||
+        position.y < 0 || position.y > kWindowHeight)
+    {
+      continue; // Skip adding objects that are already out of bounds
+    }
+
     TriggerObject obj;
     obj.body = body_handle;
     obj.collider = collider_handle;
     obj.color = SDL_Color{255, 13, 132, 255};
-
     objects_.push_back(obj);
   }
 }
