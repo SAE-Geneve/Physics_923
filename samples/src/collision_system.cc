@@ -138,26 +138,6 @@ void CollisionSystem::UpdateCollisionObject() {
     obj.collider = collider_handle;
     obj.color = SDL_Color{255, 13, 132, 255};
     objects_.push_back(obj);
-
-//    //Check for collision with window borders
-//    if (position.x - radius < 0) {
-//      position.x = radius;
-//      body.set_velocity(math::Vec2f(-body.velocity().x, body.velocity().y));
-//    }
-//    if (position.x + radius > 1200) {
-//      position.x = 1200 - radius;
-//      body.set_velocity(math::Vec2f(-body.velocity().x, body.velocity().y));
-//    }
-//    if (position.y - radius < 0) {
-//      position.y = radius;
-//      body.set_velocity(math::Vec2f(body.velocity().x, -body.velocity().y));
-//    }
-//    if (position.y + radius > 800) {
-//      position.y = 800 - radius;
-//      body.set_velocity(math::Vec2f(body.velocity().x, -body.velocity().y));
-//    }
-
-
   }
 }
 } // namespace samples
