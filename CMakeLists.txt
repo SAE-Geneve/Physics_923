@@ -1,4 +1,3 @@
-
 # Profiling Option
 option(ENABLE_PROFILING "Enable Tracy Profiling" OFF)
 if (ENABLE_PROFILING)
@@ -16,6 +15,9 @@ option(ENABLE_SAMPLES "Enable Samples" OFF)
 if (ENABLE_SAMPLES)
     list(APPEND VCPKG_MANIFEST_FEATURES "samples")
 endif (ENABLE_SAMPLES)
+
+
+
 
 cmake_minimum_required(VERSION 3.18)
 project(PhysicsEngine)
@@ -41,3 +43,8 @@ endif(ENABLE_SAMPLES)
 
 # Include all subdirectories
 add_subdirectory(crackitos_physics)
+add_subdirectory(external/crackitos/core)
+target_link_libraries(crackitos_physics PUBLIC crackitos_core)
+
+
+

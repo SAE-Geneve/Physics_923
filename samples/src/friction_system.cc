@@ -1,6 +1,5 @@
 ﻿#include "friction_system.h"
 
-#include <iostream>
 #include <ranges>
 
 #include "contact_solver.h"
@@ -8,7 +7,7 @@
 
 namespace crackitos_physics::samples
 {
-    FrictionSystem::FrictionSystem(): quadtree_(math::AABB(math::Vec2f(0, 0), math::Vec2f(kWindowWidth, kWindowHeight)))
+    FrictionSystem::FrictionSystem(): quadtree_(crackitos_core::math::AABB(crackitos_core::math::Vec2f(0, 0), crackitos_core::math::Vec2f(kWindowWidth, kWindowHeight)))
     {
     }
 
@@ -33,11 +32,11 @@ namespace crackitos_physics::samples
     }
 
 
-    void FrictionSystem::SpawnShape(const math::Vec2f pos, const math::ShapeType type)
+    void FrictionSystem::SpawnShape(const crackitos_core::math::Vec2f pos, const crackitos_core::math::ShapeType type)
     {
         const size_t i = objects_.size();
-        math::Vec2f new_position = pos;
-        const crackitos_physics::commons::fp radius = random::Range(5.f, 20.f);
+        crackitos_core::math::Vec2f new_position = pos;
+        const crackitos_core::commons::fp radius = crackitos_core::random::Range(5.f, 20.f);
 
         constexpr int max_retries = 10; // Limit retries to avoid infinite loops.
         for (int retry = 0; retry < max_retries; ++retry)
@@ -45,9 +44,9 @@ namespace crackitos_physics::samples
             bool position_valid = true;
             for (auto& object : objects_)
             {
-                if (math::Intersect(object.collider().GetBoundingBox(),
-                                    math::AABB(new_position - math::Vec2f(radius, radius),
-                                               new_position + math::Vec2f(radius, radius))))
+                if (crackitos_core::math::Intersect(object.collider().GetBoundingBox(),
+                                    crackitos_core::math::AABB(new_position - crackitos_core::math::Vec2f(radius, radius),
+                                               new_position + crackitos_core::math::Vec2f(radius, radius))))
                 {
                     position_valid = false;
                     new_position.y = object.collider().GetBoundingBox().min_bound().y - radius - 2.0f;
@@ -61,58 +60,58 @@ namespace crackitos_physics::samples
 
         switch (type)
         {
-        case math::ShapeType::kAABB:
+        case crackitos_core::math::ShapeType::kAABB:
             {
-                const crackitos_physics::commons::fp half_size_x = random::Range(5.f, 20.f);
-                const crackitos_physics::commons::fp half_size_y = radius;
-                const auto half_size_vec = math::Vec2f(half_size_x, half_size_y);
+                const crackitos_core::commons::fp half_size_x = crackitos_core::random::Range(5.f, 20.f);
+                const crackitos_core::commons::fp half_size_y = radius;
+                const auto half_size_vec = crackitos_core::math::Vec2f(half_size_x, half_size_y);
                 const auto half_size_length = half_size_vec.Magnitude();
-                math::AABB aabb(new_position, half_size_vec, half_size_length);
+                crackitos_core::math::AABB aabb(new_position, half_size_vec, half_size_length);
                 CreateObject(i, aabb);
             }
             break;
-        case math::ShapeType::kCircle:
+        case crackitos_core::math::ShapeType::kCircle:
             {
-                math::Circle circle(new_position, radius);
+                crackitos_core::math::Circle circle(new_position, radius);
                 CreateObject(i, circle);
             }
             break;
-        case math::ShapeType::kPolygon:
-        case math::ShapeType::kNone:
+        case crackitos_core::math::ShapeType::kPolygon:
+        case crackitos_core::math::ShapeType::kNone:
         default:
             break;
         }
     }
 
-    void FrictionSystem::CreateObject(size_t index, math::Circle& circle)
+    void FrictionSystem::CreateObject(size_t index, crackitos_core::math::Circle& circle)
     {
-        math::Vec2f velocity(0.0f, 0.0f);
+        crackitos_core::math::Vec2f velocity(0.0f, 0.0f);
         physics::Body body(physics::BodyType::Dynamic,
                            circle.centre(),
                            velocity,
                            gravity,
                            true,
-                           random::Range(50.f, 100.f)
+                           crackitos_core::random::Range(50.f, 100.f)
         );
-        physics::Collider collider(circle, random::Range(0.5f, 0.9f), 0.1f, false);
+        physics::Collider collider(circle, crackitos_core::random::Range(0.5f, 0.9f), 0.1f, false);
         GameObject object(body, collider, circle.radius());
 
         objects_.push_back(object);
         RegisterObject(objects_[index]);
     }
 
-    void FrictionSystem::CreateObject(size_t index, math::AABB& aabb)
+    void FrictionSystem::CreateObject(size_t index, crackitos_core::math::AABB& aabb)
     {
-        math::Vec2f velocity(0.0f, 0.0f);
+        crackitos_core::math::Vec2f velocity(0.0f, 0.0f);
         physics::Body body(physics::BodyType::Dynamic,
                            aabb.GetCentre(),
                            velocity,
                            gravity,
                            true,
-                           random::Range(50.f, 100.f)
+                           crackitos_core::random::Range(50.f, 100.f)
         );
         physics::Collider collider(aabb,
-                                   random::Range(0.0f, 0.0f),
+                                   crackitos_core::random::Range(0.0f, 0.0f),
                                    0.5f,
                                    true);
         GameObject object(body, collider, aabb.half_size_length());
@@ -125,9 +124,9 @@ namespace crackitos_physics::samples
     {
         size_t i = objects_.size();
 
-        math::AABB ground(math::Vec2f(360.0f, 650.0f), math::Vec2f(840.0f, 750.0f));
+        crackitos_core::math::AABB ground(crackitos_core::math::Vec2f(360.0f, 650.0f), crackitos_core::math::Vec2f(840.0f, 750.0f));
 
-        math::Vec2f velocity(0.0f, 0.0f);
+        crackitos_core::math::Vec2f velocity(0.0f, 0.0f);
         physics::Body body(physics::BodyType::Static,
                            ground.GetCentre(),
                            velocity,
@@ -199,7 +198,7 @@ namespace crackitos_physics::samples
     }
 
 
-    void FrictionSystem::Update(const crackitos_physics::commons::fp delta_time)
+    void FrictionSystem::Update(const crackitos_core::commons::fp delta_time)
     {
         UpdateShapes(delta_time);
         RemoveOutOfBoundsObjects();
@@ -207,7 +206,7 @@ namespace crackitos_physics::samples
         NarrowPhase();
     }
 
-    void FrictionSystem::UpdateShapes(const crackitos_physics::commons::fp delta_time)
+    void FrictionSystem::UpdateShapes(const crackitos_core::commons::fp delta_time)
     {
         for (auto& object : objects_)
         {
@@ -246,7 +245,7 @@ namespace crackitos_physics::samples
                 auto rangeB = colliderB.GetBoundingBox();
 
                 // Check for AABB overlap
-                if (math::Intersect(rangeA, rangeB))
+                if (crackitos_core::math::Intersect(rangeA, rangeB))
                 {
                     GameObjectPair pair{&objectA, &objectB};
                     new_potential_pairs[pair] = true;
@@ -282,7 +281,7 @@ namespace crackitos_physics::samples
                 {
                     // Avoid self-collision
                     // Only test AABB overlap in broad phase
-                    if (math::Intersect(range, otherCollider->GetBoundingBox()))
+                    if (crackitos_core::math::Intersect(range, otherCollider->GetBoundingBox()))
                     {
                         GameObject* objectA = collider_to_object_map_[&collider];
                         GameObject* objectB = collider_to_object_map_[otherCollider];
@@ -313,7 +312,7 @@ namespace crackitos_physics::samples
 
             const bool intersect = std::visit([](auto&& shape_a, auto&& shape_b)
                                               {
-                                                  return math::Intersect(shape_a, shape_b);
+                                                  return crackitos_core::math::Intersect(shape_a, shape_b);
                                               }, pair.gameObjectA_->collider().shape(),
                                               pair.gameObjectB_->collider().shape());
 

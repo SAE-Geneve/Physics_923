@@ -8,7 +8,7 @@
 
 namespace crackitos_physics::samples
 {
-    TriggerSystem::TriggerSystem(): quadtree_(math::AABB(math::Vec2f(0, 0), math::Vec2f(kWindowWidth, kWindowHeight)))
+    TriggerSystem::TriggerSystem(): quadtree_(crackitos_core::math::AABB(crackitos_core::math::Vec2f(0, 0), crackitos_core::math::Vec2f(kWindowWidth, kWindowHeight)))
     {
     }
 
@@ -21,24 +21,24 @@ namespace crackitos_physics::samples
     {
         Clear();
 
-        constexpr crackitos_physics::commons::fp margin = 20.0f;
+        constexpr crackitos_core::commons::fp margin = 20.0f;
 
         for (size_t i = 0; i < number_of_objects_ / 2 - 1; i++)
         {
-            const math::Vec2f position(random::Range(margin, kWindowWidth - margin),
-                                       random::Range(margin, kWindowHeight - margin));
-            const crackitos_physics::commons::fp radius = random::Range(5.f, 10.f);
-            math::Circle circle(position, radius);
+            const crackitos_core::math::Vec2f position(crackitos_core::random::Range(margin, kWindowWidth - margin),
+                                       crackitos_core::random::Range(margin, kWindowHeight - margin));
+            const crackitos_core::commons::fp radius = crackitos_core::random::Range(5.f, 10.f);
+            crackitos_core::math::Circle circle(position, radius);
             CreateObject(i, circle);
         }
         for (size_t i = number_of_objects_ / 2 - 1; i < number_of_objects_; i++)
         {
-            const math::Vec2f position(random::Range(margin, kWindowWidth - margin),
-                                       random::Range(margin, kWindowHeight - margin));
-            math::Vec2f half_size_vec = math::Vec2f(random::Range(5.f, 10.f), random::Range(5.f, 10.f));
+            const crackitos_core::math::Vec2f position(crackitos_core::random::Range(margin, kWindowWidth - margin),
+                                       crackitos_core::random::Range(margin, kWindowHeight - margin));
+            crackitos_core::math::Vec2f half_size_vec = crackitos_core::math::Vec2f(crackitos_core::random::Range(5.f, 10.f), crackitos_core::random::Range(5.f, 10.f));
             const auto half_size_length = half_size_vec.Magnitude();
 
-            math::AABB aabb(position, half_size_vec, half_size_length);
+            crackitos_core::math::AABB aabb(position, half_size_vec, half_size_length);
             CreateObject(i, aabb);
         }
     }
@@ -56,36 +56,36 @@ namespace crackitos_physics::samples
         active_pairs_.clear();
     }
 
-    void TriggerSystem::CreateObject(size_t index, math::Circle& circle)
+    void TriggerSystem::CreateObject(size_t index, crackitos_core::math::Circle& circle)
     {
-        math::Vec2f velocity(random::Range(-50.0f, 50.0f), random::Range(-50.0f, 50.0f));
+        crackitos_core::math::Vec2f velocity(crackitos_core::random::Range(-50.0f, 50.0f), crackitos_core::random::Range(-50.0f, 50.0f));
         physics::Body body(physics::BodyType::Dynamic,
                            circle.centre(),
                            velocity,
-                           math::Vec2f::Zero(),
+                           crackitos_core::math::Vec2f::Zero(),
                            false,
-                           random::Range(1.0f, 50.0f)
+                           crackitos_core::random::Range(1.0f, 50.0f)
         );
-        physics::Collider collider(circle, random::Range(1.0f, 1.0f), 0, true);
+        physics::Collider collider(circle, crackitos_core::random::Range(1.0f, 1.0f), 0, true);
         GameObject object(body, collider, circle.radius());
 
         objects_[index] = object;
         RegisterObject(objects_[index]);
     }
 
-    void TriggerSystem::CreateObject(size_t index, math::AABB& aabb)
+    void TriggerSystem::CreateObject(size_t index, crackitos_core::math::AABB& aabb)
     {
-        math::Vec2f velocity(random::Range(-50.0f, 50.0f), random::Range(-50.0f, 50.0f));
+        crackitos_core::math::Vec2f velocity(crackitos_core::random::Range(-50.0f, 50.0f), crackitos_core::random::Range(-50.0f, 50.0f));
 
         physics::Body body(physics::BodyType::Dynamic,
                            aabb.GetCentre(),
                            velocity,
-                           math::Vec2f::Zero(),
+                           crackitos_core::math::Vec2f::Zero(),
                            false,
-                           random::Range(1.0f, 50.0f)
+                           crackitos_core::random::Range(1.0f, 50.0f)
         );
 
-        physics::Collider collider(aabb, random::Range(1.0f, 1.0f), 0, true);
+        physics::Collider collider(aabb, crackitos_core::random::Range(1.0f, 1.0f), 0, true);
         GameObject object(body, collider, aabb.half_size_length());
 
         objects_[index] = object;
@@ -111,14 +111,14 @@ namespace crackitos_physics::samples
         collider_to_object_map_.erase(&object.collider());
     }
 
-    void TriggerSystem::Update(const crackitos_physics::commons::fp delta_time)
+    void TriggerSystem::Update(const crackitos_core::commons::fp delta_time)
     {
         UpdateShapes(delta_time);
         BroadPhase();
         NarrowPhase();
     }
 
-    void TriggerSystem::UpdateShapes(const crackitos_physics::commons::fp delta_time)
+    void TriggerSystem::UpdateShapes(const crackitos_core::commons::fp delta_time)
     {
         for (auto& object : objects_)
         {
@@ -129,28 +129,28 @@ namespace crackitos_physics::samples
 
             auto position = body.position();
 
-            const crackitos_physics::commons::fp radius = object.radius();
+            const crackitos_core::commons::fp radius = object.radius();
 
             //Check for collision with window borders
             if (position.x - radius < 0)
             {
                 position.x = radius;
-                body.set_velocity(math::Vec2f(-body.velocity().x, body.velocity().y));
+                body.set_velocity(crackitos_core::math::Vec2f(-body.velocity().x, body.velocity().y));
             }
             if (position.x + radius > 1200)
             {
                 position.x = 1200 - radius;
-                body.set_velocity(math::Vec2f(-body.velocity().x, body.velocity().y));
+                body.set_velocity(crackitos_core::math::Vec2f(-body.velocity().x, body.velocity().y));
             }
             if (position.y - radius < 0)
             {
                 position.y = radius;
-                body.set_velocity(math::Vec2f(body.velocity().x, -body.velocity().y));
+                body.set_velocity(crackitos_core::math::Vec2f(body.velocity().x, -body.velocity().y));
             }
             if (position.y + radius > 800)
             {
                 position.y = 800 - radius;
-                body.set_velocity(math::Vec2f(body.velocity().x, -body.velocity().y));
+                body.set_velocity(crackitos_core::math::Vec2f(body.velocity().x, -body.velocity().y));
             }
 
             //Update the collider's position
@@ -181,7 +181,7 @@ namespace crackitos_physics::samples
                 auto rangeB = colliderB.GetBoundingBox();
 
                 // Check for AABB overlap
-                if (math::Intersect(rangeA, rangeB))
+                if (crackitos_core::math::Intersect(rangeA, rangeB))
                 {
                     GameObjectPair pair{&objectA, &objectB};
                     new_potential_pairs[pair] = true;
@@ -218,7 +218,7 @@ namespace crackitos_physics::samples
                 {
                     // Avoid self-collision
                     // Only test AABB overlap in broad phase
-                    if (math::Intersect(range, otherCollider->GetBoundingBox()))
+                    if (crackitos_core::math::Intersect(range, otherCollider->GetBoundingBox()))
                     {
                         GameObject* objectA = collider_to_object_map_[&collider];
                         GameObject* objectB = collider_to_object_map_[otherCollider];
@@ -249,7 +249,7 @@ namespace crackitos_physics::samples
 
             const bool intersect = std::visit([](auto&& shape_a, auto&& shape_b)
                                               {
-                                                  return math::Intersect(shape_a, shape_b);
+                                                  return crackitos_core::math::Intersect(shape_a, shape_b);
                                               }, pair.gameObjectA_->collider().shape(),
                                               pair.gameObjectB_->collider().shape());
 

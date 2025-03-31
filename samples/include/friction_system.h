@@ -25,16 +25,16 @@ class FrictionSystem {
   //Mapping from Collider to GameObject
 
   //Create the gravity for the scene
-  distance::Meter gravity_in_meter_x = distance::Meter(0.0f);
-  distance::Meter gravity_in_meter_y = distance::Meter(0.9f);
-  const math::Vec2f
-      gravity = math::Vec2f(static_cast<float>(distance::Convert<distance::Meter, distance::Pixel>(
+  crackitos_core::distance::Meter gravity_in_meter_x = crackitos_core::distance::Meter(0.0f);
+  crackitos_core::distance::Meter gravity_in_meter_y = crackitos_core::distance::Meter(0.9f);
+  const crackitos_core::math::Vec2f
+      gravity = crackitos_core::math::Vec2f(static_cast<float>(crackitos_core::distance::Convert<crackitos_core::distance::Meter, crackitos_core::distance::Pixel>(
                                 gravity_in_meter_x).value),
-                            static_cast<float>(distance::Convert<distance::Meter,
-                                                                 distance::Pixel>(gravity_in_meter_y).value));
+                            static_cast<float>(crackitos_core::distance::Convert<crackitos_core::distance::Meter,
+                                                                 crackitos_core::distance::Pixel>(gravity_in_meter_y).value));
 
-  timer::Timer *timer_ = nullptr;
-  math::AABB frame_bounds_ = math::AABB(math::Vec2f(0, 0), math::Vec2f(kWindowWidth, kWindowHeight));
+  crackitos_core::timer::Timer *timer_ = nullptr;
+  crackitos_core::math::AABB frame_bounds_ = crackitos_core::math::AABB(crackitos_core::math::Vec2f(0, 0), crackitos_core::math::Vec2f(kWindowWidth, kWindowHeight));
 
  public:
   FrictionSystem();
@@ -46,10 +46,10 @@ class FrictionSystem {
   std::vector<GameObject> objects() { return objects_; }
   [[nodiscard]] physics::Quadtree &quadtree() { return quadtree_; }
 
-  void SpawnShape(math::Vec2f pos, math::ShapeType type);
-  void CreateObject(size_t index, math::Circle &circle);
-  void CreateObject(size_t index, math::AABB &aabb);
-  //void CreateObject(size_t index, math::Polygon& polygon);
+  void SpawnShape(crackitos_core::math::Vec2f pos, crackitos_core::math::ShapeType type);
+  void CreateObject(size_t index, crackitos_core::math::Circle &circle);
+  void CreateObject(size_t index, crackitos_core::math::AABB &aabb);
+  //void CreateObject(size_t index, crackitos_core::math::Polygon& polygon);
   void CreateGround();
   void DeleteObject(size_t index);
   void RemoveOutOfBoundsObjects();
@@ -57,8 +57,8 @@ class FrictionSystem {
   void RegisterObject(GameObject &object);
   void UnregisterObject(GameObject &object);
 
-  void Update(crackitos_physics::commons::fp delta_time);
-  void UpdateShapes(crackitos_physics::commons::fp delta_time);
+  void Update(crackitos_core::commons::fp delta_time);
+  void UpdateShapes(crackitos_core::commons::fp delta_time);
 
   void SimplisticBroadPhase();
   void BroadPhase();
