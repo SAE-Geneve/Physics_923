@@ -83,21 +83,22 @@ namespace crackitos_physics::samples
         timer::Timer timer_{};
         GraphicsManager graphics_manager_{};
         PlanetSystem planet_system_{};
+        TriggerSystem trigger_system_{};
         FrictionSystem friction_system_{};
         TestingSystem testing_system_{};
 
-        ImGuiInterface imgui_interface_{};
+  ImGuiInterface imgui_interface_{};
 
-        void HandleEvents();
-        void RenderQuadtree(SDL_Renderer* renderer, physics::Quadtree& quadtree);
+  void HandleEvents();
+  void RenderQuadtree(SDL_Renderer* renderer, physics::Quadtree& quadtree);
 
-    public:
-        GameEngine();
-        ~GameEngine();
+ public:
+  GameEngine();
+  ~GameEngine();
 
-        void ChangeScene(SystemScene new_sample);
+  void ChangeScene(SystemScene new_sample);
 
-        void Run();
-    };
+  void Run();
+};
 } // namespace samples
 #endif // PHYSICS_SAMPLES_GAME_ENGINE_H_

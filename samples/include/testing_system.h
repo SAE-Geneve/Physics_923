@@ -18,18 +18,19 @@ namespace crackitos_physics::samples {
         SDL_Color color = {255, 13, 132, 255};
     };
 
-    // Contact Listener for Logging Events
-    class TestingContactListener final : public physics::ContactListener
-    {
-    public:
-        void OnTriggerEnter(const physics::ColliderPair& pair) override;
-        void OnTriggerStay(const physics::ColliderPair& pair) override;
-        void OnTriggerExit(const physics::ColliderPair& pair) override;
 
-        void OnCollisionEnter(const physics::ColliderPair& pair) override;
-        void OnCollisionStay(const physics::ColliderPair& pair) override;
-        void OnCollisionExit(const physics::ColliderPair& pair) override;
-    };
+    // Contact Listener for Logging Events
+//    class TestingContactListener final : public physics::ContactListener
+//    {
+//    public:
+//        void OnTriggerEnter(const physics::ColliderPair& pair) override;
+//        void OnTriggerStay(const physics::ColliderPair& pair) override;
+//        void OnTriggerExit(const physics::ColliderPair& pair) override;
+//
+//        void OnCollisionEnter(const physics::ColliderPair& pair) override;
+//        void OnCollisionStay(const physics::ColliderPair& pair) override;
+//        void OnCollisionExit(const physics::ColliderPair& pair) override;
+//    };
 
     // Main Testing System
     class TestingSystem {
@@ -56,6 +57,7 @@ namespace crackitos_physics::samples {
 
         [[nodiscard]] physics::PhysicsWorld& physics_world() { return physics_world_; }
         [[nodiscard]] const physics::PhysicsWorld& physics_world() const { return physics_world_; } // Const version
+
     };
 } // namespace crackitos_physics::samples
 

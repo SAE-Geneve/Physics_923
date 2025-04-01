@@ -6,16 +6,15 @@
 #include "imgui_interface.h"
 #include "random.h"
 
-namespace crackitos_physics::samples
-{
-    GameEngine::GameEngine()
-    {
-        is_running_ = true;
-        imgui_interface_.Initialize(&display_, this);
-    }
+namespace crackitos_physics::samples {
+GameEngine::GameEngine() {
+  is_running_ = true;
+  imgui_interface_.Initialize(&display_, this);
+}
 
-    GameEngine::~GameEngine()
+GameEngine::~GameEngine()
     = default;
+
 
     void GameEngine::ChangeScene(const SystemScene new_sample)
     {
@@ -61,11 +60,9 @@ namespace crackitos_physics::samples
             break;
         case SystemScene::TestingSystemScene:
             testing_system_.Initialize();
-            break;
-        default:
-            break;
-        }
-    }
+    default:break;
+  }
+}
 
        void GameEngine::HandleEvents()
      {
@@ -140,43 +137,40 @@ namespace crackitos_physics::samples
              // }
          }
      }
-
-    void GameEngine::RenderQuadtree(SDL_Renderer* renderer, physics::Quadtree& quadtree)
-    {
-        quadtree.UpdateBoundingBoxes();
-        const std::vector<math::AABB>& boxes = quadtree.GetBoundingBoxes(); // No copying
-
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        for (const auto& box : boxes)
-        {
-            SDL_Rect rect;
-            rect.x = static_cast<int>(box.min_bound().x);
-            rect.y = static_cast<int>(box.min_bound().y);
-            rect.w = static_cast<int>(box.max_bound().x - box.min_bound().x);
-            rect.h = static_cast<int>(box.max_bound().y - box.min_bound().y);
-
-            SDL_RenderDrawRect(renderer, &rect);
-        }
     }
 
+void GameEngine::RenderQuadtree(SDL_Renderer *renderer, physics::Quadtree &quadtree) {
+  quadtree.UpdateBoundingBoxes();
+  const std::vector<math::AABB> &boxes = quadtree.GetBoundingBoxes(); // No copying
 
-    void GameEngine::Run()
-    {
-        ChangeScene(selected_scene_);
-        //Begin():
-        timer_.SetFixedDeltaTime(1.0f / 60.0f); // Fixed step of 60 FPS (0.0167 sec)
+  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+  for (const auto &box : boxes) {
+    SDL_Rect rect;
+    rect.x = static_cast<int>(box.min_bound().x);
+    rect.y = static_cast<int>(box.min_bound().y);
+    rect.w = static_cast<int>(box.max_bound().x - box.min_bound().x);
+    rect.h = static_cast<int>(box.max_bound().y - box.min_bound().y);
 
-        while (is_running_)
-        {
-            // Handle events
-            HandleEvents();
-            imgui_interface_.Update(is_running_);
+    SDL_RenderDrawRect(renderer, &rect);
+  }
+}
 
-            // Update the timer
-            timer_.Tick();
-            crackitos_physics::commons::fp delta_time = timer_.DeltaTime();
+void GameEngine::Run() {
+  ChangeScene(selected_scene_);
+  //Begin():
+  timer_.SetFixedDeltaTime(1.0f / 60.0f); // Fixed step of 60 FPS (0.0167 sec)
+
+  while (is_running_) {
+    // Handle events
+    HandleEvents();
+    imgui_interface_.Update(is_running_);
+
+    // Update the timer
+    timer_.Tick();
+    crackitos_physics::commons::fp delta_time = timer_.DeltaTime();
 
 
+   
             while (timer_.FixedDeltaTimeStep())
             {
                 // Update all systems with the fixed time step
@@ -185,14 +179,14 @@ namespace crackitos_physics::samples
                     planet_system_.Update(timer_.FixedDeltaTime() * imgui_interface_.speed_multiplier() * 1000.0f,
                                            imgui_interface_.planets_colour());
                 }
-                // else if (selected_scene_ == SystemScene::TriggerSystemScene)
-                // {
-                //     trigger_system_.Update(timer_.FixedDeltaTime() * imgui_interface_.speed_multiplier());
-                // }
-                // else if (selected_scene_ == SystemScene::CollisionSystemScene)
-                // {
-                //     collision_system_.Update(timer_.FixedDeltaTime() * imgui_interface_.speed_multiplier());
-                // }
+                 else if (selected_scene_ == SystemScene::TriggerSystemScene)
+                 {
+                     trigger_system_.Update(timer_.FixedDeltaTime() * imgui_interface_.speed_multiplier());
+                 }
+                 else if (selected_scene_ == SystemScene::CollisionSystemScene)
+                 {
+                     collision_system_.Update(timer_.FixedDeltaTime() * imgui_interface_.speed_multiplier());
+                 }
                 else if (selected_scene_ == SystemScene::FrictionSystemScene)
                 {
                     friction_system_.Update(timer_.FixedDeltaTime() * imgui_interface_.speed_multiplier() * 4.f);
@@ -203,9 +197,40 @@ namespace crackitos_physics::samples
                 }
             }
 
-            // Render
-            display_.Clear();
-            graphics_manager_.Clear();
+    // Render
+    display_.Clear();
+    graphics_manager_.Clear();
+
+    // Render all systems based on the current state
+    // if (selected_scene_ == SystemScene::TestingSystemScene) {
+
+      //Not finished, must go in trigger system, wish me luck
+      // for (const auto &obj : trigger_system_.objects()) {
+        // const auto &collider = trigger_system_ ;
+       //  const auto &body = trigger_system_ ;
+      // }
+
+      //My copy sheet
+      // for (const auto &obj : testing_system_.testing_objects()) {
+      //   const auto &collider = testing_system_.physics_world().GetCollider(obj.collider);
+      //   const auto &body = testing_system_.physics_world().GetBody(obj.body);
+
+      //   switch (collider.GetShapeType()) {
+       //    case math::ShapeType::kAABB:
+       //      graphics_manager_.CreateAABB(
+       //          collider.GetBoundingBox().min_bound(),
+       //          collider.GetBoundingBox().max_bound(),
+       //          obj.color, true);
+
+       //      break;
+
+        //   case math::ShapeType::kCircle:
+        //     graphics_manager_.CreateCircle(
+        //         body.position(),
+        //         collider.GetBoundingBox().half_size_vec().x, // Radius
+        //         obj.color, false);
+        //     break;
+
 
             // Render all systems based on the current state
             if (selected_scene_ == SystemScene::PlanetSystemScene)
