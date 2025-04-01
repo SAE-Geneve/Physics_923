@@ -8,13 +8,13 @@
 
 namespace crackitos_physics::physics
 {
-    constexpr commons::fp kPenetrationEpsilon = 0.0001f;
-    constexpr commons::fp kSleepVelocityThreshold = 0.5f;
+    constexpr crackitos_core::commons::fp kPenetrationEpsilon = 0.0001f;
+    constexpr crackitos_core::commons::fp kSleepVelocityThreshold = 0.5f;
 
     struct ContactSolver
     {
-        math::Vec2f contact_point_ = math::Vec2f::Zero();
-        math::Vec2f contact_normal_ = math::Vec2f::Zero();
+        crackitos_core::math::Vec2f contact_point_ = crackitos_core::math::Vec2f::Zero();
+        crackitos_core::math::Vec2f contact_normal_ = crackitos_core::math::Vec2f::Zero();
 
         commons::fp restitution_ = 0.0f;
         commons::fp penetration_ = 0.0f;

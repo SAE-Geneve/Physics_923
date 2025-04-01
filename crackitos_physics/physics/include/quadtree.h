@@ -16,7 +16,7 @@ namespace crackitos_physics::physics
 
     struct QuadtreeNode
     {
-        math::AABB bounding_box_{};
+        crackitos_core::math::AABB bounding_box_{};
         std::array<std::unique_ptr<QuadtreeNode>, 4> children_{}; //Unique pointers for automatic memory management
         std::vector<ColliderHandle> colliders_; //Colliders stored in each node
         int depth_;

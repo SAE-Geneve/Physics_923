@@ -97,9 +97,9 @@ namespace crackitos_physics::samples
                     {
                         int mouse_x, mouse_y;
                         SDL_GetMouseState(&mouse_x, &mouse_y);
-                        const auto mouse_pos = math::Vec2f(static_cast<commons::fp>(mouse_x),
-                                                           static_cast<commons::fp>(mouse_y));
-                        friction_system_.SpawnShape(mouse_pos, math::ShapeType::kCircle);
+                        const auto mouse_pos = crackitos_core::math::Vec2f(static_cast<crackitos_core::commons::fp>(mouse_x),
+                                                           static_cast<crackitos_core::commons::fp>(mouse_y));
+                        friction_system_.SpawnShape(mouse_pos, crackitos_core::math::ShapeType::kCircle);
                     }
                     if (selected_scene_ == SystemScene::TestingSystemScene)
                     {
@@ -116,9 +116,9 @@ namespace crackitos_physics::samples
                     {
                         int mouse_x, mouse_y;
                         SDL_GetMouseState(&mouse_x, &mouse_y);
-                        const auto mouse_pos = math::Vec2f(static_cast<commons::fp>(mouse_x),
-                                                           static_cast<commons::fp>(mouse_y));
-                        friction_system_.SpawnShape(mouse_pos, math::ShapeType::kAABB);
+                        const auto mouse_pos = crackitos_core::math::Vec2f(static_cast<crackitos_core::commons::fp>(mouse_x),
+                                                           static_cast<crackitos_core::commons::fp>(mouse_y));
+                        friction_system_.SpawnShape(mouse_pos, crackitos_core::math::ShapeType::kAABB);
                     }
                     if (selected_scene_ == SystemScene::TestingSystemScene)
                     {
@@ -142,7 +142,7 @@ namespace crackitos_physics::samples
     void GameEngine::RenderQuadtree(SDL_Renderer* renderer, physics::Quadtree& quadtree)
     {
         quadtree.UpdateBoundingBoxes();
-        const std::vector<math::AABB>& boxes = quadtree.GetBoundingBoxes(); // No copying
+        const std::vector<crackitos_core::math::AABB>& boxes = quadtree.GetBoundingBoxes(); // No copying
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         for (const auto& box : boxes)
@@ -171,7 +171,7 @@ namespace crackitos_physics::samples
 
             // Update the timer
             timer_.Tick();
-            commons::fp delta_time = timer_.DeltaTime();
+            crackitos_core::commons::fp delta_time = timer_.DeltaTime();
 
 
             while (timer_.FixedDeltaTimeStep())
@@ -223,14 +223,14 @@ namespace crackitos_physics::samples
 
                     switch (collider.GetShapeType())
                     {
-                    case math::ShapeType::kAABB:
+                    case crackitos_core::math::ShapeType::kAABB:
                         graphics_manager_.CreateAABB(
                             collider.GetBoundingBox().min_bound(),
                             collider.GetBoundingBox().max_bound(),
                             obj.color, true);
                         break;
 
-                    case math::ShapeType::kCircle:
+                    case crackitos_core::math::ShapeType::kCircle:
                         graphics_manager_.CreateCircle(
                             body.position(),
                             collider.GetBoundingBox().half_size_vec().x, // Radius
@@ -256,14 +256,14 @@ namespace crackitos_physics::samples
 
                     switch (collider.GetShapeType())
                     {
-                    case math::ShapeType::kAABB:
+                    case crackitos_core::math::ShapeType::kAABB:
                         graphics_manager_.CreateAABB(
                             collider.GetBoundingBox().min_bound(),
                             collider.GetBoundingBox().max_bound(),
                             obj.color, true);
                         break;
 
-                    case math::ShapeType::kCircle:
+                    case crackitos_core::math::ShapeType::kCircle:
                         graphics_manager_.CreateCircle(
                             body.position(),
                             collider.GetBoundingBox().half_size_vec().x, // Radius
@@ -288,14 +288,14 @@ namespace crackitos_physics::samples
 
                     switch (collider.GetShapeType())
                     {
-                    case math::ShapeType::kAABB:
+                    case crackitos_core::math::ShapeType::kAABB:
                         graphics_manager_.CreateAABB(
                             collider.GetBoundingBox().min_bound(),
                             collider.GetBoundingBox().max_bound(),
                             obj.color, true);
                         break;
 
-                    case math::ShapeType::kCircle:
+                    case crackitos_core::math::ShapeType::kCircle:
                         graphics_manager_.CreateCircle(
                             body.position(),
                             collider.GetBoundingBox().half_size_vec().x, // Radius

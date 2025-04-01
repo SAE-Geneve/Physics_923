@@ -69,13 +69,13 @@ namespace crackitos_physics::samples
     }
 
 
-    void FrictionSystem::SpawnShape(const math::Vec2f pos, const math::ShapeType type)
+    void FrictionSystem::SpawnShape(const crackitos_core::math::Vec2f pos, const crackitos_core::math::ShapeType type)
     {
         physics::BodyHandle body;
 
         switch (type)
         {
-        case math::ShapeType::kAABB:
+        case crackitos_core::math::ShapeType::kAABB:
             {
                 float half_size_x = random::Range(5.f, 20.f);
                 float half_size_y = random::Range(5.f, 20.f);
@@ -121,7 +121,7 @@ namespace crackitos_physics::samples
         physics_world_.CreateCollider(body, collider_def);
     }
 
-    void FrictionSystem::Update(const crackitos_physics::commons::fp delta_time)
+    void FrictionSystem::Update(const crackitos_core::commons::fp delta_time)
     {
         physics_world_.Update(delta_time);
         UpdateTestingObjects();

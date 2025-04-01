@@ -80,7 +80,7 @@ namespace crackitos_physics::samples
         bool is_running_;
 
         Display display_{};
-        timer::Timer timer_{};
+        crackitos_core::timer::Timer timer_{};
         GraphicsManager graphics_manager_{};
         PlanetSystem planet_system_{};
         TriggerSystem trigger_system_{};

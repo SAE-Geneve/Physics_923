@@ -25,10 +25,10 @@ namespace crackitos_physics::physics
     private:
         std::variant<math::Circle, math::AABB, math::Polygon> shape_ = math::Circle(0);
 
-        commons::fp bounciness_ = 0.0f;
-        commons::fp friction_ = 0.0f;
-        commons::fp dynamic_friction_ = 0.0f;
-        commons::fp offset_ = 0.0f;
+  crackitos_core::commons::fp bounciness_ = 0.0f;
+  crackitos_core::commons::fp friction_ = 0.0f;
+  crackitos_core::commons::fp dynamic_friction_ = 0.0f;
+  crackitos_core::commons::fp offset_ = 0.0f;
 
         bool is_trigger_ = false;
         BodyHandle body_handle_;
@@ -36,9 +36,9 @@ namespace crackitos_physics::physics
     public:
         Collider() = default;
 
-        Collider(const std::variant<math::Circle, math::AABB, math::Polygon>& shape,
-                 const commons::fp bounciness,
-                 const commons::fp friction,
+        Collider(const std::variant<crackitos_core::math::Circle, crackitos_core::math::AABB, crackitos_core::math::Polygon>& shape,
+                 const crackitos_core::commons::fp bounciness,
+                 const crackitos_core::commons::fp friction,
                  const bool is_trigger,
                  const BodyHandle body_handle)
             : shape_(shape),
@@ -50,20 +50,20 @@ namespace crackitos_physics::physics
         {
         }
 
-        [[nodiscard]] std::variant<math::Circle, math::AABB, math::Polygon> shape() const { return shape_; }
-        [[nodiscard]] commons::fp bounciness() const { return bounciness_; }
-        [[nodiscard]] commons::fp friction() const { return friction_; }
-        [[nodiscard]] commons::fp dynamic_friction() const { return dynamic_friction_; }
+        [[nodiscard]] std::variant<crackitos_core::math::Circle, crackitos_core::math::AABB, crackitos_core::math::Polygon> shape() const { return shape_; }
+        [[nodiscard]] crackitos_core::commons::fp bounciness() const { return bounciness_; }
+        [[nodiscard]] crackitos_core::commons::fp friction() const { return friction_; }
+        [[nodiscard]] crackitos_core::commons::fp dynamic_friction() const { return dynamic_friction_; }
         [[nodiscard]] bool is_trigger() const { return is_trigger_; }
         [[nodiscard]] BodyHandle body_handle() const { return body_handle_; }
 
-        void set_shape(const std::variant<math::Circle, math::AABB, math::Polygon>& shape) { shape_ = shape; }
-        void set_bounciness(const commons::fp restitution) { bounciness_ = restitution; }
-        void set_friction(const commons::fp friction) { friction_ = friction; }
+        void set_shape(const std::variant<crackitos_core::math::Circle, crackitos_core::math::AABB, crackitos_core::math::Polygon>& shape) { shape_ = shape; }
+        void set_bounciness(const crackitos_core::commons::fp restitution) { bounciness_ = restitution; }
+        void set_friction(const crackitos_core::commons::fp friction) { friction_ = friction; }
         void set_is_trigger(const bool is_trigger) { is_trigger_ = is_trigger; }
         void set_body_handle(const BodyHandle& handle) { body_handle_ = handle; }
 
-        [[nodiscard]] math::AABB GetBoundingBox() const
+        [[nodiscard]] crackitos_core::math::AABB GetBoundingBox() const
         {
             return std::visit([](auto&& shape)
             {
@@ -71,7 +71,7 @@ namespace crackitos_physics::physics
             }, shape_);
         }
 
-        [[nodiscard]] math::ShapeType GetShapeType() const
+        [[nodiscard]] crackitos_core::math::ShapeType GetShapeType() const
         {
             return std::visit([](auto&& shape)
             {
@@ -79,7 +79,7 @@ namespace crackitos_physics::physics
             }, shape_);
         }
 
-        void UpdatePosition(const math::Vec2f position)
+        void UpdatePosition(const crackitos_core::math::Vec2f position)
         {
             std::visit([&position](auto&& shape)
             {
