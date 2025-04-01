@@ -73,7 +73,7 @@ namespace crackitos_physics::physics
         collider_generations_[collider.id]++;
     }
 
-    const Body& PhysicsWorld::GetBody(const BodyHandle body) const
+    Body& PhysicsWorld::GetBody(const BodyHandle body)
     {
         if (body.id < 0 || body.id >= static_cast<int>(bodies_.size()) || body_generations_[body.id] != body.generation)
         {
@@ -84,7 +84,8 @@ namespace crackitos_physics::physics
 
     const Collider& PhysicsWorld::GetCollider(const ColliderHandle collider) const
     {
-        if (collider.id < 0 || collider.id >= static_cast<int>(colliders_.size()) || collider_generations_[collider.id] != collider.generation)
+        if (collider.id < 0 || collider.id >= static_cast<int>(colliders_.size()) || collider_generations_[collider.id]
+            != collider.generation)
         {
             throw std::out_of_range("Invalid ColliderHandle");
         }
@@ -128,7 +129,7 @@ namespace crackitos_physics::physics
     }
 
     void PhysicsWorld::set_out_of_bounds_margins(const float left, const float right, const float top,
-        const float bottom)
+                                                 const float bottom)
     {
         out_of_bounds_margin_left_ = left;
         out_of_bounds_margin_right_ = right;
@@ -142,67 +143,64 @@ namespace crackitos_physics::physics
         for (size_t i = 0; i < bodies_.size(); ++i)
         {
             auto& body = bodies_[i];
-            if (body.type() != BodyType::Static)
-            {
-                body.Update(time_step_, gravity_);
+            body.Update(time_step_, gravity_);
 
-                // Ensure collider follows body movement
-                if (i < colliders_.size()) // Sanity check
-                {
-                    colliders_[i].UpdatePosition(body.position());
-                }
+            // Ensure collider follows body movement
+            if (i < colliders_.size())
+            {
+                colliders_[i].UpdatePosition(body.position());
             }
         }
     }
 
 
     void PhysicsWorld::RemoveOutOfBoundsObjects()
-{
-    if (!out_of_bounds_removal_state_) return; //Skip if disabled
-
-    for (size_t i = bodies_.size(); i-- > 0;) //Reverse iteration for safe removal
     {
-        bool is_out_of_bounds = false;
+        if (!out_of_bounds_removal_state_) return; //Skip if disabled
 
-        if (i < colliders_.size()) //Ensure collider exists
+        for (size_t i = bodies_.size(); i-- > 0;) //Reverse iteration for safe removal
         {
-            const auto& bounding_box = colliders_[i].GetBoundingBox();
+            bool is_out_of_bounds = false;
 
-            //Check if the collider is fully outside with its respective margin
-            if (bounding_box.max_bound().x < frame_bounds_.min_bound().x - out_of_bounds_margin_left_ ||  // Left
-                bounding_box.min_bound().x > frame_bounds_.max_bound().x + out_of_bounds_margin_right_ || // Right
-                bounding_box.max_bound().y < frame_bounds_.min_bound().y - out_of_bounds_margin_top_ ||   // Top
-                bounding_box.min_bound().y > frame_bounds_.max_bound().y + out_of_bounds_margin_bottom_)  // Bottom
+            if (i < colliders_.size()) //Ensure collider exists
             {
-                is_out_of_bounds = true;
-            }
-        }
-        else //Use body position if collider doesn't exist
-        {
-            const auto& body_pos = bodies_[i].position();
+                const auto& bounding_box = colliders_[i].GetBoundingBox();
 
-            if (body_pos.x < frame_bounds_.min_bound().x - out_of_bounds_margin_left_ ||  // Left
-                body_pos.x > frame_bounds_.max_bound().x + out_of_bounds_margin_right_ || // Right
-                body_pos.y < frame_bounds_.min_bound().y - out_of_bounds_margin_top_ ||   // Top
-                body_pos.y > frame_bounds_.max_bound().y + out_of_bounds_margin_bottom_)  // Bottom
-            {
-                is_out_of_bounds = true;
+                //Check if the collider is fully outside with its respective margin
+                if (bounding_box.max_bound().x < frame_bounds_.min_bound().x - out_of_bounds_margin_left_ || // Left
+                    bounding_box.min_bound().x > frame_bounds_.max_bound().x + out_of_bounds_margin_right_ || // Right
+                    bounding_box.max_bound().y < frame_bounds_.min_bound().y - out_of_bounds_margin_top_ || // Top
+                    bounding_box.min_bound().y > frame_bounds_.max_bound().y + out_of_bounds_margin_bottom_) // Bottom
+                {
+                    is_out_of_bounds = true;
+                }
             }
-        }
+            else //Use body position if collider doesn't exist
+            {
+                const auto& body_pos = bodies_[i].position();
 
-        if (is_out_of_bounds)
-        {
-            if (i < body_generations_.size()) //Ensure valid index
-            {
-                RemoveBody({static_cast<int>(i), body_generations_[i]});
+                if (body_pos.x < frame_bounds_.min_bound().x - out_of_bounds_margin_left_ || // Left
+                    body_pos.x > frame_bounds_.max_bound().x + out_of_bounds_margin_right_ || // Right
+                    body_pos.y < frame_bounds_.min_bound().y - out_of_bounds_margin_top_ || // Top
+                    body_pos.y > frame_bounds_.max_bound().y + out_of_bounds_margin_bottom_) // Bottom
+                {
+                    is_out_of_bounds = true;
+                }
             }
-            if (i < collider_generations_.size()) //Ensure valid index
+
+            if (is_out_of_bounds)
             {
-                RemoveCollider({static_cast<int>(i), collider_generations_[i]});
+                if (i < body_generations_.size()) //Ensure valid index
+                {
+                    RemoveBody({static_cast<int>(i), body_generations_[i]});
+                }
+                if (i < collider_generations_.size()) //Ensure valid index
+                {
+                    RemoveCollider({static_cast<int>(i), collider_generations_[i]});
+                }
             }
         }
     }
-}
 
 
     void PhysicsWorld::BroadPhase()
@@ -245,8 +243,6 @@ namespace crackitos_physics::physics
 
         quadtree_.BuildPotentialPairs();
     }
-
-
 
     void PhysicsWorld::NarrowPhase()
     {
@@ -361,5 +357,4 @@ namespace crackitos_physics::physics
             solver.ResolveContact();
         }
     }
-
 } // crackitos_physics

@@ -4,68 +4,65 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "contact_listener.h"
 #include "display.h"
 #include "game_object.h"
 #include "quadtree.h"
 #include "shape.h"
 #include "timer.h"
 #include "distance.h"
+#include "physics_world.h"
 
-namespace crackitos_physics::samples {
-class FrictionSystem {
- private:
-  std::vector<GameObject> objects_;
+namespace crackitos_physics::samples
+{
+    //For testing purposes, this would be an implementation specific GameObject
+    struct FrictionObject
+    {
+        physics::BodyHandle body;
+        physics::ColliderHandle collider;
+        SDL_Color color = {255, 13, 132, 255};
+    };
 
-  physics::Quadtree quadtree_;
+    // Contact Listener for Logging Events
+    class FrictionContactListener final : public physics::ContactListener
+    {
+    public:
+        void OnTriggerEnter(const physics::ColliderPair& pair) override;
+        void OnTriggerStay(const physics::ColliderPair& pair) override;
+        void OnTriggerExit(const physics::ColliderPair& pair) override;
 
-  std::unordered_map<GameObjectPair, bool> potential_pairs_;
-  std::unordered_set<GameObjectPair> active_pairs_;
+        void OnCollisionEnter(const physics::ColliderPair& pair) override;
+        void OnCollisionStay(const physics::ColliderPair& pair) override;
+        void OnCollisionExit(const physics::ColliderPair& pair) override;
+    };
 
-  std::unordered_map<physics::Collider *, GameObject *> collider_to_object_map_;
-  //Mapping from Collider to GameObject
+    class FrictionSystem
+    {
+    private:
+        physics::PhysicsWorld physics_world_;
+        FrictionContactListener contact_listener_;
 
-  //Create the gravity for the scene
-  distance::Meter gravity_in_meter_x = distance::Meter(0.0f);
-  distance::Meter gravity_in_meter_y = distance::Meter(9.81f);
-  const math::Vec2f
-      gravity = math::Vec2f(static_cast<float>(distance::Convert<distance::Meter, distance::Pixel>(
-                                gravity_in_meter_x).value),
-                            static_cast<float>(distance::Convert<distance::Meter,
-                                                                 distance::Pixel>(gravity_in_meter_y).value));
+        std::vector<FrictionObject> friction_objects_;
 
-  timer::Timer *timer_ = nullptr;
-  math::AABB frame_bounds_ = math::AABB(math::Vec2f(0, 0), math::Vec2f(kWindowWidth, kWindowHeight));
+    public:
+        FrictionSystem();
+        ~FrictionSystem();
 
- public:
-  FrictionSystem();
-  ~FrictionSystem();
+        void Initialize();
+        void Clear();
 
-  void Initialize();
-  void Clear();
+        void SpawnShape(math::Vec2f pos, math::ShapeType type);
+        void CreateGround();
 
-  std::vector<GameObject> objects() { return objects_; }
-  [[nodiscard]] physics::Quadtree &quadtree() { return quadtree_; }
+        void Update(commons::fp delta_time);
+        void SetGravity(const math::Vec2f& gravity);
 
-  void SpawnShape(math::Vec2f pos, math::ShapeType type);
-  void CreateObject(size_t index, math::Circle &circle);
-  void CreateObject(size_t index, math::AABB &aabb);
-  //void CreateObject(size_t index, math::Polygon& polygon);
-  void CreateGround();
-  void DeleteObject(size_t index);
-  void RemoveOutOfBoundsObjects();
+        void UpdateTestingObjects();
 
-  void RegisterObject(GameObject &object);
-  void UnregisterObject(GameObject &object);
+        [[nodiscard]] const std::vector<FrictionObject>& friction_objects() const { return friction_objects_; }
 
-  void Update(crackitos_physics::commons::fp delta_time);
-  void UpdateShapes(crackitos_physics::commons::fp delta_time);
-
-  void SimplisticBroadPhase();
-  void BroadPhase();
-  void NarrowPhase();
-  void ResolveCollisionPair(const GameObjectPair& pair, bool is_new_pair);
-
-  static void OnPairCollideEnd(const GameObjectPair &pair);
-};
+        [[nodiscard]] physics::PhysicsWorld& physics_world() { return physics_world_; }
+        [[nodiscard]] const physics::PhysicsWorld& physics_world() const { return physics_world_; } // Const version
+    };
 } // namespace samples
 #endif // PHYSICS_SAMPLES_FRICTION_SYSTEM_H_

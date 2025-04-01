@@ -39,6 +39,7 @@ namespace crackitos_physics::samples
     TestingSystem::TestingSystem()
     {
         physics_world_.SetContactListener(&contact_listener_);
+        testing_objects_.reserve(1000);
     }
 
     TestingSystem::~TestingSystem()
@@ -60,6 +61,7 @@ namespace crackitos_physics::samples
 
     void TestingSystem::Clear()
     {
+        testing_objects_.clear();
         physics_world_.Clear();
     }
 

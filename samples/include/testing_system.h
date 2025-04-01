@@ -15,7 +15,7 @@ namespace crackitos_physics::samples {
     {
         physics::BodyHandle body;
         physics::ColliderHandle collider;
-        SDL_Color color;
+        SDL_Color color = {255, 13, 132, 255};
     };
 
     // Contact Listener for Logging Events
