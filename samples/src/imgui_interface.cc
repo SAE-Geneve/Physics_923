@@ -111,20 +111,20 @@ namespace crackitos_physics::samples
                     ImGui::SliderFloat("Speed Mult", &speed_multiplier_, 0.0f, 10.0f);
                     break;
                 }
-            // case SystemScene::TriggerSystemScene: // Trigger System
-            //     {
-            //         ImGui::Checkbox("Show Quadtree", &show_quadtree_);
-            //
-            //         ImGui::SliderFloat("Speed Mult", &speed_multiplier_, 0.0f, 10.0f);
-            //         break;
-            //     }
-            // case SystemScene::CollisionSystemScene: // Collision System
-            //     {
-            //         ImGui::Checkbox("Show Quadtree", &show_quadtree_);
-            //
-            //         ImGui::SliderFloat("Speed Mult", &speed_multiplier_, 0.0f, 10.0f);
-            //         break;
-            //     }
+            case SystemScene::TriggerSystemScene: // Trigger System
+                {
+                    ImGui::Checkbox("Show Quadtree", &show_quadtree_);
+
+                    ImGui::SliderFloat("Speed Mult", &speed_multiplier_, 0.0f, 10.0f);
+                    break;
+                }
+            case SystemScene::CollisionSystemScene: // Collision System
+                {
+                    ImGui::Checkbox("Show Quadtree", &show_quadtree_);
+
+                    ImGui::SliderFloat("Speed Mult", &speed_multiplier_, 0.0f, 10.0f);
+                    break;
+                }
             case SystemScene::FrictionSystemScene: // Friction System
                 {
                     ImGui::PushTextWrapPos();

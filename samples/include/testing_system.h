@@ -8,8 +8,8 @@
 #include "shape.h"
 #include "contact_listener.h"
 
-namespace crackitos_physics::samples {
-
+namespace crackitos_physics::samples
+{
     //For testing purposes, this would be an implementation specific GameObject
     struct TestingObject
     {
@@ -20,20 +20,21 @@ namespace crackitos_physics::samples {
 
 
     // Contact Listener for Logging Events
-//    class TestingContactListener final : public physics::ContactListener
-//    {
-//    public:
-//        void OnTriggerEnter(const physics::ColliderPair& pair) override;
-//        void OnTriggerStay(const physics::ColliderPair& pair) override;
-//        void OnTriggerExit(const physics::ColliderPair& pair) override;
-//
-//        void OnCollisionEnter(const physics::ColliderPair& pair) override;
-//        void OnCollisionStay(const physics::ColliderPair& pair) override;
-//        void OnCollisionExit(const physics::ColliderPair& pair) override;
-//    };
+    class TestingContactListener final : public physics::ContactListener
+    {
+    public:
+        void OnTriggerEnter(const physics::ColliderPair& pair) override;
+        void OnTriggerStay(const physics::ColliderPair& pair) override;
+        void OnTriggerExit(const physics::ColliderPair& pair) override;
+
+        void OnCollisionEnter(const physics::ColliderPair& pair) override;
+        void OnCollisionStay(const physics::ColliderPair& pair) override;
+        void OnCollisionExit(const physics::ColliderPair& pair) override;
+    };
 
     // Main Testing System
-    class TestingSystem {
+    class TestingSystem
+    {
         physics::PhysicsWorld physics_world_;
         TestingContactListener contact_listener_;
 
@@ -57,7 +58,6 @@ namespace crackitos_physics::samples {
 
         [[nodiscard]] physics::PhysicsWorld& physics_world() { return physics_world_; }
         [[nodiscard]] const physics::PhysicsWorld& physics_world() const { return physics_world_; } // Const version
-
     };
 } // namespace crackitos_physics::samples
 

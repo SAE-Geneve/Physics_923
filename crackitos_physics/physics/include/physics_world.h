@@ -68,7 +68,8 @@ namespace crackitos_physics::physics
         void RemoveBody(BodyHandle body);
         void RemoveCollider(ColliderHandle collider);
 
-        [[nodiscard]] Body& GetBody(BodyHandle body);
+        [[nodiscard]] const Body& GetBody(BodyHandle body) const;
+        [[nodiscard]] Body& GetMutableBody(BodyHandle body);
         [[nodiscard]] const Collider& GetCollider(ColliderHandle collider) const;
 
         [[nodiscard]] std::vector<std::pair<BodyHandle, ColliderHandle>> GetBodiesWithColliders() const;

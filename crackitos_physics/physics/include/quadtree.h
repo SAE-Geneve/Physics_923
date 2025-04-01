@@ -34,6 +34,8 @@ namespace crackitos_physics::physics
 
         // Provide access to bounding boxes for external rendering
         void GetBoundingBoxes(std::vector<math::AABB>& boxes) const;
+        void BuildPairs(std::unordered_set<ColliderPair>& out_pairs) const;
+        std::vector<ColliderHandle> CollectAllColliders() const;
     };
 
     class Quadtree

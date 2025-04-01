@@ -76,7 +76,7 @@ namespace crackitos_physics::samples
     class GameEngine
     {
     private:
-        SystemScene selected_scene_ = SystemScene::FrictionSystemScene;
+        SystemScene selected_scene_ = SystemScene::PlanetSystemScene;
         bool is_running_;
 
         Display display_{};
@@ -84,6 +84,7 @@ namespace crackitos_physics::samples
         GraphicsManager graphics_manager_{};
         PlanetSystem planet_system_{};
         TriggerSystem trigger_system_{};
+        CollisionSystem collision_system_{};
         FrictionSystem friction_system_{};
         TestingSystem testing_system_{};
 

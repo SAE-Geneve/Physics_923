@@ -113,21 +113,62 @@ namespace crackitos_physics::physics
 
     void Quadtree::BuildPotentialPairs()
     {
-
         potential_pairs_.clear();
-        std::vector<ColliderHandle> allColliders;
-        root_->Query(root_->bounding_box_, allColliders);
+        root_->BuildPairs(potential_pairs_);
+    }
 
-        for (size_t i = 0; i < allColliders.size(); ++i)
+
+
+    void QuadtreeNode::BuildPairs(std::unordered_set<ColliderPair>& out_pairs) const
+    {
+        // Compare each pair within this node
+        for (size_t i = 0; i < colliders_.size(); ++i)
         {
-            for (size_t j = i + 1; j < allColliders.size(); ++j)
+            for (size_t j = i + 1; j < colliders_.size(); ++j)
             {
-                ColliderPair pair{allColliders[i], allColliders[j]};
-                potential_pairs_.insert(pair);
+                auto a = colliders_[i];
+                auto b = colliders_[j];
+                if (a.id > b.id) std::swap(a, b);
+                out_pairs.insert(ColliderPair{a, b});
             }
         }
 
+        // Compare this node's colliders with each child's colliders
+        for (const auto& child : children_)
+        {
+            if (child)
+            {
+                auto child_colliders = child->CollectAllColliders();
+                for (const auto& a : colliders_)
+                {
+                    for (const auto& b : child_colliders)
+                    {
+                        auto aa = a, bb = b;
+                        if (aa.id > bb.id) std::swap(aa, bb);
+                        out_pairs.insert(ColliderPair{aa, bb});
+                    }
+                }
+                child->BuildPairs(out_pairs);
+            }
+        }
     }
+
+    std::vector<ColliderHandle> QuadtreeNode::CollectAllColliders() const
+    {
+        std::vector<ColliderHandle> result = colliders_;
+        for (const auto& child : children_)
+        {
+            if (child)
+            {
+                auto child_result = child->CollectAllColliders();
+                result.insert(result.end(), child_result.begin(), child_result.end());
+            }
+        }
+        return result;
+    }
+
+
+
 
     const std::unordered_set<ColliderPair>& Quadtree::GetPotentialPairs() const
     {

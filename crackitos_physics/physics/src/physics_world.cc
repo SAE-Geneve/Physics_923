@@ -4,6 +4,10 @@
 
 #include "contact_solver.h"
 
+#ifdef TRACY_ENABLE
+#include <tracy/Tracy.hpp>
+#endif
+
 namespace crackitos_physics::physics
 {
     PhysicsWorld::PhysicsWorld() : frame_bounds_(math::AABB(math::Vec2f(0, 0), math::Vec2f(1000, 1000))),
@@ -21,6 +25,9 @@ namespace crackitos_physics::physics
     void PhysicsWorld::Initialize(const math::AABB& world_bounds, const bool out_of_bounds_removal_state,
                                   const math::Vec2f gravity)
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         Clear();
         bodies_.reserve(1000);
         colliders_.reserve(1000);
@@ -42,6 +49,9 @@ namespace crackitos_physics::physics
 
     BodyHandle PhysicsWorld::CreateBody(const Body& body_def)
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         const int id = static_cast<int>(bodies_.size());
         bodies_.push_back(body_def);
         body_generations_.push_back(0);
@@ -50,6 +60,9 @@ namespace crackitos_physics::physics
 
     ColliderHandle PhysicsWorld::CreateCollider(const BodyHandle body, const Collider& collider_def)
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         const int id = static_cast<int>(colliders_.size());
         colliders_.emplace_back(collider_def);
         colliders_[id].set_body_handle(body);
@@ -59,6 +72,9 @@ namespace crackitos_physics::physics
 
     void PhysicsWorld::RemoveBody(const BodyHandle body)
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         if (body.id < 0 || body.id >= static_cast<int>(bodies_.size())) return;
 
         bodies_[body.id] = Body();
@@ -67,14 +83,32 @@ namespace crackitos_physics::physics
 
     void PhysicsWorld::RemoveCollider(const ColliderHandle collider)
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         if (collider.id < 0 || collider.id >= static_cast<int>(colliders_.size())) return;
 
         colliders_[collider.id] = Collider();
         collider_generations_[collider.id]++;
     }
 
-    Body& PhysicsWorld::GetBody(const BodyHandle body)
+    const Body& PhysicsWorld::GetBody(const BodyHandle body) const
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
+        if (body.id < 0 || body.id >= static_cast<int>(bodies_.size()) || body_generations_[body.id] != body.generation)
+        {
+            throw std::out_of_range("Invalid BodyHandle");
+        }
+        return bodies_[body.id];
+    }
+
+    Body& PhysicsWorld::GetMutableBody(const BodyHandle body)
+    {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         if (body.id < 0 || body.id >= static_cast<int>(bodies_.size()) || body_generations_[body.id] != body.generation)
         {
             throw std::out_of_range("Invalid BodyHandle");
@@ -84,6 +118,9 @@ namespace crackitos_physics::physics
 
     const Collider& PhysicsWorld::GetCollider(const ColliderHandle collider) const
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         if (collider.id < 0 || collider.id >= static_cast<int>(colliders_.size()) || collider_generations_[collider.id]
             != collider.generation)
         {
@@ -95,6 +132,9 @@ namespace crackitos_physics::physics
 
     std::vector<std::pair<BodyHandle, ColliderHandle>> PhysicsWorld::GetBodiesWithColliders() const
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         std::vector<std::pair<BodyHandle, ColliderHandle>> body_collider_pairs;
 
         for (size_t i = 0; i < colliders_.size(); ++i)
@@ -116,12 +156,18 @@ namespace crackitos_physics::physics
 
     void PhysicsWorld::Update(commons::fp delta_time)
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         timer_.Tick();
         StepSimulation();
     }
 
     void PhysicsWorld::StepSimulation()
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         UpdateObjects();
         RemoveOutOfBoundsObjects();
         BroadPhase();
@@ -131,6 +177,9 @@ namespace crackitos_physics::physics
     void PhysicsWorld::set_out_of_bounds_margins(const float left, const float right, const float top,
                                                  const float bottom)
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         out_of_bounds_margin_left_ = left;
         out_of_bounds_margin_right_ = right;
         out_of_bounds_margin_top_ = top;
@@ -140,6 +189,9 @@ namespace crackitos_physics::physics
 
     void PhysicsWorld::UpdateObjects()
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         for (size_t i = 0; i < bodies_.size(); ++i)
         {
             auto& body = bodies_[i];
@@ -156,6 +208,9 @@ namespace crackitos_physics::physics
 
     void PhysicsWorld::RemoveOutOfBoundsObjects()
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         if (!out_of_bounds_removal_state_) return; //Skip if disabled
 
         for (size_t i = bodies_.size(); i-- > 0;) //Reverse iteration for safe removal
@@ -205,6 +260,9 @@ namespace crackitos_physics::physics
 
     void PhysicsWorld::BroadPhase()
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         quadtree_.Clear();
 
         // Insert static objects first
@@ -246,6 +304,9 @@ namespace crackitos_physics::physics
 
     void PhysicsWorld::NarrowPhase()
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         const auto& potentialPairs = quadtree_.GetPotentialPairs();
         std::unordered_set<ColliderPair> newActivePairs;
 
@@ -299,6 +360,9 @@ namespace crackitos_physics::physics
 
     void PhysicsWorld::ResolveCollisionPair(const ColliderPair& pair, const bool is_new_pair)
     {
+#ifdef TRACY_ENABLE
+        ZoneScoped;
+#endif
         const ColliderHandle colA = pair.colliderA;
         const ColliderHandle colB = pair.colliderB;
 

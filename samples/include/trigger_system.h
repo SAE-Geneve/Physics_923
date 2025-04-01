@@ -9,53 +9,68 @@
 #include "quadtree.h"
 #include "contact_listener.h"
 
-namespace crackitos_physics::samples {
 
-//For testing purposes, this would be an implementation specific GameObject
-struct TriggerObject {
-  physics::BodyHandle body;
-  physics::ColliderHandle collider;
-  SDL_Color color;
-};
 
-class TriggerContactListener final : public physics::ContactListener
+namespace crackitos_physics::samples
 {
- public:
-  void OnTriggerEnter(const physics::ColliderPair& pair) override;
-  void OnTriggerStay(const physics::ColliderPair& pair) override;
-  void OnTriggerExit(const physics::ColliderPair& pair) override;
+    //For testing purposes, this would be an implementation specific GameObject
+    struct TriggerObject
+    {
+        physics::BodyHandle body;
+        physics::ColliderHandle collider;
+        SDL_Color color = {255, 13, 132, 255};
+        int collisions = 0;
 
-  void OnCollisionEnter(const physics::ColliderPair& pair) override;
-  void OnCollisionStay(const physics::ColliderPair& pair) override;
-  void OnCollisionExit(const physics::ColliderPair& pair) override;
-};
+        void OnTriggerEnter() {
+            if (++collisions == 1)
+                color = SDL_Color{0, 255, 0, 255};
+        }
 
-class TriggerSystem{
- private:
+        void OnTriggerExit() {
+            if (--collisions <= 0) {
+                collisions = 0;
+                color = SDL_Color{255, 13, 132, 255};
+            }
+        }
+    };
 
-  physics::PhysicsWorld physics_world_;
-  TriggerContactListener contact_listener_;
 
-  //had to lower it, my pc couldn't handle 400
-  int number_of_objects_ = 100;
-  std::vector<TriggerObject> objects_ = {};
+    class TriggerContactListener final : public physics::ContactListener
+    {
+    public:
+        std::unordered_map<int, TriggerObject*> collider_to_object_;
 
- public:
-  TriggerSystem();
-  ~TriggerSystem();
+        void OnTriggerEnter(const physics::ColliderPair& pair) override;
+        void OnTriggerExit(const physics::ColliderPair& pair) override;
 
-  void Initialize();
-  void Clear();
+        void OnTriggerStay(const physics::ColliderPair& pair) override {}
+        void OnCollisionEnter(const physics::ColliderPair& pair) override {}
+        void OnCollisionStay(const physics::ColliderPair& pair) override {}
+        void OnCollisionExit(const physics::ColliderPair& pair) override {}
+    };
 
-  void CreateObject(const math::Vec2f& pos, math::ShapeType type);
+    class TriggerSystem
+    {
+    private:
+        static constexpr int kMaxObjects = 400;
+        physics::PhysicsWorld physics_world_;
+        TriggerContactListener contact_listener_;
+        std::vector<TriggerObject> trigger_objects_;
 
-  void Update(crackitos_physics::commons::fp delta_time);
+    public:
+        TriggerSystem();
+        ~TriggerSystem();
 
-  void UpdateTriggerObjects();
+        void Initialize();
+        void Clear();
+        void Update(commons::fp delta_time);
 
-  [[nodiscard]] const std::vector<TriggerObject>& trigger_objects() const { return objects_; }
-  [[nodiscard]] physics::PhysicsWorld& physics_world() { return physics_world_; }
-  [[nodiscard]] const physics::PhysicsWorld& physics_world() const { return physics_world_; } // Const version
-};
+        [[nodiscard]] const std::vector<TriggerObject>& trigger_objects() const { return trigger_objects_; }
+
+        // void CreateObject(math::ShapeType type);
+        // void UpdateTriggerObjects();
+        [[nodiscard]] physics::PhysicsWorld& physics_world() { return physics_world_; }
+        [[nodiscard]] const physics::PhysicsWorld& physics_world() const { return physics_world_; } // Const version
+    };
 } // namespace samples
 #endif // PHYSICS_SAMPLES_TRIGGER_SYSTEM_H_
