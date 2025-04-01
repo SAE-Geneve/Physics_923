@@ -31,16 +31,16 @@ namespace crackitos_physics::samples
         std::array<GameObject, 200> objects() { return objects_; }
         [[nodiscard]] physics::Quadtree& quadtree() { return quadtree_; }
 
-        void CreateObject(size_t index, math::Circle& circle);
-        void CreateObject(size_t index, math::AABB& aabb);
-        //void CreateObject(size_t index, math::Polygon& polygon);
+        void CreateObject(size_t index, crackitos_core::math::Circle& circle);
+        void CreateObject(size_t index, crackitos_core::math::AABB& aabb);
+        //void CreateObject(size_t index, crackitos_core::math::Polygon& polygon);
         void DeleteObject(size_t index);
 
         void RegisterObject(GameObject& object);
         void UnregisterObject(GameObject& object);
 
-        void Update(crackitos_physics::commons::fp delta_time);
-        void UpdateShapes(crackitos_physics::commons::fp delta_time);
+        void Update(crackitos_core::commons::fp delta_time);
+        void UpdateShapes(crackitos_core::commons::fp delta_time);
 
         void SimplisticBroadPhase();
         void BroadPhase();

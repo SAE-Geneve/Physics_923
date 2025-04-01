@@ -16,7 +16,7 @@ namespace crackitos_physics::samples
     private:
         physics::Body body_;
         physics::Collider collider_ = {};
-        crackitos_physics::commons::fp radius_ = 0.f;
+        crackitos_core::commons::fp radius_ = 0.f;
         SDL_Color color_ = SDL_Color{255, 13, 132, 255};
         int collisions_count_ = 0;
 
@@ -24,12 +24,12 @@ namespace crackitos_physics::samples
         GameObject() = default;
 
         GameObject(const physics::Body& body, physics::Collider collider,
-                   const crackitos_physics::commons::fp radius) : body_(body),
+                   const crackitos_core::commons::fp radius) : body_(body),
                                                                   collider_(std::move(collider)), radius_(radius)
         {
         }
 
-        GameObject(const physics::Body& body, const crackitos_physics::commons::fp radius,
+        GameObject(const physics::Body& body, const crackitos_core::commons::fp radius,
                    const SDL_Color& color) : body_(body),
                                              radius_(radius), color_(color)
         {
@@ -39,14 +39,14 @@ namespace crackitos_physics::samples
 
         [[nodiscard]] physics::Body& body() { return body_; }
         [[nodiscard]] physics::Collider& collider() { return collider_; }
-        [[nodiscard]] crackitos_physics::commons::fp radius() const { return radius_; }
+        [[nodiscard]] crackitos_core::commons::fp radius() const { return radius_; }
         [[nodiscard]] SDL_Color color() const { return color_; }
-        [[nodiscard]] math::Vec2f position() const { return body_.position(); }
+        [[nodiscard]] crackitos_core::math::Vec2f position() const { return body_.position(); }
         [[nodiscard]] int collisions_count() const { return collisions_count_; }
 
         void set_body(const physics::Body& body) { body_ = body; }
         void set_collider(const physics::Collider& collider) { collider_ = collider; }
-        void set_radius(const crackitos_physics::commons::fp radius) { radius_ = radius; }
+        void set_radius(const crackitos_core::commons::fp radius) { radius_ = radius; }
         void set_color(const SDL_Color& color) { color_ = color; }
         void AddCollision() { collisions_count_++; }
         void SubCollision() { collisions_count_--; }
@@ -68,9 +68,9 @@ namespace crackitos_physics::samples
 
         void OnCollisionEnter()
         {
-            Uint8 r = random::Range(128, 255);
-            Uint8 g = random::Range(128, 255);
-            Uint8 b = random::Range(128, 255);
+            Uint8 r = crackitos_core::random::Range(128, 255);
+            Uint8 g = crackitos_core::random::Range(128, 255);
+            Uint8 b = crackitos_core::random::Range(128, 255);
             color_ = SDL_Color{r, g, b, 255};
         }
 

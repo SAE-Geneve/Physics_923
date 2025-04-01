@@ -23,13 +23,13 @@ namespace crackitos_physics::samples
         std::vector<SDL_Vertex>& vertices() { return vertices_; }
         std::vector<int>& indices() { return indices_; }
 
-        void AddVertex(math::Vec2f position, SDL_Color color);
+        void AddVertex(crackitos_core::math::Vec2f position, SDL_Color color);
         void Clear();
-        void CreateCircle(math::Vec2f centre, crackitos_physics::commons::fp radius, SDL_Color color, bool rotation);
-        void CreateAABB(math::Vec2f min, math::Vec2f max, SDL_Color color, bool fill_status);
-        void CreateAABB(math::Vec2f centre, crackitos_physics::commons::fp half_size, SDL_Color color,
+        void CreateCircle(crackitos_core::math::Vec2f centre, crackitos_core::commons::fp radius, SDL_Color color, bool rotation);
+        void CreateAABB(crackitos_core::math::Vec2f min, crackitos_core::math::Vec2f max, SDL_Color color, bool fill_status);
+        void CreateAABB(crackitos_core::math::Vec2f centre, crackitos_core::commons::fp half_size, SDL_Color color,
                         bool fill_status);
-        void CreatePolygon(const std::vector<math::Vec2f>& points, math::Vec2f center, SDL_Color color,
+        void CreatePolygon(const std::vector<crackitos_core::math::Vec2f>& points, crackitos_core::math::Vec2f center, SDL_Color color,
                            bool fill_status);
     };
 } // namespace samples

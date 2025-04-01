@@ -15,7 +15,7 @@ namespace crackitos_physics::samples
     private:
         GameEngine* game_engine_ = nullptr;
         bool show_quadtree_ = true;
-        crackitos_physics::commons::fp speed_multiplier_ = 1.0f;
+        crackitos_core::commons::fp speed_multiplier_ = 1.0f;
         int current_scene_ = 0;
 
         SDL_Color planets_colour_ = {255, 13, 132};
@@ -30,7 +30,7 @@ namespace crackitos_physics::samples
         void PassEvents(SDL_Event& event);
 
         [[nodiscard]] bool show_quadtree() const { return show_quadtree_; }
-        [[nodiscard]] crackitos_physics::commons::fp speed_multiplier() const { return speed_multiplier_; }
+        [[nodiscard]] crackitos_core::commons::fp speed_multiplier() const { return speed_multiplier_; }
         [[nodiscard]] SDL_Color planets_colour() const { return planets_colour_; }
     };
 } // namespace samples
