@@ -16,8 +16,8 @@ namespace crackitos_physics::physics
         crackitos_core::math::Vec2f contact_point_ = crackitos_core::math::Vec2f::Zero();
         crackitos_core::math::Vec2f contact_normal_ = crackitos_core::math::Vec2f::Zero();
 
-        commons::fp restitution_ = 0.0f;
-        commons::fp penetration_ = 0.0f;
+        crackitos_core::commons::fp restitution_ = 0.0f;
+        crackitos_core::commons::fp penetration_ = 0.0f;
 
         void SetContactObjects(Body& bodyA, Body& bodyB, Collider& colliderA, Collider& colliderB);
         void ResolveContact();

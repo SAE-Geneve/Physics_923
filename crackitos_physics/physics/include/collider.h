@@ -23,7 +23,7 @@ namespace crackitos_physics::physics
     class Collider
     {
     private:
-        std::variant<math::Circle, math::AABB, math::Polygon> shape_ = math::Circle(0);
+        std::variant<crackitos_core::math::Circle, crackitos_core::math::AABB, crackitos_core::math::Polygon> shape_ = crackitos_core::math::Circle(0);
 
   crackitos_core::commons::fp bounciness_ = 0.0f;
   crackitos_core::commons::fp friction_ = 0.0f;

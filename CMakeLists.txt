@@ -43,7 +43,7 @@ endif(ENABLE_SAMPLES)
 
 # Include all subdirectories
 add_subdirectory(crackitos_physics)
-add_subdirectory(external/crackitos/core)
+add_subdirectory(external/crackitos_core/core)
 target_link_libraries(crackitos_physics PUBLIC crackitos_core)
 
 

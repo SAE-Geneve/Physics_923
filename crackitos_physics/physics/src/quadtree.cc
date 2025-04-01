@@ -2,26 +2,26 @@
 
 namespace crackitos_physics::physics
 {
-    QuadtreeNode::QuadtreeNode(const math::AABB& box, const int depth): bounding_box_(box), depth_(depth)
+    QuadtreeNode::QuadtreeNode(const crackitos_core::math::AABB& box, const int depth): bounding_box_(box), depth_(depth)
     {
     }
 
     void QuadtreeNode::Subdivide()
     {
-        math::Vec2f halfSize = (bounding_box_.max_bound() - bounding_box_.min_bound()) * 0.5f;
-        math::Vec2f center = bounding_box_.min_bound() + halfSize;
+        crackitos_core::math::Vec2f halfSize = (bounding_box_.max_bound() - bounding_box_.min_bound()) * 0.5f;
+        crackitos_core::math::Vec2f center = bounding_box_.min_bound() + halfSize;
 
-        children_[0] = std::make_unique<QuadtreeNode>(math::AABB(bounding_box_.min_bound(), center), depth_ + 1);
-        children_[1] = std::make_unique<QuadtreeNode>(math::AABB({center.x, bounding_box_.min_bound().y},
+        children_[0] = std::make_unique<QuadtreeNode>(crackitos_core::math::AABB(bounding_box_.min_bound(), center), depth_ + 1);
+        children_[1] = std::make_unique<QuadtreeNode>(crackitos_core::math::AABB({center.x, bounding_box_.min_bound().y},
                                                                  {bounding_box_.max_bound().x, center.y}),
                                                       depth_ + 1);
-        children_[2] = std::make_unique<QuadtreeNode>(math::AABB({bounding_box_.min_bound().x, center.y},
+        children_[2] = std::make_unique<QuadtreeNode>(crackitos_core::math::AABB({bounding_box_.min_bound().x, center.y},
                                                                  {center.x, bounding_box_.max_bound().y}),
                                                       depth_ + 1);
-        children_[3] = std::make_unique<QuadtreeNode>(math::AABB(center, bounding_box_.max_bound()), depth_ + 1);
+        children_[3] = std::make_unique<QuadtreeNode>(crackitos_core::math::AABB(center, bounding_box_.max_bound()), depth_ + 1);
     }
 
-    bool QuadtreeNode::Insert(ColliderHandle collider, const math::AABB& shapeAABB)
+    bool QuadtreeNode::Insert(ColliderHandle collider, const crackitos_core::math::AABB& shapeAABB)
     {
         if (!Intersect(bounding_box_, shapeAABB))
         {
@@ -56,7 +56,7 @@ namespace crackitos_physics::physics
     }
 
 
-    void QuadtreeNode::Query(const math::AABB& range,
+    void QuadtreeNode::Query(const crackitos_core::math::AABB& range,
                              std::vector<ColliderHandle>& foundColliders) const
     {
         if (!Intersect(bounding_box_, range))
@@ -78,7 +78,7 @@ namespace crackitos_physics::physics
         }
     }
 
-    void QuadtreeNode::GetBoundingBoxes(std::vector<math::AABB>& boxes) const
+    void QuadtreeNode::GetBoundingBoxes(std::vector<crackitos_core::math::AABB>& boxes) const
     {
         boxes.push_back(bounding_box_);
         for (const auto& child : children_)
@@ -90,12 +90,12 @@ namespace crackitos_physics::physics
         }
     }
 
-    Quadtree::Quadtree(const math::AABB& boundary): root_(std::make_unique<QuadtreeNode>(boundary))
+    Quadtree::Quadtree(const crackitos_core::math::AABB& boundary): root_(std::make_unique<QuadtreeNode>(boundary))
     {
         bounding_boxes_.reserve(ComputeMaxNodes()); // Preallocate memory
     }
 
-    void Quadtree::Insert(const ColliderHandle collider, const math::AABB& shapeAABB) const
+    void Quadtree::Insert(const ColliderHandle collider, const crackitos_core::math::AABB& shapeAABB) const
     {
         if (collider.id >= 0)
         {
@@ -104,7 +104,7 @@ namespace crackitos_physics::physics
     }
 
     std::vector<ColliderHandle> Quadtree::Query(
-        const math::AABB& range) const
+        const crackitos_core::math::AABB& range) const
     {
         std::vector<ColliderHandle> foundColliders;
         root_->Query(range, foundColliders);

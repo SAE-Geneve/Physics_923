@@ -21,9 +21,9 @@ namespace crackitos_physics::samples
         SDL_Color color = {255, 13, 132, 255};
 
         void OnCollisionEnter() {
-            Uint8 r = random::Range(128, 255);
-            Uint8 g = random::Range(128, 255);
-            Uint8 b = random::Range(128, 255);
+            Uint8 r = crackitos_core::random::Range(128, 255);
+            Uint8 g = crackitos_core::random::Range(128, 255);
+            Uint8 b = crackitos_core::random::Range(128, 255);
             color = SDL_Color{r, g, b, 255};
         }
     };
@@ -57,7 +57,7 @@ namespace crackitos_physics::samples
 
         void Initialize();
         void Clear();
-        void Update(commons::fp delta_time);
+        void Update(crackitos_core::commons::fp delta_time);
 
         [[nodiscard]] const std::vector<CollisionObject>& collision_objects() const { return collision_objects_; }
 

@@ -10,7 +10,7 @@
 
 namespace crackitos_physics::physics
 {
-    PhysicsWorld::PhysicsWorld() : frame_bounds_(math::AABB(math::Vec2f(0, 0), math::Vec2f(1000, 1000))),
+    PhysicsWorld::PhysicsWorld() : frame_bounds_(crackitos_core::math::AABB(crackitos_core::math::Vec2f(0, 0), crackitos_core::math::Vec2f(1000, 1000))),
                                    out_of_bounds_removal_state_(true),
                                    quadtree_(frame_bounds_),
                                    gravity_(kDefaultGravity)
@@ -22,8 +22,8 @@ namespace crackitos_physics::physics
         Clear();
     }
 
-    void PhysicsWorld::Initialize(const math::AABB& world_bounds, const bool out_of_bounds_removal_state,
-                                  const math::Vec2f gravity)
+    void PhysicsWorld::Initialize(const crackitos_core::math::AABB& world_bounds, const bool out_of_bounds_removal_state,
+                                  const crackitos_core::math::Vec2f gravity)
     {
 #ifdef TRACY_ENABLE
         ZoneScoped;
@@ -154,7 +154,7 @@ namespace crackitos_physics::physics
     }
 
 
-    void PhysicsWorld::Update(commons::fp delta_time)
+    void PhysicsWorld::Update(crackitos_core::commons::fp delta_time)
     {
 #ifdef TRACY_ENABLE
         ZoneScoped;

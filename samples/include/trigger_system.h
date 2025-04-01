@@ -63,7 +63,7 @@ namespace crackitos_physics::samples
 
         void Initialize();
         void Clear();
-        void Update(commons::fp delta_time);
+        void Update(crackitos_core::commons::fp delta_time);
 
         [[nodiscard]] const std::vector<TriggerObject>& trigger_objects() const { return trigger_objects_; }
 

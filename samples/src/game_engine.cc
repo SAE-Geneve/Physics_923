@@ -105,9 +105,9 @@ namespace crackitos_physics::samples
                     {
                         int mouse_x, mouse_y;
                         SDL_GetMouseState(&mouse_x, &mouse_y);
-                        const auto mouse_pos = math::Vec2f(static_cast<commons::fp>(mouse_x),
-                                                           static_cast<commons::fp>(mouse_y));
-                        testing_system_.SpawnShape(mouse_pos, math::ShapeType::kCircle);
+                        const auto mouse_pos = crackitos_core::math::Vec2f(static_cast<crackitos_core::commons::fp>(mouse_x),
+                                                           static_cast<crackitos_core::commons::fp>(mouse_y));
+                        testing_system_.SpawnShape(mouse_pos, crackitos_core::math::ShapeType::kCircle);
                     }
                 }
                 else if (event.button.button == SDL_BUTTON_RIGHT && !ImGui::GetIO().WantCaptureMouse)
@@ -124,9 +124,9 @@ namespace crackitos_physics::samples
                     {
                         int mouse_x, mouse_y;
                         SDL_GetMouseState(&mouse_x, &mouse_y);
-                        const auto mouse_pos = math::Vec2f(static_cast<commons::fp>(mouse_x),
-                                                           static_cast<commons::fp>(mouse_y));
-                        testing_system_.SpawnShape(mouse_pos, math::ShapeType::kAABB);
+                        const auto mouse_pos = crackitos_core::math::Vec2f(static_cast<crackitos_core::commons::fp>(mouse_x),
+                                                           static_cast<crackitos_core::commons::fp>(mouse_y));
+                        testing_system_.SpawnShape(mouse_pos, crackitos_core::math::ShapeType::kAABB);
                     }
                 }
             }
@@ -321,14 +321,14 @@ namespace crackitos_physics::samples
 
                     switch (collider.GetShapeType())
                     {
-                    case math::ShapeType::kAABB:
+                    case crackitos_core::math::ShapeType::kAABB:
                         graphics_manager_.CreateAABB(
                             collider.GetBoundingBox().min_bound(),
                             collider.GetBoundingBox().max_bound(),
                             obj.color, true);
                         break;
 
-                    case math::ShapeType::kCircle:
+                    case crackitos_core::math::ShapeType::kCircle:
                         graphics_manager_.CreateCircle(
                             body.position(),
                             collider.GetBoundingBox().half_size_vec().x, // Radius

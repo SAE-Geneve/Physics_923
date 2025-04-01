@@ -20,35 +20,35 @@ namespace crackitos_physics::samples
     {
         Clear();
         collision_objects_.reserve(kMaxObjects);
-        physics_world_.Initialize(math::AABB({0, 0}, {kWindowWidth, kWindowHeight}), true);
+        physics_world_.Initialize(crackitos_core::math::AABB({0, 0}, {kWindowWidth, kWindowHeight}), true);
 
         for (int i = 0; i < kMaxObjects; ++i)
         {
-            math::Vec2f pos = {
-                random::Range(20.f, kWindowWidth - 20.f),
-                random::Range(20.f, kWindowHeight - 20.f)
+            crackitos_core::math::Vec2f pos = {
+                crackitos_core::random::Range(20.f, kWindowWidth - 20.f),
+                crackitos_core::random::Range(20.f, kWindowHeight - 20.f)
             };
 
-            math::Vec2f vel = {
-                random::Range(-100.f, 100.f),
-                random::Range(-100.f, 100.f)
+            crackitos_core::math::Vec2f vel = {
+                crackitos_core::random::Range(-100.f, 100.f),
+                crackitos_core::random::Range(-100.f, 100.f)
             };
 
             bool is_circle = (i % 2 == 0);
-            physics::Body body(physics::BodyType::Dynamic, pos, vel, false, random::Range(1.0f, 50.0f));
+            physics::Body body(physics::BodyType::Dynamic, pos, vel, false, crackitos_core::random::Range(1.0f, 50.0f));
             physics::BodyHandle body_handle = physics_world_.CreateBody(body);
 
             physics::ColliderHandle collider_handle;
             if (is_circle)
             {
-                math::Circle shape(pos, random::Range(5.f, 10.f));
+                crackitos_core::math::Circle shape(pos, crackitos_core::random::Range(5.f, 10.f));
                 physics::Collider collider(shape, 1.f, 0.f, false, body_handle);
                 collider_handle = physics_world_.CreateCollider(body_handle, collider);
             }
             else
             {
-                math::Vec2f half_size = {random::Range(5.f, 10.f), random::Range(5.f, 10.f)};
-                math::AABB shape(pos, half_size, half_size.Magnitude());
+                crackitos_core::math::Vec2f half_size = {crackitos_core::random::Range(5.f, 10.f), crackitos_core::random::Range(5.f, 10.f)};
+                crackitos_core::math::AABB shape(pos, half_size, half_size.Magnitude());
                 physics::Collider collider(shape, 1.f, 0.f, false, body_handle);
                 collider_handle = physics_world_.CreateCollider(body_handle, collider);
             }
@@ -110,7 +110,7 @@ namespace crackitos_physics::samples
     //     }
     // }
 
-    void CollisionSystem::Update(commons::fp delta_time)
+    void CollisionSystem::Update(crackitos_core::commons::fp delta_time)
     {
         // Bounce logic
         for (auto& obj : collision_objects_)

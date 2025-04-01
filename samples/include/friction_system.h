@@ -51,11 +51,11 @@ namespace crackitos_physics::samples
         void Initialize();
         void Clear();
 
-        void SpawnShape(math::Vec2f pos, math::ShapeType type);
+        void SpawnShape(crackitos_core::math::Vec2f pos, crackitos_core::math::ShapeType type);
         void CreateGround();
 
-        void Update(commons::fp delta_time);
-        void SetGravity(const math::Vec2f& gravity);
+        void Update(crackitos_core::commons::fp delta_time);
+        void SetGravity(const crackitos_core::math::Vec2f& gravity);
 
         void UpdateTestingObjects();
 

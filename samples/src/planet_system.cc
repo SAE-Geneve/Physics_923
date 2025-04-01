@@ -65,7 +65,6 @@ void PlanetSystem::CreatePlanet(const crackitos_core::math::Vec2f position, cons
                        false,
                        planet_mass_
     );
-    //crackitos_core::random mass: crackitos_core::random::Range(1.0f, 50.0f)
 
     auto planet = GameObject(body, radius, color);
     planets_.push_back(planet);

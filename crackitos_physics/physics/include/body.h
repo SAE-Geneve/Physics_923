@@ -64,7 +64,6 @@ namespace crackitos_physics::physics
         Body(const BodyType type,
              const crackitos_core::math::Vec2f position,
              const crackitos_core::math::Vec2f velocity,
-             const crackitos_core::math::Vec2f gravity,
              const bool gravity_bound,
              const crackitos_core::commons::fp mass)
         {
@@ -160,7 +159,7 @@ namespace crackitos_physics::physics
             }
         }
 
-        void Update(const crackitos_core::commons::fp delta_time)
+        void Update(const crackitos_core::commons::fp delta_time, const crackitos_core::math::Vec2f& gravity = crackitos_core::math::Vec2f::Zero())
         {
             switch (type_)
             {

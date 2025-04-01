@@ -14,15 +14,15 @@
 
 namespace crackitos_physics::physics
 {
-    static constexpr auto kDefaultGravity = math::Vec2f(
-        static_cast<commons::fp>(distance::Convert<distance::Meter, distance::Pixel>(distance::Meter(0.f)).value),
-        static_cast<commons::fp>(distance::Convert<distance::Meter, distance::Pixel>(distance::Meter(9.81f)).value)
+    static constexpr auto kDefaultGravity = crackitos_core::math::Vec2f(
+        static_cast<crackitos_core::commons::fp>(crackitos_core::distance::Convert<crackitos_core::distance::Meter, crackitos_core::distance::Pixel>(crackitos_core::distance::Meter(0.f)).value),
+        static_cast<crackitos_core::commons::fp>(crackitos_core::distance::Convert<crackitos_core::distance::Meter, crackitos_core::distance::Pixel>(crackitos_core::distance::Meter(9.81f)).value)
     );
 
     class PhysicsWorld
     {
     private:
-        math::AABB frame_bounds_;
+        crackitos_core::math::AABB frame_bounds_;
 
         bool out_of_bounds_removal_state_;
         float out_of_bounds_margin_left_ = 10.0f;
@@ -40,10 +40,10 @@ namespace crackitos_physics::physics
 
         std::unordered_set<ColliderPair> active_pairs_;
 
-        math::Vec2f gravity_;
+        crackitos_core::math::Vec2f gravity_;
 
-        commons::fp time_step_ = 1.0f / 60.0f;
-        timer::Timer timer_;
+        crackitos_core::commons::fp time_step_ = 1.0f / 60.0f;
+        crackitos_core::timer::Timer timer_;
 
         ContactListener* contact_listener_ = nullptr;
 
@@ -57,7 +57,7 @@ namespace crackitos_physics::physics
         explicit PhysicsWorld();
         ~PhysicsWorld();
 
-        void Initialize(const math::AABB& world_bounds, bool out_of_bounds_removal_state = true, math::Vec2f gravity = kDefaultGravity);
+        void Initialize(const crackitos_core::math::AABB& world_bounds, bool out_of_bounds_removal_state = true, crackitos_core::math::Vec2f gravity = kDefaultGravity);
         void Clear();
 
         void SetContactListener(ContactListener* listener) { contact_listener_ = listener; }
@@ -74,11 +74,11 @@ namespace crackitos_physics::physics
 
         [[nodiscard]] std::vector<std::pair<BodyHandle, ColliderHandle>> GetBodiesWithColliders() const;
 
-        void Update(commons::fp delta_time);
+        void Update(crackitos_core::commons::fp delta_time);
         void StepSimulation();
 
-        void set_gravity(const math::Vec2f& new_gravity) { gravity_ = new_gravity; }
-        void set_time_step(const commons::fp step) { time_step_ = step; }
+        void set_gravity(const crackitos_core::math::Vec2f& new_gravity) { gravity_ = new_gravity; }
+        void set_time_step(const crackitos_core::commons::fp step) { time_step_ = step; }
         void set_out_of_bound_removal_state(const bool enable) { out_of_bounds_removal_state_ = enable; }
         void set_out_of_bounds_margins(float left, float right, float top, float bottom);
 

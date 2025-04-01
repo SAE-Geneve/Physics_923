@@ -21,19 +21,19 @@ namespace crackitos_physics::physics
         std::vector<ColliderHandle> colliders_; //Colliders stored in each node
         int depth_;
 
-        explicit QuadtreeNode(const math::AABB& box, int depth = 0);
+        explicit QuadtreeNode(const crackitos_core::math::AABB& box, int depth = 0);
 
         //Subdivide the node into 4 child quadrants
         void Subdivide();
 
         //Insert a collider into this node or its children
-        bool Insert(ColliderHandle collider, const math::AABB& shapeAABB);
+        bool Insert(ColliderHandle collider, const crackitos_core::math::AABB& shapeAABB);
 
         //Query colliders within a given area
-        void Query(const math::AABB& range, std::vector<ColliderHandle>& foundColliders) const;
+        void Query(const crackitos_core::math::AABB& range, std::vector<ColliderHandle>& foundColliders) const;
 
         // Provide access to bounding boxes for external rendering
-        void GetBoundingBoxes(std::vector<math::AABB>& boxes) const;
+        void GetBoundingBoxes(std::vector<crackitos_core::math::AABB>& boxes) const;
         void BuildPairs(std::unordered_set<ColliderPair>& out_pairs) const;
         std::vector<ColliderHandle> CollectAllColliders() const;
     };
@@ -43,7 +43,7 @@ namespace crackitos_physics::physics
     private:
         std::unique_ptr<QuadtreeNode> root_;
         std::unordered_set<ColliderPair> potential_pairs_;
-        std::vector<math::AABB> bounding_boxes_; // Preallocated storage for bounding boxes
+        std::vector<crackitos_core::math::AABB> bounding_boxes_; // Preallocated storage for bounding boxes
 
         // Helper function to compute the maximum number of nodes
         static constexpr int ComputeMaxNodes()
@@ -61,11 +61,11 @@ namespace crackitos_physics::physics
         }
 
     public:
-        explicit Quadtree(const math::AABB& boundary);
+        explicit Quadtree(const crackitos_core::math::AABB& boundary);
 
-        void Insert(ColliderHandle collider, const math::AABB& shapeAABB) const;
+        void Insert(ColliderHandle collider, const crackitos_core::math::AABB& shapeAABB) const;
 
-        [[nodiscard]] std::vector<ColliderHandle> Query(const math::AABB& range) const;
+        [[nodiscard]] std::vector<ColliderHandle> Query(const crackitos_core::math::AABB& range) const;
 
         void BuildPotentialPairs();
 
@@ -75,7 +75,7 @@ namespace crackitos_physics::physics
 
         void UpdateBoundingBoxes();
 
-        [[nodiscard]] const std::vector<math::AABB>& GetBoundingBoxes() const
+        [[nodiscard]] const std::vector<crackitos_core::math::AABB>& GetBoundingBoxes() const
         {
             return bounding_boxes_;
         }

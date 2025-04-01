@@ -53,12 +53,12 @@ namespace crackitos_physics::samples
 
     void FrictionSystem::Initialize()
     {
-        constexpr auto system_gravity = math::Vec2f(
-                static_cast<commons::fp>(distance::Convert<distance::Meter, distance::Pixel>(distance::Meter(0.f)).value),
-                static_cast<commons::fp>(distance::Convert<distance::Meter, distance::Pixel>(distance::Meter(100.f)).value)
+        constexpr auto system_gravity = crackitos_core::math::Vec2f(
+                static_cast<crackitos_core::commons::fp>(crackitos_core::distance::Convert<crackitos_core::distance::Meter, crackitos_core::distance::Pixel>(crackitos_core::distance::Meter(0.f)).value),
+                static_cast<crackitos_core::commons::fp>(crackitos_core::distance::Convert<crackitos_core::distance::Meter, crackitos_core::distance::Pixel>(crackitos_core::distance::Meter(100.f)).value)
             );
         Clear();
-        physics_world_.Initialize(math::AABB(math::Vec2f(0, 0), math::Vec2f(kWindowWidth, kWindowHeight)), true, system_gravity);
+        physics_world_.Initialize(crackitos_core::math::AABB(crackitos_core::math::Vec2f(0, 0), crackitos_core::math::Vec2f(kWindowWidth, kWindowHeight)), true, system_gravity);
         CreateGround();
     }
 
@@ -77,34 +77,34 @@ namespace crackitos_physics::samples
         {
         case crackitos_core::math::ShapeType::kAABB:
             {
-                float half_size_x = random::Range(5.f, 20.f);
-                float half_size_y = random::Range(5.f, 20.f);
-                math::AABB aabb(pos, math::Vec2f(half_size_x, half_size_y),
-                                math::Vec2f(half_size_x, half_size_y).Magnitude());
+                float half_size_x = crackitos_core::random::Range(5.f, 20.f);
+                float half_size_y = crackitos_core::random::Range(5.f, 20.f);
+                crackitos_core::math::AABB aabb(pos, crackitos_core::math::Vec2f(half_size_x, half_size_y),
+                                crackitos_core::math::Vec2f(half_size_x, half_size_y).Magnitude());
 
-                physics::Body body_def(physics::BodyType::Dynamic, pos, math::Vec2f(0, 0),
-                                       true, random::Range(50.f, 100.f));
+                physics::Body body_def(physics::BodyType::Dynamic, pos, crackitos_core::math::Vec2f(0, 0),
+                                       true, crackitos_core::random::Range(50.f, 100.f));
                 body = physics_world_.CreateBody(body_def);
 
-                physics::Collider collider_def(aabb, random::Range(0.0f, 0.0f), 0.5f, false, body);
+                physics::Collider collider_def(aabb, crackitos_core::random::Range(0.0f, 0.0f), 0.5f, false, body);
                 physics_world_.CreateCollider(body, collider_def);
                 break;
             }
-        case math::ShapeType::kCircle:
+        case crackitos_core::math::ShapeType::kCircle:
             {
-                float radius = random::Range(5.f, 20.f);
-                math::Circle circle(pos, radius);
+                float radius = crackitos_core::random::Range(5.f, 20.f);
+                crackitos_core::math::Circle circle(pos, radius);
 
-                physics::Body body_def(physics::BodyType::Dynamic, pos, math::Vec2f(0, 0),
-                                       true, random::Range(50.f, 100.f));
+                physics::Body body_def(physics::BodyType::Dynamic, pos, crackitos_core::math::Vec2f(0, 0),
+                                       true, crackitos_core::random::Range(50.f, 100.f));
                 body = physics_world_.CreateBody(body_def);
 
-                physics::Collider collider_def(circle, random::Range(0.2f, 0.8f), 0.5f, false, body);
+                physics::Collider collider_def(circle, crackitos_core::random::Range(0.2f, 0.8f), 0.5f, false, body);
                 physics_world_.CreateCollider(body, collider_def);
                 break;
             }
-        case math::ShapeType::kPolygon:
-        case math::ShapeType::kNone:
+        case crackitos_core::math::ShapeType::kPolygon:
+        case crackitos_core::math::ShapeType::kNone:
         default:
             return; // Do nothing
         }
@@ -112,9 +112,9 @@ namespace crackitos_physics::samples
 
     void FrictionSystem::CreateGround()
     {
-        math::AABB ground(math::Vec2f(360.0f, 650.0f), math::Vec2f(840.0f, 750.0f));
+        crackitos_core::math::AABB ground(crackitos_core::math::Vec2f(360.0f, 650.0f), crackitos_core::math::Vec2f(840.0f, 750.0f));
 
-        physics::Body body_def(physics::BodyType::Static, ground.GetCentre(), math::Vec2f(0, 0), false, 0.0f);
+        physics::Body body_def(physics::BodyType::Static, ground.GetCentre(), crackitos_core::math::Vec2f(0, 0), false, 0.0f);
         physics::BodyHandle body = physics_world_.CreateBody(body_def);
 
         physics::Collider collider_def(ground, 0.0f, 0.0f, false, body);
@@ -128,7 +128,7 @@ namespace crackitos_physics::samples
     }
 
     //Set Gravity Dynamically
-    void FrictionSystem::SetGravity(const math::Vec2f& gravity)
+    void FrictionSystem::SetGravity(const crackitos_core::math::Vec2f& gravity)
     {
         physics_world_.set_gravity(gravity);
     }
