@@ -49,7 +49,6 @@
 //         void Run();
 //     };
 // } // namespace samples
-//
 // #endif // PHYSICS_SAMPLES_GAME_ENGINE_H_
 
 #ifndef PHYSICS_SAMPLES_GAME_ENGINE_H_
@@ -65,21 +64,28 @@
 
 namespace crackitos_physics::samples
 {
-enum class SystemScene
-{
-  TestingSystemScene
-};
+    enum class SystemScene
+    {
+        PlanetSystemScene,
+        TriggerSystemScene,
+        CollisionSystemScene,
+        FrictionSystemScene,
+        TestingSystemScene
+    };
 
-class GameEngine
-{
- private:
-  SystemScene selected_scene_ = SystemScene::TestingSystemScene;
-  bool is_running_;
+    class GameEngine
+    {
+    private:
+        SystemScene selected_scene_ = SystemScene::FrictionSystemScene;
+        bool is_running_;
 
-  Display display_{};
-  timer::Timer timer_{};
-  GraphicsManager graphics_manager_{};
-  TriggerSystem trigger_system_{};
+        Display display_{};
+        timer::Timer timer_{};
+        GraphicsManager graphics_manager_{};
+        PlanetSystem planet_system_{};
+        TriggerSystem trigger_system_{};
+        FrictionSystem friction_system_{};
+        TestingSystem testing_system_{};
 
   ImGuiInterface imgui_interface_{};
 

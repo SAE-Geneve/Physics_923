@@ -49,7 +49,7 @@ namespace crackitos_physics::samples
             ImGui::Separator();
 
             // Scene Selector Combo Box
-            const char* scenes[] = {"Planet System", "Trigger System", "Collision System", "Friction System"};
+            const char* scenes[] = {"Planet System", "Trigger System", "Collision System", "Friction System", "Testing System"};
 
             if (ImGui::BeginCombo("Select Scene", scenes[current_scene_]))
             {
@@ -87,30 +87,30 @@ namespace crackitos_physics::samples
             // Scene-specific options
             switch (static_cast<SystemScene>(current_scene_))
             {
-            // case SystemScene::PlanetSystemScene: // Planet System
-            //     {
-            //         ImGui::PushTextWrapPos();
-            //         ImGui::Text("Left Click: Toggle Spawner");
-            //         ImGui::PopTextWrapPos();
-            //
-            //         ImGui::Separator();
-            //
-            //         static ImVec4 planetColor = ImVec4(1.0f, 13.f / 255.f, 132.f / 255.f, 1.0f); // Default color
-            //         if (ImGui::ColorPicker3("Planet Color",
-            //                                 reinterpret_cast<crackitos_physics::commons::fp*>(&planetColor)))
-            //         {
-            //             // Convert the ImVec3 color (0-1 range) to SDL_Color (0-255 range)
-            //             SDL_Color sdlColor;
-            //             sdlColor.r = static_cast<Uint8>(planetColor.x * 255);
-            //             sdlColor.g = static_cast<Uint8>(planetColor.y * 255);
-            //             sdlColor.b = static_cast<Uint8>(planetColor.z * 255);
-            //             sdlColor.a = 255; // Full opacity, since ColorPicker3 does not have an alpha channel
-            //             planets_colour_ = sdlColor;
-            //         }
-            //
-            //         ImGui::SliderFloat("Speed Mult", &speed_multiplier_, 0.0f, 10.0f);
-            //         break;
-            //     }
+            case SystemScene::PlanetSystemScene: // Planet System
+                {
+                    ImGui::PushTextWrapPos();
+                    ImGui::Text("Left Click: Toggle Spawner");
+                    ImGui::PopTextWrapPos();
+
+                    ImGui::Separator();
+
+                    static ImVec4 planetColor = ImVec4(1.0f, 13.f / 255.f, 132.f / 255.f, 1.0f); // Default color
+                    if (ImGui::ColorPicker3("Planet Color",
+                                            reinterpret_cast<crackitos_physics::commons::fp*>(&planetColor)))
+                    {
+                        // Convert the ImVec3 color (0-1 range) to SDL_Color (0-255 range)
+                        SDL_Color sdlColor;
+                        sdlColor.r = static_cast<Uint8>(planetColor.x * 255);
+                        sdlColor.g = static_cast<Uint8>(planetColor.y * 255);
+                        sdlColor.b = static_cast<Uint8>(planetColor.z * 255);
+                        sdlColor.a = 255; // Full opacity, since ColorPicker3 does not have an alpha channel
+                        planets_colour_ = sdlColor;
+                    }
+
+                    ImGui::SliderFloat("Speed Mult", &speed_multiplier_, 0.0f, 10.0f);
+                    break;
+                }
             // case SystemScene::TriggerSystemScene: // Trigger System
             //     {
             //         ImGui::Checkbox("Show Quadtree", &show_quadtree_);
@@ -125,20 +125,20 @@ namespace crackitos_physics::samples
             //         ImGui::SliderFloat("Speed Mult", &speed_multiplier_, 0.0f, 10.0f);
             //         break;
             //     }
-            // case SystemScene::FrictionSystemScene: // Friction System
-            //     {
-            //         ImGui::PushTextWrapPos();
-            //         ImGui::Text("Left Click: Spawn Circle");
-            //         ImGui::Text("Right Click: Spawn AABB");
-            //         ImGui::PopTextWrapPos();
-            //
-            //         ImGui::Separator();
-            //
-            //         ImGui::Checkbox("Show Quadtree", &show_quadtree_);
-            //
-            //         ImGui::SliderFloat("Speed Mult", &speed_multiplier_, 0.0f, 2.0f);
-            //         break;
-            //     }
+            case SystemScene::FrictionSystemScene: // Friction System
+                {
+                    ImGui::PushTextWrapPos();
+                    ImGui::Text("Left Click: Spawn Circle");
+                    ImGui::Text("Right Click: Spawn AABB");
+                    ImGui::PopTextWrapPos();
+
+                    ImGui::Separator();
+
+                    ImGui::Checkbox("Show Quadtree", &show_quadtree_);
+
+                    ImGui::SliderFloat("Speed Mult", &speed_multiplier_, 0.0f, 2.0f);
+                    break;
+                }
             case SystemScene::TestingSystemScene: // Friction System
                 {
                     ImGui::PushTextWrapPos();

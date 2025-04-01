@@ -160,16 +160,25 @@ namespace crackitos_physics::physics
 
         void Update(const commons::fp delta_time, const math::Vec2f& gravity = math::Vec2f::Zero())
         {
-            if (type_ != BodyType::Static)
+            switch (type_)
             {
-                if (type_ == BodyType::Dynamic && gravity_bound_)
+            case BodyType::Static:
+                break;
+            case BodyType::Kinematic:
+                position_ += velocity_ * delta_time;
+                break;
+            case BodyType::Dynamic:
+                if (gravity_bound_)
                 {
                     ApplyForce(gravity);
                 }
                 velocity_ += acceleration_ * delta_time;
                 position_ += velocity_ * delta_time;
+                ResetForce();
+                break;
+            case BodyType::None:
+                break;
             }
-            ResetForce();
         }
 
         void ResetForce() { acceleration_ = math::Vec2f::Zero(); }

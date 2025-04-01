@@ -11,12 +11,13 @@
 namespace crackitos_physics::samples {
 
     //For testing purposes, this would be an implementation specific GameObject
-//    struct TestingObject
-//    {
-//        physics::BodyHandle body;
-//        physics::ColliderHandle collider;
-//        SDL_Color color;
-//    };
+    struct TestingObject
+    {
+        physics::BodyHandle body;
+        physics::ColliderHandle collider;
+        SDL_Color color = {255, 13, 132, 255};
+    };
+
 
     // Contact Listener for Logging Events
 //    class TestingContactListener final : public physics::ContactListener
