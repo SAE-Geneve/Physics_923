@@ -38,7 +38,7 @@ namespace crackitos_physics::samples
             ImGui::SetNextWindowSize(window_size, ImGuiCond_Once); // Size it once
 
             // Create a window
-            ImGui::Begin("Kuma Engine", nullptr,
+            ImGui::Begin("Crackitos Engine", nullptr,
                          ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoMove |
                          ImGuiWindowFlags_AlwaysAutoResize);
 
