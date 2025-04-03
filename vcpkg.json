@@ -1,6 +1,7 @@
 {
     "name": "crackitos-physics",
     "version-string": "1.0",
+    "builtin-baseline": "96dbba1e03d1ecc7c7096e97d5a09ff3c58e21df",
     "features":
     {
         "profiling": {"description": "Profiling with tracy", "dependencies": ["tracy"]},
