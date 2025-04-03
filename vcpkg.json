@@ -1,12 +1,25 @@
 {
     "name": "crackitos-physics",
     "version-string": "1.0",
-    "features":
-    {
-        "profiling": {"description": "Profiling with tracy", "dependencies": ["tracy"]},
-        "tests": {"description": "Enable GTests", "dependencies": ["gtest"]},
-        "samples": {"description": "Profiling with tracy", "dependencies": ["sdl2", {
-            "name": "imgui", "features": ["sdl2-binding", "sdl2-renderer-binding"]
-        }]}
+    "builtin-baseline": "96dbba1e03d1ecc7c7096e97d5a09ff3c58e21df",
+    "features": {
+        "profiling": {
+            "description": "Profiling with tracy",
+            "dependencies": ["tracy"]
+        },
+        "tests": {
+            "description": "Enable GTests",
+            "dependencies": ["gtest"]
+        },
+        "samples": {
+            "description": "Sample with SDL2 and ImGui",
+            "dependencies": [
+                "sdl2",
+                {
+                    "name": "imgui",
+                    "features": ["sdl2-binding", "sdl2-renderer-binding"]
+                }
+            ]
+        }
     }
 }
