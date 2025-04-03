@@ -64,51 +64,6 @@ namespace crackitos_physics::samples
         physics_world_.Clear();
     }
 
-    // void CollisionSystem::CreateObject(const math::Vec2f& pos, math::ShapeType type)
-    // {
-    //     physics::BodyHandle body;
-    //
-    //     switch (type)
-    //     {
-    //     case math::ShapeType::kAABB:
-    //         {
-    //             math::Vec2f velocity(random::Range(-50.0f, 50.0f), random::Range(-50.0f, 50.0f));
-    //
-    //             float half_size_x = random::Range(5.f, 20.f);
-    //             float half_size_y = random::Range(5.f, 20.f);
-    //
-    //             math::AABB aabb(pos, math::Vec2f(half_size_x, half_size_y),
-    //                             math::Vec2f(half_size_x, half_size_y).Magnitude());
-    //
-    //             physics::Body body_def(physics::BodyType::Dynamic, pos, velocity,
-    //                                    false, random::Range(50.f, 100.f));
-    //             body = physics_world_.CreateBody(body_def);
-    //
-    //             physics::Collider collider_def(aabb, random::Range(0.0f, 0.0f), 0.5f, true, body);
-    //             physics_world_.CreateCollider(body, collider_def);
-    //             break;
-    //         }
-    //     case math::ShapeType::kCircle:
-    //         {
-    //             math::Vec2f velocity(random::Range(-50.0f, 50.0f), random::Range(-50.0f, 50.0f));
-    //
-    //             float radius = random::Range(5.f, 20.f);
-    //             math::Circle circle(pos, radius);
-    //
-    //             physics::Body body_def(physics::BodyType::Dynamic, pos, velocity, false, random::Range(1.0f, 50.f));
-    //             body = physics_world_.CreateBody(body_def);
-    //
-    //             physics::Collider collider_def(circle, random::Range(0.2f, 0.8f), 0.5f, true, body);
-    //             physics_world_.CreateCollider(body, collider_def);
-    //
-    //             break;
-    //         }
-    //     case math::ShapeType::kPolygon:
-    //     case math::ShapeType::kNone:
-    //     default:
-    //         return; // Do nothing
-    //     }
-    // }
 
     void CollisionSystem::Update(crackitos_core::commons::fp delta_time)
     {
@@ -159,30 +114,4 @@ namespace crackitos_physics::samples
             }
         }
     }
-
-    // void CollisionSystem::UpdateCollisionObject()
-    // {
-    //     collision_objects_.clear(); // Clear previous frame's objects
-    //
-    //     auto bodies_with_colliders = physics_world_.GetBodiesWithColliders();
-    //
-    //     for (const auto& [body_handle, collider_handle] : bodies_with_colliders)
-    //     {
-    //         const physics::Body& body = physics_world_.GetMutableBody(body_handle);
-    //         auto position = body.position(); // Get current position
-    //
-    //
-    //         if (position.x < 0 || position.x > kWindowWidth ||
-    //             position.y < 0 || position.y > kWindowHeight)
-    //         {
-    //             continue; // Skip adding objects that are already out of bounds
-    //         }
-    //
-    //         CollisionObject obj;
-    //         obj.body = body_handle;
-    //         obj.collider = collider_handle;
-    //         obj.color = SDL_Color{255, 13, 132, 255};
-    //         collision_objects_.push_back(obj);
-    //     }
-    // }
 } // namespace samples

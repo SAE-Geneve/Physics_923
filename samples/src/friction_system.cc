@@ -99,7 +99,7 @@ namespace crackitos_physics::samples
                                        true, crackitos_core::random::Range(50.f, 100.f));
                 body = physics_world_.CreateBody(body_def);
 
-                physics::Collider collider_def(circle, crackitos_core::random::Range(0.2f, 0.8f), 0.5f, false, body);
+                physics::Collider collider_def(circle, crackitos_core::random::Range(0.2f, 0.8f), 0.2f, false, body);
                 physics_world_.CreateCollider(body, collider_def);
                 break;
             }

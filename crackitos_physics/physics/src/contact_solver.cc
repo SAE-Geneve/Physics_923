@@ -102,7 +102,8 @@ namespace crackitos_physics::physics
         if (separating_velocity > 0.0f) return;
 
         const auto delta_velocity = -separating_velocity * restitution_ - separating_velocity;
-        const auto impulse = contact_normal_ * (delta_velocity / total_inverse_mass);
+        const auto impulse_magnitude = delta_velocity / total_inverse_mass;
+        const auto impulse = contact_normal_ * impulse_magnitude;
 
         if (bodyA_->type() == BodyType::Dynamic)
         {
@@ -111,6 +112,41 @@ namespace crackitos_physics::physics
         if (bodyB_->type() == BodyType::Dynamic)
         {
             bodyB_->ApplyImpulse(-impulse);
+        }
+
+        crackitos_core::math::Vec2f tangent = relative_velocity - separating_velocity * contact_normal_;
+        if (tangent.SquareMagnitude() > crackitos_core::commons::kEpsilon) {
+            tangent = tangent.Normalized();
+        } else {
+            tangent = crackitos_core::math::Vec2f::Zero(); // Avoid applying friction if there's no lateral movement
+        }
+
+        const float jt = -crackitos_core::math::Vec2f::Dot(relative_velocity, tangent) / (bodyA_->inverse_mass() + bodyB_->inverse_mass());
+        const float mu = std::sqrt(
+            colliderA_->friction() * colliderA_->friction() + colliderB_->friction() * colliderB_->friction());
+
+        // Clamp friction
+        crackitos_core::math::Vec2f friction_impulse = crackitos_core::math::Vec2f::Zero();
+        if (std::abs(jt) < impulse_magnitude * mu)
+        {
+            friction_impulse = jt * tangent;
+        }
+        else
+        {
+            const float dynamic_friction_impulse = std::sqrt(
+                colliderA_->dynamic_friction() * colliderA_->dynamic_friction() + colliderB_->dynamic_friction() *
+                colliderB_->dynamic_friction());
+            friction_impulse = -impulse_magnitude * tangent * dynamic_friction_impulse;
+        }
+
+        // Apply impulse to the dynamic bodies
+        if (bodyA_->type() == BodyType::Dynamic)
+        {
+            bodyA_->ApplyImpulse(friction_impulse);
+        }
+        if (bodyB_->type() == BodyType::Dynamic)
+        {
+            bodyB_->ApplyImpulse(-friction_impulse);
         }
     }
 
