@@ -35,6 +35,7 @@ namespace crackitos_physics::physics
         crackitos_core::math::Vec2f position_ = crackitos_core::math::Vec2f::Zero();
         crackitos_core::math::Vec2f velocity_ = crackitos_core::math::Vec2f::Zero();
         crackitos_core::math::Vec2f acceleration_ = crackitos_core::math::Vec2f::Zero();
+        crackitos_core::commons::fp damping_factor_ = 1.0f;
 
         //Angular components
         crackitos_core::commons::fp orientation_ = 0.0f;
@@ -114,6 +115,7 @@ namespace crackitos_physics::physics
         void set_position(const crackitos_core::math::Vec2f new_position) { position_ = new_position; }
         void set_velocity(const crackitos_core::math::Vec2f new_velocity) { velocity_ = new_velocity; }
         void set_gravity_bound(const bool new_gravity_bound) { gravity_bound_ = new_gravity_bound; }
+        void damping_factor(const crackitos_core::commons::fp factor) { damping_factor_ = factor; }
 
         void set_mass(const crackitos_core::commons::fp new_mass)
         {
@@ -173,6 +175,8 @@ namespace crackitos_physics::physics
                 {
                     ApplyForce(gravity);
                 }
+
+                velocity_ = velocity_ * damping_factor_;
                 velocity_ += acceleration_ * delta_time;
                 position_ += velocity_ * delta_time;
                 ResetForce();
