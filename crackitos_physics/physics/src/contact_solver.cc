@@ -121,8 +121,8 @@ namespace crackitos_physics::physics
             tangent = crackitos_core::math::Vec2f::Zero(); // Avoid applying friction if there's no lateral movement
         }
 
-        const float jt = -crackitos_core::math::Vec2f::Dot(relative_velocity, tangent) / (bodyA_->inverse_mass() + bodyB_->inverse_mass());
-        const float mu = std::sqrt(
+        const crackitos_core::commons::fp jt = -crackitos_core::math::Vec2f::Dot(relative_velocity, tangent) / (bodyA_->inverse_mass() + bodyB_->inverse_mass());
+        const crackitos_core::commons::fp mu = std::sqrt(
             colliderA_->friction() * colliderA_->friction() + colliderB_->friction() * colliderB_->friction());
 
         // Clamp friction
@@ -133,7 +133,7 @@ namespace crackitos_physics::physics
         }
         else
         {
-            const float dynamic_friction_impulse = std::sqrt(
+            const crackitos_core::commons::fp dynamic_friction_impulse = std::sqrt(
                 colliderA_->dynamic_friction() * colliderA_->dynamic_friction() + colliderB_->dynamic_friction() *
                 colliderB_->dynamic_friction());
             friction_impulse = -impulse_magnitude * tangent * dynamic_friction_impulse;

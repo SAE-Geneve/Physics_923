@@ -174,8 +174,8 @@ namespace crackitos_physics::physics
         NarrowPhase();
     }
 
-    void PhysicsWorld::set_out_of_bounds_margins(const float left, const float right, const float top,
-                                                 const float bottom)
+    void PhysicsWorld::set_out_of_bounds_margins(const crackitos_core::commons::fp left, const crackitos_core::commons::fp right, const crackitos_core::commons::fp top,
+                                                 const crackitos_core::commons::fp bottom)
     {
 #ifdef TRACY_ENABLE
         ZoneScoped;

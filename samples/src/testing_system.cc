@@ -74,8 +74,8 @@ namespace crackitos_physics::samples
         {
         case crackitos_core::math::ShapeType::kAABB:
             {
-                float half_size_x = crackitos_core::random::Range(5.f, 20.f);
-                float half_size_y = crackitos_core::random::Range(5.f, 20.f);
+                crackitos_core::commons::fp half_size_x = crackitos_core::random::Range(5.f, 20.f);
+                crackitos_core::commons::fp half_size_y = crackitos_core::random::Range(5.f, 20.f);
                 crackitos_core::math::AABB aabb(pos, crackitos_core::math::Vec2f(half_size_x, half_size_y),
                                 crackitos_core::math::Vec2f(half_size_x, half_size_y).Magnitude());
 
@@ -89,7 +89,7 @@ namespace crackitos_physics::samples
             }
         case crackitos_core::math::ShapeType::kCircle:
             {
-                float radius = crackitos_core::random::Range(5.f, 20.f);
+                crackitos_core::commons::fp radius = crackitos_core::random::Range(5.f, 20.f);
                 crackitos_core::math::Circle circle(pos, radius);
 
                 physics::Body body_def(physics::BodyType::Dynamic, pos, crackitos_core::math::Vec2f(0, 0),

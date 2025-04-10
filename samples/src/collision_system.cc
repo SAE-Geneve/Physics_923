@@ -73,7 +73,7 @@ namespace crackitos_physics::samples
             auto& body = physics_world_.GetMutableBody(obj.body);
             auto pos = body.position();
             auto vel = body.velocity();
-            const float radius = 10.0f; // approximate for both shape types
+            const crackitos_core::commons::fp radius = 10.0f; // approximate for both shape types
 
             if (pos.x - radius < 0.f)
             {

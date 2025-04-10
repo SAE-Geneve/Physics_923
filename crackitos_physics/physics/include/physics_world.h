@@ -25,10 +25,10 @@ namespace crackitos_physics::physics
         crackitos_core::math::AABB frame_bounds_;
 
         bool out_of_bounds_removal_state_;
-        float out_of_bounds_margin_left_ = 10.0f;
-        float out_of_bounds_margin_right_ = 10.0f;
-        float out_of_bounds_margin_top_ = 10.0f;
-        float out_of_bounds_margin_bottom_ = 10.0f;
+        crackitos_core::commons::fp out_of_bounds_margin_left_ = 10.0f;
+        crackitos_core::commons::fp out_of_bounds_margin_right_ = 10.0f;
+        crackitos_core::commons::fp out_of_bounds_margin_top_ = 10.0f;
+        crackitos_core::commons::fp out_of_bounds_margin_bottom_ = 10.0f;
 
         std::vector<Body> bodies_;
         std::vector<int> body_generations_;
@@ -80,7 +80,7 @@ namespace crackitos_physics::physics
         void set_gravity(const crackitos_core::math::Vec2f& new_gravity) { gravity_ = new_gravity; }
         void set_time_step(const crackitos_core::commons::fp step) { time_step_ = step; }
         void set_out_of_bound_removal_state(const bool enable) { out_of_bounds_removal_state_ = enable; }
-        void set_out_of_bounds_margins(float left, float right, float top, float bottom);
+        void set_out_of_bounds_margins(crackitos_core::commons::fp left, crackitos_core::commons::fp right, crackitos_core::commons::fp top, crackitos_core::commons::fp bottom);
 
         [[nodiscard]] Quadtree& quadtree() { return quadtree_; }
     };
