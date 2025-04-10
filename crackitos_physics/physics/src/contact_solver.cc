@@ -20,6 +20,10 @@ namespace crackitos_physics::physics
 
     void ContactSolver::ResolveContact()
     {
+        if (bodyA_->type() == BodyType::Static && bodyB_->type() == BodyType::Static)
+        {
+            return;
+        }
         CalculateProperties();
         if (bodyA_->type() == BodyType::Static || bodyA_->type() == BodyType::Kinematic)
         {
@@ -32,6 +36,11 @@ namespace crackitos_physics::physics
 
     void ContactSolver::CalculateProperties()
     {
+        if (bodyA_->type() == BodyType::Static && bodyB_->type() == BodyType::Static)
+        {
+            penetration_ = 0.0f;
+            return;
+        }
         contact_point_ = crackitos_core::math::Vec2f::Zero();
         contact_normal_ = crackitos_core::math::Vec2f::Zero();
         penetration_ = 0.0f;
@@ -41,7 +50,9 @@ namespace crackitos_physics::physics
         const auto mA = bodyA_->mass();
         const auto mB = bodyB_->mass();
 
-        restitution_ = (mA + mB > crackitos_core::commons::kEpsilon) ? (mA * eA + mB * eB) / (mA + mB) : std::max(eA, eB);
+        restitution_ = (mA + mB > crackitos_core::commons::kEpsilon)
+                           ? (mA * eA + mB * eB) / (mA + mB)
+                           : std::max(eA, eB);
 
         const auto type_a = colliderA_->GetShapeType();
         const auto type_b = colliderB_->GetShapeType();
@@ -60,29 +71,35 @@ namespace crackitos_physics::physics
             HandleAABBCircleCollision();
             contact_normal_ = -contact_normal_;
         }
-        else if (type_a == crackitos_core::math::ShapeType::kCircle && type_b == crackitos_core::math::ShapeType::kCircle)
+        else if (type_a == crackitos_core::math::ShapeType::kCircle && type_b ==
+            crackitos_core::math::ShapeType::kCircle)
         {
             HandleCircleCircleCollision();
         }
-        else if (type_a == crackitos_core::math::ShapeType::kPolygon && type_b == crackitos_core::math::ShapeType::kPolygon)
+        else if (type_a == crackitos_core::math::ShapeType::kPolygon && type_b ==
+            crackitos_core::math::ShapeType::kPolygon)
         {
             HandlePolygonPolygonCollision();
         }
-        else if (type_a == crackitos_core::math::ShapeType::kAABB && type_b == crackitos_core::math::ShapeType::kPolygon)
+        else if (type_a == crackitos_core::math::ShapeType::kAABB && type_b ==
+            crackitos_core::math::ShapeType::kPolygon)
         {
             HandleAABBPolygonCollision();
         }
-        else if (type_a == crackitos_core::math::ShapeType::kPolygon && type_b == crackitos_core::math::ShapeType::kAABB)
+        else if (type_a == crackitos_core::math::ShapeType::kPolygon && type_b ==
+            crackitos_core::math::ShapeType::kAABB)
         {
             SwapObjects();
             HandleAABBPolygonCollision();
             contact_normal_ = -contact_normal_;
         }
-        else if (type_a == crackitos_core::math::ShapeType::kCircle && type_b == crackitos_core::math::ShapeType::kPolygon)
+        else if (type_a == crackitos_core::math::ShapeType::kCircle && type_b ==
+            crackitos_core::math::ShapeType::kPolygon)
         {
             HandleCirclePolygonCollision();
         }
-        else if (type_a == crackitos_core::math::ShapeType::kPolygon && type_b == crackitos_core::math::ShapeType::kCircle)
+        else if (type_a == crackitos_core::math::ShapeType::kPolygon && type_b ==
+            crackitos_core::math::ShapeType::kCircle)
         {
             SwapObjects();
             HandleCirclePolygonCollision();
@@ -98,7 +115,8 @@ namespace crackitos_physics::physics
         if (total_inverse_mass == 0.0f) return;
 
         const crackitos_core::math::Vec2f relative_velocity = bodyA_->velocity() - bodyB_->velocity();
-        const crackitos_core::commons::fp separating_velocity = crackitos_core::math::Vec2f::Dot(relative_velocity, contact_normal_);
+        const crackitos_core::commons::fp separating_velocity = crackitos_core::math::Vec2f::Dot(
+            relative_velocity, contact_normal_);
         if (separating_velocity > 0.0f) return;
 
         const auto delta_velocity = -separating_velocity * restitution_ - separating_velocity;
@@ -114,32 +132,32 @@ namespace crackitos_physics::physics
             bodyB_->ApplyImpulse(-impulse);
         }
 
+        //Friction:
         crackitos_core::math::Vec2f tangent = relative_velocity - separating_velocity * contact_normal_;
-        if (tangent.SquareMagnitude() > crackitos_core::commons::kEpsilon) {
-            tangent = tangent.Normalized();
-        } else {
-            tangent = crackitos_core::math::Vec2f::Zero(); // Avoid applying friction if there's no lateral movement
-        }
-
-        const crackitos_core::commons::fp jt = -crackitos_core::math::Vec2f::Dot(relative_velocity, tangent) / (bodyA_->inverse_mass() + bodyB_->inverse_mass());
-        const crackitos_core::commons::fp mu = std::sqrt(
-            colliderA_->friction() * colliderA_->friction() + colliderB_->friction() * colliderB_->friction());
-
-        // Clamp friction
-        crackitos_core::math::Vec2f friction_impulse = crackitos_core::math::Vec2f::Zero();
-        if (std::abs(jt) < impulse_magnitude * mu)
+        if (tangent.SquareMagnitude() > crackitos_core::commons::kEpsilon)
         {
-            friction_impulse = jt * tangent;
+            tangent = tangent.Normalized();
         }
         else
         {
-            const crackitos_core::commons::fp dynamic_friction_impulse = std::sqrt(
-                colliderA_->dynamic_friction() * colliderA_->dynamic_friction() + colliderB_->dynamic_friction() *
-                colliderB_->dynamic_friction());
-            friction_impulse = -impulse_magnitude * tangent * dynamic_friction_impulse;
+            return; // Avoid applying friction if there's no lateral movement
         }
+        const crackitos_core::commons::fp jt = -crackitos_core::math::Vec2f::Dot(relative_velocity, tangent) / (bodyA_->
+            inverse_mass() + bodyB_->inverse_mass());
 
-        // Apply impulse to the dynamic bodies
+        const crackitos_core::commons::fp mu_s = std::sqrt(colliderA_->friction() * colliderB_->friction());
+        const crackitos_core::commons::fp mu_d = std::sqrt(
+            colliderA_->dynamic_friction() * colliderB_->dynamic_friction());
+
+        crackitos_core::math::Vec2f friction_impulse;
+        if (std::abs(jt) < impulse_magnitude * mu_s)
+        {
+            friction_impulse = jt * tangent; //Static friction
+        }
+        else
+        {
+            friction_impulse = -impulse_magnitude * mu_d * tangent; //Dynamic friction
+        }
         if (bodyA_->type() == BodyType::Dynamic)
         {
             bodyA_->ApplyImpulse(friction_impulse);
@@ -177,37 +195,35 @@ namespace crackitos_physics::physics
         const auto& aabb_b = std::get<crackitos_core::math::AABB>(colliderB_->shape());
         const auto centre_a = bodyA_->position();
         const auto centre_b = bodyB_->position();
-        const auto delta = centre_a - centre_b;
 
         contact_point_ = 0.5f * (aabb_a.ClosestPoint(centre_b) + aabb_b.ClosestPoint(centre_a));
 
         //TODO own function abs, vec2f right, left, up, down
+        const auto delta = centre_a - centre_b;
         const auto penetration_x = aabb_a.half_size_vec().x + aabb_b.half_size_vec().x - std::abs(delta.x);
         const auto penetration_y = aabb_a.half_size_vec().y + aabb_b.half_size_vec().y - std::abs(delta.y);
 
-        // Check for deep overlap (for example if one shape spawns in another)
-        const bool is_a_inside_b = (centre_a.x >= aabb_b.min_bound().x && centre_a.x <= aabb_b.max_bound().x &&
-            centre_a.y >= aabb_b.min_bound().y && centre_a.y <= aabb_b.max_bound().y);
-
-        //In which case, force an upward resolution
-        if (is_a_inside_b && (penetration_x > 0.01f || penetration_y > 0.01f))
+        if (penetration_x <= 0.0f || penetration_y <= 0.0f) {
+            penetration_ = 0.0f;
+            return;
+        }
+        //Determine the smallest overlap direction
+        if (penetration_x < penetration_y)
         {
-            contact_normal_ = crackitos_core::math::Vec2f(0.0f, -1.0f);
-            penetration_ = penetration_y;
+            penetration_ = penetration_x;
+            contact_normal_ = centre_a.x < centre_b.x ? crackitos_core::math::Vec2f(-1, 0) : crackitos_core::math::Vec2f(1, 0);
         }
         else
         {
-            if (penetration_x < penetration_y)
-            {
-                contact_normal_ = delta.x > 0.0f ? crackitos_core::math::Vec2f(1.0f, 0.0f) : crackitos_core::math::Vec2f(-1.0f, 0.0f);
-                penetration_ = penetration_x;
-            }
-            else
-            {
-                contact_normal_ = delta.y > 0.0f ? crackitos_core::math::Vec2f(0.0f, 1.0f) : crackitos_core::math::Vec2f(0.0f, -1.0f);
-                penetration_ = penetration_y;
-            }
+            penetration_ = penetration_y;
+            contact_normal_ = centre_a.y < centre_b.y ? crackitos_core::math::Vec2f(0, -1) : crackitos_core::math::Vec2f(0, 1);
         }
+
+        //Calculate the contact point as the midpoint of the overlapping edges
+        contact_point_ = {
+            std::clamp((centre_a.x + centre_b.x) / 2, aabb_a.min_bound().x, aabb_a.max_bound().x),
+            std::clamp((centre_a.y + centre_b.y) / 2, aabb_a.min_bound().y, aabb_a.max_bound().y)
+        };
     }
 
     void ContactSolver::HandleAABBCircleCollision()
@@ -215,22 +231,14 @@ namespace crackitos_physics::physics
         const auto& aabb = std::get<crackitos_core::math::AABB>(colliderA_->shape());
         const auto& circle = std::get<crackitos_core::math::Circle>(colliderB_->shape());
         const auto circle_centre = circle.centre();
-        const auto aabb_centre = aabb.GetCentre();
-        const auto aabb_half_size = aabb.half_size_vec();
         const auto radius = circle.radius();
 
-
         // Find the closest point on the AABB to the circle center
-        const crackitos_core::math::Vec2f closest_point = {
-            std::clamp(circle_centre.x, aabb.min_bound().x, aabb.max_bound().x),
-            std::clamp(circle_centre.y, aabb.min_bound().y, aabb.max_bound().y)
-        };
-
+        const crackitos_core::math::Vec2f closest_point = aabb.ClosestPoint(circle_centre);
         const crackitos_core::math::Vec2f distance_vec = closest_point - circle_centre;
         const crackitos_core::commons::fp distance_squared = distance_vec.SquareMagnitude();
-        const crackitos_core::commons::fp radius_squared = radius * radius;
 
-        if (distance_squared >= radius_squared)
+        if (distance_squared >= radius * radius)
         {
             penetration_ = 0.0f;
             return; // No collision
@@ -243,7 +251,6 @@ namespace crackitos_physics::physics
                               ? distance_vec / distance
                               : crackitos_core::math::Vec2f(0.0f, 1.0f);
         penetration_ = radius - distance;
-
         contact_point_ = closest_point;
     }
 
@@ -265,32 +272,14 @@ namespace crackitos_physics::physics
             return; // No collision
         }
 
-        if (dist < std::numeric_limits<crackitos_core::commons::fp>::epsilon())
-        {
-            contact_normal_ = crackitos_core::math::Vec2f(1.0f, 0.0f); // Arbitrary normal
-            penetration_ = total_radius; // Total overlap
-        }
-        else
-        {
-            contact_normal_ = delta / dist;
-            penetration_ = total_radius - dist;
-        }
+        contact_normal_ = dist > crackitos_core::commons::kEpsilon ? delta / dist : crackitos_core::math::Vec2f(1, 0);
+        penetration_ = total_radius - dist;
 
         contact_point_ = centre_a + contact_normal_ * radius_a;
     }
 
-    void ContactSolver::HandlePolygonPolygonCollision()
-    {
-        // Not implemented
-    }
-
-    void ContactSolver::HandleAABBPolygonCollision()
-    {
-        // Not implemented
-    }
-
-    void ContactSolver::HandleCirclePolygonCollision()
-    {
-        // Not implemented
-    }
+    // Not implemented
+    void ContactSolver::HandlePolygonPolygonCollision(){}
+    void ContactSolver::HandleAABBPolygonCollision(){}
+    void ContactSolver::HandleCirclePolygonCollision(){}
 }
