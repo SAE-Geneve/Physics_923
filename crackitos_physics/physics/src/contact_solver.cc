@@ -107,7 +107,7 @@ namespace crackitos_physics::physics
         }
     }
 
-    void ContactSolver::ResolveVelocities() const
+  void ContactSolver::ResolveVelocities() const
     {
         const auto inverse_mass_a = bodyA_->inverse_mass();
         const auto inverse_mass_b = bodyB_->inverse_mass();
@@ -140,17 +140,20 @@ namespace crackitos_physics::physics
         }
         else
         {
-            return; // Avoid applying friction if there's no lateral movement
+           return; // Avoid applying friction if there's no lateral movement
         }
+
         const crackitos_core::commons::fp jt = -crackitos_core::math::Vec2f::Dot(relative_velocity, tangent) / (bodyA_->
             inverse_mass() + bodyB_->inverse_mass());
 
-        const crackitos_core::commons::fp mu_s = std::sqrt(colliderA_->friction() * colliderB_->friction());
-        const crackitos_core::commons::fp mu_d = std::sqrt(
-            colliderA_->dynamic_friction() * colliderB_->dynamic_friction());
+        const crackitos_core::commons::fp mu_s = std::sqrt(colliderA_->friction() * colliderA_->friction() + colliderB_->friction() * colliderB_->friction());
+        const crackitos_core::commons::fp mu_d = std::sqrt(colliderA_->dynamic_friction() * colliderA_->dynamic_friction() + colliderB_->dynamic_friction() * colliderB_->dynamic_friction());
+
+        //Scale the friction impulse to the strength of the contact
+        const crackitos_core::commons::fp friction_cap = impulse_magnitude * (separating_velocity < 0.0f ? mu_s : 0.0f);
 
         crackitos_core::math::Vec2f friction_impulse;
-        if (std::abs(jt) < impulse_magnitude * mu_s)
+        if (std::abs(jt) <= friction_cap)
         {
             friction_impulse = jt * tangent; //Static friction
         }
