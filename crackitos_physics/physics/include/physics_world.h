@@ -78,7 +78,7 @@ namespace crackitos_physics::physics
         void StepSimulation();
 
         void set_gravity(const crackitos_core::math::Vec2f& new_gravity) { gravity_ = new_gravity; }
-        void set_time_step(const crackitos_core::commons::fp step) { time_step_ = step; }
+        void set_time_step(const crackitos_core::commons::fp step);
         void set_out_of_bound_removal_state(const bool enable) { out_of_bounds_removal_state_ = enable; }
         void set_out_of_bounds_margins(crackitos_core::commons::fp left, crackitos_core::commons::fp right, crackitos_core::commons::fp top, crackitos_core::commons::fp bottom);
 

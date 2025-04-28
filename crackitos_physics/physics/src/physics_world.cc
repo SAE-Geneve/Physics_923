@@ -160,7 +160,10 @@ namespace crackitos_physics::physics
         ZoneScoped;
 #endif
         timer_.Tick();
-        StepSimulation();
+        while (timer_.FixedDeltaTimeStep())
+        {
+            StepSimulation();
+        }
     }
 
     void PhysicsWorld::StepSimulation()
@@ -172,6 +175,12 @@ namespace crackitos_physics::physics
         RemoveOutOfBoundsObjects();
         BroadPhase();
         NarrowPhase();
+    }
+
+    void PhysicsWorld::set_time_step(const crackitos_core::commons::fp step)
+    {
+        time_step_ = step;
+        timer_.SetFixedDeltaTime(step);
     }
 
     void PhysicsWorld::set_out_of_bounds_margins(const crackitos_core::commons::fp left, const crackitos_core::commons::fp right, const crackitos_core::commons::fp top,
