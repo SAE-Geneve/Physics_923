@@ -154,16 +154,21 @@ namespace crackitos_physics::physics
     }
 
 
-    void PhysicsWorld::Update(crackitos_core::commons::fp delta_time)
+    void PhysicsWorld::FixedUpdate(crackitos_core::commons::fp delta_time)
     {
 #ifdef TRACY_ENABLE
         ZoneScoped;
 #endif
-        timer_.Tick();
+        timer_.AddTime(delta_time);
         while (timer_.FixedDeltaTimeStep())
         {
             StepSimulation();
         }
+    }
+
+    void PhysicsWorld::Update()
+    {
+        StepSimulation();
     }
 
     void PhysicsWorld::StepSimulation()

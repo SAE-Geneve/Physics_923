@@ -74,7 +74,8 @@ namespace crackitos_physics::physics
 
         [[nodiscard]] std::vector<std::pair<BodyHandle, ColliderHandle>> GetBodiesWithColliders() const;
 
-        void Update(crackitos_core::commons::fp delta_time);
+        void FixedUpdate(crackitos_core::commons::fp delta_time);
+        void Update();
         void StepSimulation();
 
         void set_gravity(const crackitos_core::math::Vec2f& new_gravity) { gravity_ = new_gravity; }
