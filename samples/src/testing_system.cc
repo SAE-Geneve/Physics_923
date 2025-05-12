@@ -122,7 +122,7 @@ namespace crackitos_physics::samples
     //Update the Simulation
     void TestingSystem::Update(crackitos_core::commons::fp delta_time)
     {
-        physics_world_.Update(delta_time);
+        physics_world_.FixedUpdate(delta_time);
         UpdateTestingObjects();
     }
 

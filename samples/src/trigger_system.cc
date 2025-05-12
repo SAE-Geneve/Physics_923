@@ -87,7 +87,7 @@ namespace crackitos_physics::samples {
             body.set_velocity(vel);
         }
 
-        physics_world_.Update(delta_time);
+        physics_world_.FixedUpdate(delta_time);
     }
 
     void TriggerContactListener::OnTriggerEnter(const physics::ColliderPair& pair) {

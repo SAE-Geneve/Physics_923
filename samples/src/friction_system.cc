@@ -123,7 +123,7 @@ namespace crackitos_physics::samples
 
     void FrictionSystem::Update(const crackitos_core::commons::fp delta_time)
     {
-        physics_world_.Update(delta_time);
+        physics_world_.FixedUpdate(delta_time);
         UpdateTestingObjects();
     }
 
