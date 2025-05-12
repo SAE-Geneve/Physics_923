@@ -22,6 +22,7 @@ namespace crackitos_physics::physics
         int depth_;
 
         explicit QuadtreeNode(const crackitos_core::math::AABB& box, int depth = 0);
+        QuadtreeNode(const QuadtreeNode& other); // deep copy constructor
 
         //Subdivide the node into 4 child quadrants
         void Subdivide();
@@ -36,6 +37,7 @@ namespace crackitos_physics::physics
         void GetBoundingBoxes(std::vector<crackitos_core::math::AABB>& boxes) const;
         void BuildPairs(std::unordered_set<ColliderPair>& out_pairs) const;
         std::vector<ColliderHandle> CollectAllColliders() const;
+
     };
 
     class Quadtree
@@ -79,6 +81,9 @@ namespace crackitos_physics::physics
         {
             return bounding_boxes_;
         }
+
+        void CopyFrom(const Quadtree& other);
+
     };
 }
 

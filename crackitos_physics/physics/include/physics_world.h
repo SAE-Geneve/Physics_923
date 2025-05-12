@@ -84,6 +84,8 @@ namespace crackitos_physics::physics
         void set_out_of_bounds_margins(crackitos_core::commons::fp left, crackitos_core::commons::fp right, crackitos_core::commons::fp top, crackitos_core::commons::fp bottom);
 
         [[nodiscard]] Quadtree& quadtree() { return quadtree_; }
+
+        void CopyFrom(const PhysicsWorld& other);
     };
 } // crackitos_physics
 

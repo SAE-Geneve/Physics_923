@@ -6,6 +6,21 @@ namespace crackitos_physics::physics
     {
     }
 
+    QuadtreeNode::QuadtreeNode(const QuadtreeNode& other)
+    : bounding_box_(other.bounding_box_),
+      depth_(other.depth_),
+      colliders_(other.colliders_)
+    {
+        for (size_t i = 0; i < 4; ++i)
+        {
+            if (other.children_[i])
+            {
+                children_[i] = std::make_unique<QuadtreeNode>(*other.children_[i]);
+            }
+        }
+    }
+
+
     void QuadtreeNode::Subdivide()
     {
         crackitos_core::math::Vec2f halfSize = (bounding_box_.max_bound() - bounding_box_.min_bound()) * 0.5f;
@@ -187,4 +202,20 @@ namespace crackitos_physics::physics
         bounding_boxes_.clear();
         root_->GetBoundingBoxes(bounding_boxes_);
     }
+
+    void Quadtree::CopyFrom(const Quadtree& other)
+    {
+        if (other.root_)
+        {
+            root_ = std::make_unique<QuadtreeNode>(*other.root_);
+        }
+        else
+        {
+            root_.reset();
+        }
+
+        potential_pairs_ = other.potential_pairs_;
+        bounding_boxes_ = other.bounding_boxes_;
+    }
+
 }

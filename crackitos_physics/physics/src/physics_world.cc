@@ -200,6 +200,30 @@ namespace crackitos_physics::physics
         out_of_bounds_margin_bottom_ = bottom;
     }
 
+    void PhysicsWorld::CopyFrom(const PhysicsWorld& other)
+    {
+        frame_bounds_ = other.frame_bounds_;
+        gravity_ = other.gravity_;
+        time_step_ = other.time_step_;
+
+        bodies_ = other.bodies_;
+        body_generations_ = other.body_generations_;
+        colliders_ = other.colliders_;
+        collider_generations_ = other.collider_generations_;
+
+        quadtree_.CopyFrom(other.quadtree_);
+        active_pairs_ = other.active_pairs_;
+
+        out_of_bounds_removal_state_ = other.out_of_bounds_removal_state_;
+        out_of_bounds_margin_left_ = other.out_of_bounds_margin_left_;
+        out_of_bounds_margin_right_ = other.out_of_bounds_margin_right_;
+        out_of_bounds_margin_top_ = other.out_of_bounds_margin_top_;
+        out_of_bounds_margin_bottom_ = other.out_of_bounds_margin_bottom_;
+
+        // Don't copy timer_ or contact_listener_ unless needed
+    }
+
+
 
     void PhysicsWorld::UpdateObjects()
     {
